@@ -10,20 +10,19 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.cs446.group18.timetracker.dao.TimeEntryDAO;
+import com.cs446.group18.timetracker.dao.TimeEntryDao;
+import com.cs446.group18.timetracker.entity.Event;
+import com.cs446.group18.timetracker.entity.Tag;
 import com.cs446.group18.timetracker.entity.TimeEntry;
-import com.cs446.group18.timetracker.util.DateTimeConverter;
+import com.cs446.group18.timetracker.utils.DateTimeConverter;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-@Database(entities = {TimeEntry.class}, version = 1, exportSchema = false)
+@Database(entities = {TimeEntry.class, Event.class, Tag.class}, version = 1, exportSchema = false)
 @TypeConverters({DateTimeConverter.class})
 public abstract class TimeTrackerDatabase extends RoomDatabase {
     // create a singleton instance of database
     private static TimeTrackerDatabase instance;
 
-    public abstract TimeEntryDAO timeEntryDAO();
+    public abstract TimeEntryDao timeEntryDao();
 
     // synchronized is used to avoid concurrent access in multithreading environment
     public static synchronized TimeTrackerDatabase getInstance(Context context) {
@@ -47,10 +46,10 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
     };
 
     private static class PopulateDBAsyncTask extends AsyncTask<Void, Void, Void> {
-        private TimeEntryDAO timeEntryDAO;
+        private TimeEntryDao timeEntryDAO;
 
         private PopulateDBAsyncTask(TimeTrackerDatabase db) {
-            this.timeEntryDAO = db.timeEntryDAO();
+            this.timeEntryDAO = db.timeEntryDao();
         }
 
         @Override

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.entity.TimeEntry;
-import com.cs446.group18.timetracker.util.DateTimeConverter;
+import com.cs446.group18.timetracker.utils.DateTimeConverter;
 
 import java.util.ArrayList;
 import java.util.List;

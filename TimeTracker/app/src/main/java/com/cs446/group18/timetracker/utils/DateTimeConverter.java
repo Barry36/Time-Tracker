@@ -1,4 +1,4 @@
-package com.cs446.group18.timetracker.util;
+package com.cs446.group18.timetracker.utils;
 
 import androidx.room.TypeConverter;
 

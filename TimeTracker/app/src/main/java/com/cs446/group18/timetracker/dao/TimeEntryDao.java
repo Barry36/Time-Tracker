@@ -5,14 +5,16 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.cs446.group18.timetracker.entity.TimeEntry;
+import com.cs446.group18.timetracker.relation.EventWithTimeEntries;
 
 import java.util.List;
 
 @Dao
-public interface TimeEntryDAO {
+public interface TimeEntryDao {
     @Insert
     void insert(TimeEntry entry);
 
@@ -22,6 +24,10 @@ public interface TimeEntryDAO {
     @Delete
     void delete(TimeEntry entry);
 
-    @Query("SELECT * FROM entry_table ORDER BY startTime DESC")
-    LiveData<List<TimeEntry>> getAll();
+    @Query("SELECT * FROM time_entry_table ORDER BY start_time DESC")
+    LiveData<List<TimeEntry>> getAllTimeEntries();
+
+    @Transaction
+    @Query("SELECT * FROM event_table")
+    LiveData<List<EventWithTimeEntries>> getEventWithTimeEntries();
 }

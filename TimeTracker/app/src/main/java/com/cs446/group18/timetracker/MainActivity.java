@@ -10,6 +10,8 @@ import android.os.Bundle;
 
 import com.cs446.group18.timetracker.adapter.TimeEntryAdapter;
 import com.cs446.group18.timetracker.entity.TimeEntry;
+import com.cs446.group18.timetracker.utils.InjectorUtil;
+import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
 import com.cs446.group18.timetracker.vm.TimeEntryViewModel;
 
 import java.util.List;
@@ -29,13 +31,8 @@ public class MainActivity extends AppCompatActivity {
         final TimeEntryAdapter adapter = new TimeEntryAdapter();
         recyclerView.setAdapter(adapter);
 
-        // ViewModelProvider will handle dependency injection for us, we shouldn't instantiate the ViewModel ourselves
-        timeEntryViewModel = new ViewModelProvider(this).get(TimeEntryViewModel.class);
-        timeEntryViewModel.getTimeEntries().observe(this, new Observer<List<TimeEntry>>() {
-            @Override
-            public void onChanged(List<TimeEntry> timeEntries) {
-                adapter.setEntries(timeEntries);
-            }
-        });
+        TimeEntryListViewModelFactory factory = InjectorUtil.provideTimeEntryListViewModelFactory(getApplicationContext());
+        timeEntryViewModel = new ViewModelProvider(this, factory).get(TimeEntryViewModel.class);
+        timeEntryViewModel.getTimeEntries().observe(this, timeEntries -> adapter.setEntries(timeEntries));
     }
 }
