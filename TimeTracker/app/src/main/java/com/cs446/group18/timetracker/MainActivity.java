@@ -1,24 +1,20 @@
 package com.cs446.group18.timetracker;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
-import com.cs446.group18.timetracker.adapter.TimeEntryAdapter;
-import com.cs446.group18.timetracker.entity.TimeEntry;
-import com.cs446.group18.timetracker.utils.InjectorUtil;
-import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
-import com.cs446.group18.timetracker.vm.TimeEntryViewModel;
-
-import java.util.List;
+import com.cs446.group18.timetracker.adapter.EventListAdapter;
+import com.cs446.group18.timetracker.utils.InjectorUtils;
+import com.cs446.group18.timetracker.vm.EventListViewModelFactory;
+import com.cs446.group18.timetracker.vm.EventViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TimeEntryViewModel timeEntryViewModel;
+    private EventViewModel eventViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +24,11 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        final TimeEntryAdapter adapter = new TimeEntryAdapter();
+        final EventListAdapter adapter = new EventListAdapter();
         recyclerView.setAdapter(adapter);
 
-        TimeEntryListViewModelFactory factory = InjectorUtil.provideTimeEntryListViewModelFactory(getApplicationContext());
-        timeEntryViewModel = new ViewModelProvider(this, factory).get(TimeEntryViewModel.class);
-        timeEntryViewModel.getTimeEntries().observe(this, timeEntries -> adapter.setEntries(timeEntries));
+        EventListViewModelFactory factory = InjectorUtils.provideEventListViewModelFactory(getApplicationContext());
+        eventViewModel = new ViewModelProvider(this, factory).get(EventViewModel.class);
+        eventViewModel.getEvents().observe(this, events -> adapter.setEvents(events));
     }
 }

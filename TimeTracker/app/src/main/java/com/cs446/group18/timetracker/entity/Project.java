@@ -2,22 +2,13 @@ package com.cs446.group18.timetracker.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(
-        tableName = "project_table",
-        foreignKeys = {@ForeignKey(entity = Event.class, parentColumns = {"project_id"}, childColumns = {"project_id"})},
-        indices = {@Index("project_id")}
-)
+@Entity(tableName = "project_table")
 public class Project {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "project_id")
     private long projectId;
-
-    @ColumnInfo(name = "event_id")
-    private long eventId;
 
     @ColumnInfo(name = "project_name")
     private String name;
@@ -28,8 +19,7 @@ public class Project {
     @ColumnInfo(name = "project_color")
     private String color;
 
-    public Project(long eventId, String name, String description, String color) {
-        this.eventId = eventId;
+    public Project(String name, String description, String color) {
         this.name = name;
         this.description = description;
         this.color = color;
@@ -41,14 +31,6 @@ public class Project {
 
     public void setProjectId(long projectId) {
         this.projectId = projectId;
-    }
-
-    public long getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(long eventId) {
-        this.eventId = eventId;
     }
 
     public String getName() {

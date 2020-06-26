@@ -10,19 +10,26 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.cs446.group18.timetracker.dao.EventDao;
+import com.cs446.group18.timetracker.dao.ProjectDao;
 import com.cs446.group18.timetracker.dao.TimeEntryDao;
 import com.cs446.group18.timetracker.entity.Event;
+import com.cs446.group18.timetracker.entity.Goal;
+import com.cs446.group18.timetracker.entity.Project;
 import com.cs446.group18.timetracker.entity.Tag;
 import com.cs446.group18.timetracker.entity.TimeEntry;
 import com.cs446.group18.timetracker.utils.DateTimeConverter;
 
-@Database(entities = {TimeEntry.class, Event.class, Tag.class}, version = 1, exportSchema = false)
+@Database(entities = {TimeEntry.class, Event.class, Tag.class, Project.class, Goal.class}, version = 1, exportSchema = false)
 @TypeConverters({DateTimeConverter.class})
 public abstract class TimeTrackerDatabase extends RoomDatabase {
     // create a singleton instance of database
     private static TimeTrackerDatabase instance;
 
     public abstract TimeEntryDao timeEntryDao();
+    public abstract EventDao eventDao();
+    public abstract ProjectDao projectDao();
+
 
     // synchronized is used to avoid concurrent access in multithreading environment
     public static synchronized TimeTrackerDatabase getInstance(Context context) {
@@ -46,16 +53,25 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
     };
 
     private static class PopulateDBAsyncTask extends AsyncTask<Void, Void, Void> {
-        private TimeEntryDao timeEntryDAO;
+        private TimeEntryDao timeEntryDao;
+        private EventDao eventDao;
+        private ProjectDao projectDao;
 
         private PopulateDBAsyncTask(TimeTrackerDatabase db) {
-            this.timeEntryDAO = db.timeEntryDao();
+            this.timeEntryDao = db.timeEntryDao();
+            this.eventDao = db.eventDao();
+            this.projectDao = db.projectDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            timeEntryDAO.insert(new TimeEntry(DateTimeConverter.fromTimestamp("2020-07-22 18:26:00"), DateTimeConverter.fromTimestamp("2020-07-22 18:40:00"), 1200L));
-            timeEntryDAO.insert(new TimeEntry(DateTimeConverter.fromTimestamp("2020-07-23 10:15:00"), DateTimeConverter.fromTimestamp("2020-07-23 10:20:00"), 300L));
+            projectDao.insert(new Project("Study", "N/A", "#FF4081"));
+            projectDao.insert(new Project("Rest", "N/A", "#3F51B5"));
+            eventDao.insert(new Event(1,"Prepare for interview", "LC 161 & LC 162"));
+            eventDao.insert(new Event(2, "Watch Youtube", "Watch drama"));
+            timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-07-22 18:20:00"), DateTimeConverter.fromTimestamp("2020-07-22 18:40:00"), 1200L));
+            timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-07-23 10:15:00"), DateTimeConverter.fromTimestamp("2020-07-23 10:20:00"), 300L));
+            timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-22 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-22 11:40:00"), 1500L));
             return null;
         }
     }

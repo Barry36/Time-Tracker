@@ -13,7 +13,7 @@ public class EventWithTimeEntries {
     @Embedded
     private Event event;
 
-    @Relation(parentColumn = "event_id", entityColumn = "time_entry_id")
+    @Relation(parentColumn = "event_id", entityColumn = "event_id")
     private List<TimeEntry> timeEntries = new ArrayList<>();
 
     public Event getEvent() {

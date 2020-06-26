@@ -8,16 +8,16 @@ import androidx.room.PrimaryKey;
 
 @Entity(
         tableName = "event_table",
-        foreignKeys = {@ForeignKey(entity = TimeEntry.class, parentColumns = {"time_entry_id"}, childColumns = {"time_entry_id"})},
-        indices = {@Index("time_entry_id")}
+        foreignKeys = {@ForeignKey(entity = Project.class, parentColumns = {"project_id"}, childColumns = {"project_id"})},
+        indices = {@Index("project_id")}
 )
 public class Event {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "event_id")
     private long eventId;
 
-    @ColumnInfo(name = "time_entry_id")
-    public String timeEntryId;
+    @ColumnInfo(name = "project_id")
+    public long projectId;
 
     @ColumnInfo(name = "event_name")
     private String eventName;
@@ -25,8 +25,8 @@ public class Event {
     @ColumnInfo(name = "event_description")
     private String description;
 
-    public Event(String timeEntryId, String eventName, String description) {
-        this.timeEntryId = timeEntryId;
+    public Event(long projectId, String eventName, String description) {
+        this.projectId = projectId;
         this.eventName = eventName;
         this.description = description;
     }
@@ -39,12 +39,12 @@ public class Event {
         this.eventId = eventId;
     }
 
-    public String getTimeEntryId() {
-        return timeEntryId;
+    public long getProjectId() {
+        return projectId;
     }
 
-    public void setTimeEntryId(String timeEntryId) {
-        this.timeEntryId = timeEntryId;
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
     }
 
     public String getEventName() {

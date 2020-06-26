@@ -9,14 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cs446.group18.timetracker.R;
-import com.cs446.group18.timetracker.entity.TimeEntry;
-import com.cs446.group18.timetracker.utils.DateTimeConverter;
+import com.cs446.group18.timetracker.entity.Event;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.ViewHolder> {
-    private List<TimeEntry> timeEntries = new ArrayList<>();
+public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
+    private List<Event> events = new ArrayList<>();
 
     @NonNull
     @Override
@@ -28,19 +27,19 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TimeEntry currentEntry = timeEntries.get(position);
-        holder.textViewTitle.setText(DateTimeConverter.dateToTimestamp(currentEntry.getStartTime()));
-        holder.textViewDescription.setText("Duration: " + currentEntry.getDuration());
+        Event currentEvent = events.get(position);
+        holder.textViewTitle.setText(currentEvent.getEventName());
+        holder.textViewDescription.setText(currentEvent.getDescription());
     }
 
     @Override
     public int getItemCount() {
-        return timeEntries.size();
+        return events.size();
     }
 
     // get List of LiveData
-    public void setEntries(List<TimeEntry> timeEntries) {
-        this.timeEntries = timeEntries;
+    public void setEvents(List<Event> events) {
+        this.events = events;
         // there's more efficient way to update adapter
         notifyDataSetChanged();
     }

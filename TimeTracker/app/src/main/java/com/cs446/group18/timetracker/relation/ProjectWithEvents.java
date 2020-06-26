@@ -13,7 +13,7 @@ public class ProjectWithEvents {
     @Embedded
     private Project project;
 
-    @Relation(parentColumn = "project_id", entityColumn = "event_id")
+    @Relation(parentColumn = "project_id", entityColumn = "project_id")
     private List<Event> events = new ArrayList<>();
 
     public Project getProject() {

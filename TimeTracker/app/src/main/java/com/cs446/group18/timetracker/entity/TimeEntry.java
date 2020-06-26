@@ -3,15 +3,24 @@ package com.cs446.group18.timetracker.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "time_entry_table")
+@Entity(
+        tableName = "time_entry_table",
+        foreignKeys = {@ForeignKey(entity = Event.class,  parentColumns = {"event_id"}, childColumns = {"event_id"})},
+        indices = {@Index("event_id")}
+        )
 public class TimeEntry {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "time_entry_id")
     private long timeEntryId;
+
+    @ColumnInfo(name = "event_id")
+    private long eventId;
 
     @ColumnInfo(name = "start_time")
     private Date startTime;
@@ -21,7 +30,8 @@ public class TimeEntry {
 
     private Long duration;
 
-    public TimeEntry(Date startTime, Date endTime, Long duration) {
+    public TimeEntry(long eventId, Date startTime, Date endTime, Long duration) {
+        this.eventId = eventId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.duration = duration;
@@ -33,6 +43,14 @@ public class TimeEntry {
 
     public void setTimeEntryId(long timeEntryId) {
         this.timeEntryId = timeEntryId;
+    }
+
+    public long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(long eventId) {
+        this.eventId = eventId;
     }
 
     public Date getStartTime() {
