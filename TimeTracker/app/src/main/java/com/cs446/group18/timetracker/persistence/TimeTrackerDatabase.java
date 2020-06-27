@@ -11,6 +11,7 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.cs446.group18.timetracker.dao.EventDao;
+import com.cs446.group18.timetracker.dao.GoalDao;
 import com.cs446.group18.timetracker.dao.ProjectDao;
 import com.cs446.group18.timetracker.dao.TimeEntryDao;
 import com.cs446.group18.timetracker.entity.Event;
@@ -29,7 +30,7 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
     public abstract TimeEntryDao timeEntryDao();
     public abstract EventDao eventDao();
     public abstract ProjectDao projectDao();
-
+    public abstract GoalDao goalDao();
 
     // synchronized is used to avoid concurrent access in multithreading environment
     public static synchronized TimeTrackerDatabase getInstance(Context context) {
@@ -56,11 +57,13 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
         private TimeEntryDao timeEntryDao;
         private EventDao eventDao;
         private ProjectDao projectDao;
+        private GoalDao goalDao;
 
         private PopulateDBAsyncTask(TimeTrackerDatabase db) {
             this.timeEntryDao = db.timeEntryDao();
             this.eventDao = db.eventDao();
             this.projectDao = db.projectDao();
+            this.goalDao = db.goalDao();
         }
 
         @Override
@@ -72,6 +75,8 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
             timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-07-22 18:20:00"), DateTimeConverter.fromTimestamp("2020-07-22 18:40:00"), 1200L));
             timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-07-23 10:15:00"), DateTimeConverter.fromTimestamp("2020-07-23 10:20:00"), 300L));
             timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-22 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-22 11:40:00"), 1500L));
+            goalDao.insert(new Goal(1, "Study Goal", "N/A", 20));
+            goalDao.insert(new Goal(1, "Rest Goal", "N/A", 20));
             return null;
         }
     }

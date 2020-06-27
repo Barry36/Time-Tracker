@@ -3,4 +3,7 @@
     <item
         android:id="@+id/event_list_fragment"
         android:title="Event list"/>
+    <item
+        android:id="@+id/goal_list_fragment"
+        android:title="My goals"/>
 </menu>

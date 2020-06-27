@@ -44,9 +44,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
     // get List of LiveData
     public void setEvents(List<Event> events) {
-        this.events.clear();
-
-        this.events.addAll(events);
+        this.events = events;
         // there's more efficient way to update adapter
         notifyDataSetChanged();
     }
