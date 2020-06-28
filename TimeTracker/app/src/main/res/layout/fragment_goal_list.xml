@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/goals">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/goal_list"
@@ -21,5 +22,13 @@
         android:gravity="center"
         android:text="No data"
         android:textSize="24sp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_add_goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="32dp"/>
 
 </FrameLayout>
