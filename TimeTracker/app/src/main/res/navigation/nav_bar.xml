@@ -15,4 +15,9 @@
         android:name="com.cs446.group18.timetracker.ui.GoalListFragment"
         android:label="My goals"
         tools:layout="@layout/fragment_goal_list" />
+    <fragment
+        android:id="@+id/stopwatch_fragment"
+        android:name="com.cs446.group18.timetracker.ui.StopwatchFragment"
+        android:label="StopWatch"
+        tools:layout="@layout/fragment_stopwatch" />
 </navigation>
