@@ -21,6 +21,8 @@ import com.cs446.group18.timetracker.entity.Tag;
 import com.cs446.group18.timetracker.entity.TimeEntry;
 import com.cs446.group18.timetracker.utils.DateTimeConverter;
 
+// This file is equal to JDBC, for thead safefy
+// Add new entities, need change this line below
 @Database(entities = {TimeEntry.class, Event.class, Tag.class, Project.class, Goal.class}, version = 1, exportSchema = false)
 @TypeConverters({DateTimeConverter.class})
 public abstract class TimeTrackerDatabase extends RoomDatabase {
