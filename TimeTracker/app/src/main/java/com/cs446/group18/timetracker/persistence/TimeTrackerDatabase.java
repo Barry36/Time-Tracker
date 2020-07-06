@@ -25,7 +25,7 @@ import com.cs446.group18.timetracker.utils.DateTimeConverter;
 @TypeConverters({DateTimeConverter.class})
 public abstract class TimeTrackerDatabase extends RoomDatabase {
     // create a singleton instance of database
-    private static TimeTrackerDatabase instance;
+    private static volatile TimeTrackerDatabase instance = null;
 
     public abstract TimeEntryDao timeEntryDao();
     public abstract EventDao eventDao();

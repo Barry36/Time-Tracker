@@ -11,7 +11,7 @@ import java.util.List;
 
 public class EventRepository {
     private EventDao eventDao;
-    private static volatile  EventRepository instance;
+    private static volatile EventRepository instance = null;
 
     public EventRepository(EventDao eventDao) {
         this.eventDao = eventDao;
@@ -19,7 +19,7 @@ public class EventRepository {
 
     public static EventRepository getInstance(EventDao eventDao) {
         if (instance == null) {
-            synchronized(EventRepository.class) {
+            synchronized (EventRepository.class) {
                 if (instance == null)
                     instance = new EventRepository(eventDao);
             }
