@@ -36,16 +36,6 @@
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/nav_bar"/>
 
-<!--            <fragment-->
-<!--                android:id="@+id/stopwatch_bar"-->
-<!--                android:name="com.cs446.group18.timetracker.ui.StopwatchFragment"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:layout_constraintLeft_toLeftOf="parent"-->
-<!--                app:layout_constraintRight_toRightOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                tools:layout="@layout/fragment_stopwatch"/>-->
-
         </LinearLayout>
 
         <com.google.android.material.navigation.NavigationView

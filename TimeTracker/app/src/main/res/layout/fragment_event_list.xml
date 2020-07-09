@@ -22,4 +22,12 @@
         android:text="No data"
         android:textSize="24sp" />
 
+    <fragment
+        android:id="@+id/stopwatch_fragment"
+        android:name="com.cs446.group18.timetracker.ui.StopwatchFragment"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        tools:layout="@layout/fragment_stopwatch"
+        android:layout_gravity="bottom" />
+
 </FrameLayout>

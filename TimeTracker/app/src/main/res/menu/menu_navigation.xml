@@ -6,7 +6,4 @@
     <item
         android:id="@+id/goal_list_fragment"
         android:title="My goals"/>
-    <item
-        android:id="@+id/stopwatch_fragment"
-        android:title="Stopwatch"/>
 </menu>
