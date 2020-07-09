@@ -16,7 +16,6 @@ import com.cs446.group18.timetracker.databinding.ActivityEventBinding;
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavController navController;
-    private StopwatchFragment stopwatchFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
         navController = Navigation.findNavController(this, R.id.event_nav_fragment);
-        stopwatchFragment = (StopwatchFragment) getSupportFragmentManager().findFragmentById(R.id.stopwatch_fragment);
-
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
         NavigationUI.setupWithNavController(binding.navigationView, navController);
 
