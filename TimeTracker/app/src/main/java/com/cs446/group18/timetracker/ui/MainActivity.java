@@ -4,14 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.databinding.ActivityEventBinding;
+import com.cs446.group18.timetracker.entity.Event;
+import com.cs446.group18.timetracker.vm.EventViewModel;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;

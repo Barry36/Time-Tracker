@@ -11,7 +11,7 @@ import java.util.List;
 
 public class EventRepository {
     private EventDao eventDao;
-    private static volatile  EventRepository instance;
+    private static volatile EventRepository instance;
 
     public EventRepository(EventDao eventDao) {
         this.eventDao = eventDao;
