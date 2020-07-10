@@ -49,6 +49,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         notifyDataSetChanged();
     }
 
+    public Event getEventAt(int position){
+        return events.get(position);
+    }
     class ViewHolder extends RecyclerView.ViewHolder {
         private ListItemEventBinding binding;
 
