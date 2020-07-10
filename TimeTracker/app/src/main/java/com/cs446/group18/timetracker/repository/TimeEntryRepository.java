@@ -12,7 +12,7 @@ import java.util.List;
 
 public class TimeEntryRepository {
     private TimeEntryDao timeEntryDao;
-    private static volatile TimeEntryRepository instance;
+    private static volatile TimeEntryRepository instance = null;
 
     public TimeEntryRepository(TimeEntryDao timeEntryDao) {
         this.timeEntryDao = timeEntryDao;
@@ -20,7 +20,7 @@ public class TimeEntryRepository {
 
     public static TimeEntryRepository getInstance(TimeEntryDao timeEntryDao) {
         if (instance == null) {
-            synchronized(TimeEntryRepository.class) {
+            synchronized (TimeEntryRepository.class) {
                 if (instance == null)
                     instance = new TimeEntryRepository(timeEntryDao);
             }
