@@ -16,6 +16,7 @@ import java.util.List;
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
     private List<Event> events;
     private LayoutInflater layoutInflater;
+    private onItemClickListener listener;
 
     public EventListAdapter(List<Event> events) {
         this.events = events;
@@ -52,6 +53,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     public Event getEventAt(int position){
         return events.get(position);
     }
+
+
+    // This is the card view
     class ViewHolder extends RecyclerView.ViewHolder {
         private ListItemEventBinding binding;
 
@@ -64,6 +68,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             binding.setEvent(event);
             binding.executePendingBindings();
         }
+
     }
 
+    public interface onItemClickListener{
+        void onItemClick(Event event);
+    }
+
+    public void setOnItemClickListener(onItemClickListener listener){
+        this.listener = listener;
+    }
 }

@@ -3,6 +3,7 @@ package com.cs446.group18.timetracker.ui;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ public class EventListFragment extends Fragment {
         recyclerView = eventListView.findViewById(R.id.event_list);
         recyclerView.setAdapter(adapter);
 
+        // Add New Event
         FloatingActionButton buttonAddEvent = eventListView.findViewById(R.id.button_add_event);
         buttonAddEvent.setOnClickListener(new View.OnClickListener() {
 
@@ -94,6 +96,20 @@ public class EventListFragment extends Fragment {
             }
         });
 
+
+        // Click Event to Update
+
+        adapter.setOnItemClickListener(new EventListAdapter.onItemClickListener(){
+            @Override
+            public void onItemClick(Event event) {
+//                int pos = RecyclerView.ViewHolder.getAdapterPosition();
+                Toast.makeText(eventListView.getContext(), "Event Clicked", Toast.LENGTH_SHORT).show();
+                Log.d("Clicked");
+            }
+
+        });
+
+        // Swipe to Delete Event
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
