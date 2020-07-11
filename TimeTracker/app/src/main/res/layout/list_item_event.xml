@@ -40,6 +40,8 @@
                 android:layout_below="@id/text_view_title"
                 android:layout_marginStart="56dp"
                 android:text="@{event.description}" />
+
+
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
