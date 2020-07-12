@@ -1,5 +1,7 @@
 package com.cs446.group18.timetracker.adapter;
 
+import android.app.admin.ConnectEvent;
+import android.media.MediaDrm;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +19,11 @@ import java.util.List;
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
     private List<Event> events;
     private LayoutInflater layoutInflater;
-    private onItemClickListener listener;
+    private OnEventListener mOnEventListener;
 
-    public EventListAdapter(List<Event> events) {
+    public EventListAdapter(List<Event> events, OnEventListener onEventListener) {
         this.events = events;
+        this.mOnEventListener = onEventListener;    // makes clickListener visible to viewHolder
     }
 
     @NonNull
@@ -30,13 +33,16 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             layoutInflater = LayoutInflater.from(parent.getContext()); // get context from main Activity
         }
         ListItemEventBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_event, parent, false);
-        return new ViewHolder(binding);
+        return new ViewHolder(binding, mOnEventListener);
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Event currentEvent = events.get(position);
         holder.bind(currentEvent);
+
+        // holder.bind(currentEvent, onEventListener);
     }
 
     @Override
@@ -57,41 +63,35 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
 
     // This is the card view
-    class ViewHolder extends RecyclerView.ViewHolder {
+    // Detect the click by implementing onClickListener
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ListItemEventBinding binding;
+        private OnEventListener onEventListener;
 
-        ViewHolder(@NonNull ListItemEventBinding binding) {
+        public ViewHolder(@NonNull ListItemEventBinding binding, OnEventListener onEventListener) {
             super(binding.getRoot());
             this.binding = binding;
+            this.onEventListener = onEventListener;
+            binding.getRoot().setOnClickListener(this);
         }
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if(listener != null && position != RecyclerView.NO_POSITION){   // check the position is valid
-                        listener.onItemClick(events.get(position));
-                    }
-
-                }
-            });
-        }
-
 
         void bind(Event event) {
+            // access data variable in list_item_event.xml
             binding.setEvent(event);
             binding.executePendingBindings();
         }
 
+        @Override
+        public void onClick(View v) {
+            onEventListener.onEventClick(getAdapterPosition());
+        }
     }
 
-    public interface onItemClickListener{
-        void onItemClick(Event event);
+    // Interface for the itemView onClick Listener
+    // Implemented in Activity - EventListFragment.java to handle unfold action
+
+    public interface OnEventListener{
+        void onEventClick(int position);
     }
 
-    public void setOnItemClickListener(onItemClickListener listener){
-        this.listener = listener;
-    }
 }

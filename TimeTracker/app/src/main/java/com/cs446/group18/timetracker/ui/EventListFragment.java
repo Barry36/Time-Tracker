@@ -33,7 +33,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventListFragment extends Fragment{
+public class EventListFragment extends Fragment implements EventListAdapter.OnEventListener{
+    private static final String TAG = "Test";
     private List<Event> events = new ArrayList<>();
     RecyclerView recyclerView;
     private TextView textViewEmpty;
@@ -42,7 +43,7 @@ public class EventListFragment extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View eventListView = inflater.inflate(R.layout.fragment_event_list, container, false);
-        EventListAdapter adapter = new EventListAdapter(events);
+        EventListAdapter adapter = new EventListAdapter(events, this);
         EventListViewModelFactory factory = InjectorUtils.provideEventListViewModelFactory(getActivity());
         EventViewModel viewModel = new ViewModelProvider(this, factory).get(EventViewModel.class);
 
@@ -184,4 +185,11 @@ public class EventListFragment extends Fragment{
         });
     }
 
+    @Override
+    public void onEventClick(int position) {
+
+        // reference to the Event selected
+//        events.get(position);
+        
+    }
 }
