@@ -23,6 +23,10 @@ public class TimeEntryViewModel extends ViewModel {
         return repository.getTimeEntries();
     }
 
+    public LiveData<List<TimeEntry>> getTimeEntriesByEventID(int event_id){
+        return repository.getTimeEntriesByEventID(event_id);
+    }
+
     public LiveData<List<EventWithTimeEntries>> getEventWithTimeEntries() {
         return repository.getEventWithTimeEntries();
     }

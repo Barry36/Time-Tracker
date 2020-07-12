@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,10 +41,18 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     RecyclerView recyclerView;
     private TextView textViewEmpty;
 
+    private RelativeLayout expandableCardView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View eventListView = inflater.inflate(R.layout.fragment_event_list, container, false);
+
+        // *** For Expandable cardView Begins
+        View listItemEvent = inflater.inflate(R.layout.list_item_event, container, false);
+        RelativeLayout expandableCardView = listItemEvent.findViewById(R.id.expandable);
+        this.expandableCardView = expandableCardView;
+        // *** For Expandable cardView Ends
+
         EventListAdapter adapter = new EventListAdapter(events, this);
         EventListViewModelFactory factory = InjectorUtils.provideEventListViewModelFactory(getActivity());
         EventViewModel viewModel = new ViewModelProvider(this, factory).get(EventViewModel.class);
@@ -51,12 +61,13 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         recyclerView = eventListView.findViewById(R.id.event_list);
         recyclerView.setAdapter(adapter);
 
-        // Add New Event
+        // Add New Event Action
         FloatingActionButton buttonAddEvent = eventListView.findViewById(R.id.button_add_event);
         buttonAddEvent.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: Floating button");
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
                 View promptView = inflater.inflate(R.layout.prompt_add_event, container, false);
 
@@ -65,6 +76,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                 builder.setView(promptView)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+
                                 String eventName = eventNameText.getText().toString();
                                 String eventDescription = eventDescriptionText.getText().toString();
                                 try {
@@ -185,11 +197,11 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         });
     }
 
+    // Click to expand cardView
     @Override
     public void onEventClick(int position) {
 
-        // reference to the Event selected
-//        events.get(position);
-        
     }
+
+
 }

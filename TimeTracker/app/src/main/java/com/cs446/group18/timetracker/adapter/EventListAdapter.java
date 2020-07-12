@@ -2,9 +2,11 @@ package com.cs446.group18.timetracker.adapter;
 
 import android.app.admin.ConnectEvent;
 import android.media.MediaDrm;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -33,8 +35,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             layoutInflater = LayoutInflater.from(parent.getContext()); // get context from main Activity
         }
         ListItemEventBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_event, parent, false);
-        return new ViewHolder(binding, mOnEventListener);
 
+        return new ViewHolder(binding, mOnEventListener);
     }
 
     @Override
@@ -57,41 +59,57 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         notifyDataSetChanged();
     }
 
-    public Event getEventAt(int position){
+    public Event getEventAt(int position) {
         return events.get(position);
     }
 
 
     // This is the card view
     // Detect the click by implementing onClickListener
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private ListItemEventBinding binding;
-        private OnEventListener onEventListener;
 
         public ViewHolder(@NonNull ListItemEventBinding binding, OnEventListener onEventListener) {
             super(binding.getRoot());
             this.binding = binding;
-            this.onEventListener = onEventListener;
-            binding.getRoot().setOnClickListener(this);
+            binding.getRoot().setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    Log.d("Barry", "Yoo");
+                    if (binding.expandable.getVisibility() == View.GONE) {
+                        Log.d("Bob is Awesome", "Not Visible");
+                        expand(binding.expandable);
+                    } else {
+                        Log.d("Bob is Awesome", "Visible");
+                        collapse(binding.expandable);
+                    }
+                }
+            });
         }
 
         void bind(Event event) {
             // access data variable in list_item_event.xml
             binding.setEvent(event);
+
             binding.executePendingBindings();
         }
 
-        @Override
-        public void onClick(View v) {
-            onEventListener.onEventClick(getAdapterPosition());
-        }
     }
 
     // Interface for the itemView onClick Listener
     // Implemented in Activity - EventListFragment.java to handle unfold action
 
-    public interface OnEventListener{
+    public interface OnEventListener {
         void onEventClick(int position);
+    }
+
+    private void expand(RelativeLayout layout) {
+        layout.setVisibility(View.VISIBLE);
+    }
+
+    private void collapse(final RelativeLayout layout) {
+        layout.setVisibility(View.GONE);
     }
 
 }
