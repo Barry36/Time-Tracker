@@ -9,9 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,16 +45,23 @@ public class EventListFragment extends Fragment{
     RecyclerView recyclerView;
     private TextView textViewEmpty;
 
+<<<<<<< HEAD
     // Let's try
     RecyclerView timeEntryListRecyclerView;
 
     private RelativeLayout expandableCardView;
+=======
+>>>>>>> parent of b696c17... create expandable cardViewHolder
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View eventListView = inflater.inflate(R.layout.fragment_event_list, container, false);
+<<<<<<< HEAD
         EventListAdapter eventListAdapter = new EventListAdapter(events);
 
+=======
+        EventListAdapter adapter = new EventListAdapter(events, this);
+>>>>>>> parent of b696c17... create expandable cardViewHolder
         EventListViewModelFactory factory = InjectorUtils.provideEventListViewModelFactory(getActivity());
         EventViewModel viewModel = new ViewModelProvider(this, factory).get(EventViewModel.class);
 
@@ -75,7 +80,7 @@ public class EventListFragment extends Fragment{
         // Try Ends
 
 
-        // Add New Event Action
+        // Add New Event
         FloatingActionButton buttonAddEvent = eventListView.findViewById(R.id.button_add_event);
         buttonAddEvent.setOnClickListener(new View.OnClickListener() {
 
@@ -89,7 +94,6 @@ public class EventListFragment extends Fragment{
                 builder.setView(promptView)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-
                                 String eventName = eventNameText.getText().toString();
                                 String eventDescription = eventDescriptionText.getText().toString();
                                 try {
@@ -211,6 +215,7 @@ public class EventListFragment extends Fragment{
             }
         });
 
+<<<<<<< HEAD
 
 
         // Time Entries
@@ -224,7 +229,13 @@ public class EventListFragment extends Fragment{
 //                Log.d("Hey", timeEntries.get(0).getDurationStr());
 //            }
 //        });
+=======
+    @Override
+    public void onEventClick(int position) {
+
+        // reference to the Event selected
+//        events.get(position);
+        
+>>>>>>> parent of b696c17... create expandable cardViewHolder
     }
-
-
 }

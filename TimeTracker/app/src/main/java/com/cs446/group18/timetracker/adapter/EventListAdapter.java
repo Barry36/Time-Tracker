@@ -2,11 +2,9 @@ package com.cs446.group18.timetracker.adapter;
 
 import android.app.admin.ConnectEvent;
 import android.media.MediaDrm;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -33,8 +31,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             layoutInflater = LayoutInflater.from(parent.getContext()); // get context from main Activity
         }
         ListItemEventBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_event, parent, false);
+<<<<<<< HEAD
 
         return new ViewHolder(binding);
+=======
+        return new ViewHolder(binding, mOnEventListener);
+
+>>>>>>> parent of b696c17... create expandable cardViewHolder
     }
 
     @Override
@@ -55,14 +58,21 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         notifyDataSetChanged();
     }
 
+<<<<<<< HEAD
 
     public Event getEventAt(int position) { return events.get(position); }
+=======
+    public Event getEventAt(int position){
+        return events.get(position);
+    }
+>>>>>>> parent of b696c17... create expandable cardViewHolder
 
 
     // This is the card view
     // Detect the click by implementing onClickListener
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ListItemEventBinding binding;
+<<<<<<< HEAD
         private long eventID;
         public ViewHolder(@NonNull ListItemEventBinding binding) {
             super(binding.getRoot());
@@ -80,6 +90,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                     }
                 }
             });
+=======
+        private OnEventListener onEventListener;
+
+        public ViewHolder(@NonNull ListItemEventBinding binding, OnEventListener onEventListener) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.onEventListener = onEventListener;
+            binding.getRoot().setOnClickListener(this);
+>>>>>>> parent of b696c17... create expandable cardViewHolder
         }
 
         void bind(Event event) {
@@ -88,15 +107,20 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             binding.executePendingBindings();
         }
 
+        @Override
+        public void onClick(View v) {
+            onEventListener.onEventClick(getAdapterPosition());
+        }
     }
 
     // Interface for the itemView onClick Listener
     // Implemented in Activity - EventListFragment.java to handle unfold action
 
-    public interface OnEventListener {
+    public interface OnEventListener{
         void onEventClick(int position);
     }
 
+<<<<<<< HEAD
 //    private void expand(RelativeLayout layout) {
 //        layout.setVisibility(View.VISIBLE);
 //    }
@@ -111,4 +135,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     private void collapse(RecyclerView view) {
         view.setVisibility(View.GONE);
     }
+=======
+>>>>>>> parent of b696c17... create expandable cardViewHolder
 }
