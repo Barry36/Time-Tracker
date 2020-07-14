@@ -23,19 +23,18 @@ public class TimeEntryViewModel extends ViewModel {
         return repository.getTimeEntries();
     }
 
-<<<<<<< HEAD
+
 
 //    public LiveData<List<TimeEntry>> getTimeEntriesByEventID(int event_id){
 //        return repository.getTimeEntriesByEventID(event_id);
 //    }
 
-=======
->>>>>>> parent of b696c17... create expandable cardViewHolder
+
     public LiveData<List<EventWithTimeEntries>> getEventWithTimeEntries() {
         return repository.getEventWithTimeEntries();
     }
 
-    public List<TimeEntry> getTimeEntriesByEventID(long event_id) {
+    public LiveData<List<TimeEntry>> getTimeEntriesByEventID(long event_id) {
         return repository.getTimeEntriesByEventID(event_id);
     }
 

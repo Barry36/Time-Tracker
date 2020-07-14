@@ -42,67 +42,22 @@
                 android:layout_marginStart="56dp"
                 android:text="@{event.description}" />
 
-<<<<<<< HEAD
+
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/expandable"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="56dp">
+            android:clipToPadding="false"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_marginTop="56dp"
+            android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:visibility="visible"
-                android:id="@+id/expandable"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp" />
-        </RelativeLayout>
+        </LinearLayout>
 
 
-
-<!--        <RelativeLayout-->
-
-<!--            android:visibility="gone"-->
-<!--            android:id="@+id/expandable"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="50dp"-->
-<!--            android:animateLayoutChanges="true"-->
-<!--            android:orientation="vertical">-->
-
-
-<!--            <TextView-->
-<!--                android:id="@+id/time_entry_startTime"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@{eventTimeEntry.startTimeStr}"-->
-<!--                android:textSize="20sp" />-->
-<!--            <TextView-->
-<!--                android:id="@+id/time_entry_endTime"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@{eventTimeEntry.endTimeStr}"-->
-<!--                android:textSize="20sp" />-->
-<!--            <TextView-->
-<!--                android:id="@+id/time_entry_duration"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@{eventTimeEntry.durationStr}"-->
-<!--                android:textSize="20sp" />-->
-<!--            <TextView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@{eventTimeEntry.myFunction()}"-->
-<!--                android:textSize="20sp" />-->
-<!--        </RelativeLayout>-->
-
-
-=======
-
-        </RelativeLayout>
-
->>>>>>> parent of b696c17... create expandable cardViewHolder
     </androidx.cardview.widget.CardView>
 </layout>
