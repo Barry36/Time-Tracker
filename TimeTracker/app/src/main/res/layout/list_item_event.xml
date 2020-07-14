@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
             name="event"
             type="com.cs446.group18.timetracker.entity.Event"/>
-        <variable
-            name="eventTimeEntry"
-            type="com.cs446.group18.timetracker.entity.TimeEntry"/>
     </data>
 
     <androidx.cardview.widget.CardView
@@ -49,22 +47,57 @@
         </RelativeLayout>
 
         <RelativeLayout
-
-            android:visibility="gone"
-            android:id="@+id/expandable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:animateLayoutChanges="true"
-            android:orientation="vertical">
+            android:layout_marginTop="56dp">
 
-
-            <TextView
+            <androidx.recyclerview.widget.RecyclerView
+                android:visibility="visible"
+                android:id="@+id/expandable"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Text messaging, or texting, is the act of composing and sending electronic messages, typically consisting of alphabetic and numeric characters"
-                android:textSize="20sp" />
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
         </RelativeLayout>
+
+
+
+<!--        <RelativeLayout-->
+
+<!--            android:visibility="gone"-->
+<!--            android:id="@+id/expandable"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="50dp"-->
+<!--            android:animateLayoutChanges="true"-->
+<!--            android:orientation="vertical">-->
+
+
+<!--            <TextView-->
+<!--                android:id="@+id/time_entry_startTime"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@{eventTimeEntry.startTimeStr}"-->
+<!--                android:textSize="20sp" />-->
+<!--            <TextView-->
+<!--                android:id="@+id/time_entry_endTime"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@{eventTimeEntry.endTimeStr}"-->
+<!--                android:textSize="20sp" />-->
+<!--            <TextView-->
+<!--                android:id="@+id/time_entry_duration"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@{eventTimeEntry.durationStr}"-->
+<!--                android:textSize="20sp" />-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@{eventTimeEntry.myFunction()}"-->
+<!--                android:textSize="20sp" />-->
+<!--        </RelativeLayout>-->
 
 
     </androidx.cardview.widget.CardView>

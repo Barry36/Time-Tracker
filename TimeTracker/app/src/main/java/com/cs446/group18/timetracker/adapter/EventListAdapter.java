@@ -15,17 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.databinding.ListItemEventBinding;
 import com.cs446.group18.timetracker.entity.Event;
-
+import com.cs446.group18.timetracker.utils.InjectorUtils;
 import java.util.List;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
     private List<Event> events;
     private LayoutInflater layoutInflater;
-    private OnEventListener mOnEventListener;
 
-    public EventListAdapter(List<Event> events, OnEventListener onEventListener) {
+    public EventListAdapter(List<Event> events) {
         this.events = events;
-        this.mOnEventListener = onEventListener;    // makes clickListener visible to viewHolder
     }
 
     @NonNull
@@ -36,15 +34,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         }
         ListItemEventBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_event, parent, false);
 
-        return new ViewHolder(binding, mOnEventListener);
+        return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Event currentEvent = events.get(position);
+        Event currentEvent = getEventAt(position);
         holder.bind(currentEvent);
-
-        // holder.bind(currentEvent, onEventListener);
     }
 
     @Override
@@ -52,36 +48,34 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         return events.size();
     }
 
-    // get List of LiveData
+    // get List of Event LiveData
     public void setEvents(List<Event> events) {
         this.events = events;
         // there's more efficient way to update adapter
         notifyDataSetChanged();
     }
 
-    public Event getEventAt(int position) {
-        return events.get(position);
-    }
+
+    public Event getEventAt(int position) { return events.get(position); }
 
 
     // This is the card view
     // Detect the click by implementing onClickListener
     class ViewHolder extends RecyclerView.ViewHolder {
         private ListItemEventBinding binding;
-
-        public ViewHolder(@NonNull ListItemEventBinding binding, OnEventListener onEventListener) {
+        private long eventID;
+        public ViewHolder(@NonNull ListItemEventBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             binding.getRoot().setOnClickListener(new View.OnClickListener(){
 
                 @Override
                 public void onClick(View v) {
-                    Log.d("Barry", "Yoo");
+                    eventID = events.get(getAdapterPosition()).getEventId();
                     if (binding.expandable.getVisibility() == View.GONE) {
-                        Log.d("Bob is Awesome", "Not Visible");
                         expand(binding.expandable);
+
                     } else {
-                        Log.d("Bob is Awesome", "Visible");
                         collapse(binding.expandable);
                     }
                 }
@@ -91,7 +85,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         void bind(Event event) {
             // access data variable in list_item_event.xml
             binding.setEvent(event);
-
             binding.executePendingBindings();
         }
 
@@ -104,12 +97,18 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         void onEventClick(int position);
     }
 
-    private void expand(RelativeLayout layout) {
-        layout.setVisibility(View.VISIBLE);
+//    private void expand(RelativeLayout layout) {
+//        layout.setVisibility(View.VISIBLE);
+//    }
+    private void expand(RecyclerView view) {
+        view.setVisibility(View.VISIBLE);
     }
 
-    private void collapse(final RelativeLayout layout) {
-        layout.setVisibility(View.GONE);
-    }
+//    private void collapse(final RelativeLayout layout) {
+//        layout.setVisibility(View.GONE);
+//    }
 
+    private void collapse(RecyclerView view) {
+        view.setVisibility(View.GONE);
+    }
 }

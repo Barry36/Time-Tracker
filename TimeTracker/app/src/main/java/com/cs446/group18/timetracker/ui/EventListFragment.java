@@ -22,44 +22,58 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.adapter.EventListAdapter;
+import com.cs446.group18.timetracker.adapter.TimeEntryListAdapter;
 import com.cs446.group18.timetracker.entity.Event;
+import com.cs446.group18.timetracker.entity.TimeEntry;
 import com.cs446.group18.timetracker.utils.InjectorUtils;
 import com.cs446.group18.timetracker.vm.EventListViewModelFactory;
 import com.cs446.group18.timetracker.vm.EventViewModel;
+import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
+import com.cs446.group18.timetracker.vm.TimeEntryViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventListFragment extends Fragment implements EventListAdapter.OnEventListener{
-    private static final String TAG = "Test";
+public class EventListFragment extends Fragment{
+
     private List<Event> events = new ArrayList<>();
+    private List<TimeEntry> timeEntries = new ArrayList<>();
     RecyclerView recyclerView;
     private TextView textViewEmpty;
+
+    // Let's try
+    RecyclerView timeEntryListRecyclerView;
 
     private RelativeLayout expandableCardView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View eventListView = inflater.inflate(R.layout.fragment_event_list, container, false);
+        EventListAdapter eventListAdapter = new EventListAdapter(events);
 
-        // *** For Expandable cardView Begins
-        View listItemEvent = inflater.inflate(R.layout.list_item_event, container, false);
-        RelativeLayout expandableCardView = listItemEvent.findViewById(R.id.expandable);
-        this.expandableCardView = expandableCardView;
-        // *** For Expandable cardView Ends
-
-        EventListAdapter adapter = new EventListAdapter(events, this);
         EventListViewModelFactory factory = InjectorUtils.provideEventListViewModelFactory(getActivity());
         EventViewModel viewModel = new ViewModelProvider(this, factory).get(EventViewModel.class);
 
         textViewEmpty = eventListView.findViewById(R.id.empty_event_list);
         recyclerView = eventListView.findViewById(R.id.event_list);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(eventListAdapter);
+
+        // Try
+//        View listItemEvent = inflater.inflate(R.layout.list_item_event, container, false);
+//        timeEntryListRecyclerView = (RecyclerView) listItemEvent.findViewById(R.id.expandable);
+//        timeEntryListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//
+//        TimeEntryListAdapter timeEntryListAdapter = new TimeEntryListAdapter();
+//        timeEntryListRecyclerView.setAdapter(timeEntryListAdapter);
+
+        // Try Ends
+
 
         // Add New Event Action
         FloatingActionButton buttonAddEvent = eventListView.findViewById(R.id.button_add_event);
@@ -67,7 +81,6 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: Floating button");
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
                 View promptView = inflater.inflate(R.layout.prompt_add_event, container, false);
 
@@ -122,10 +135,10 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if( direction == ItemTouchHelper.RIGHT){
-                    viewModel.delete(adapter.getEventAt(viewHolder.getAdapterPosition()));
+                    viewModel.delete(eventListAdapter.getEventAt(viewHolder.getAdapterPosition()));
                     Toast.makeText(eventListView.getContext(), "Event Deleted", Toast.LENGTH_SHORT).show();
                 }else if( direction == ItemTouchHelper.LEFT){
-                    long eventId = adapter.getEventAt(viewHolder.getAdapterPosition()).getEventId();
+                    long eventId = eventListAdapter.getEventAt(viewHolder.getAdapterPosition()).getEventId();
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
                     View promptView = inflater.inflate(R.layout.prompt_add_event, container, false);
 
@@ -175,16 +188,18 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         }).attachToRecyclerView(recyclerView);
 
 
-        subscribeUI(adapter);
+//        subscribeUI(eventListAdapter, timeEntryListAdapter);
+        subscribeUI(eventListAdapter);
         return eventListView;
     }
 
-    private void subscribeUI(EventListAdapter adapter) {
+    private void subscribeUI(EventListAdapter eventListAdapter) {
         EventListViewModelFactory factory = InjectorUtils.provideEventListViewModelFactory(getActivity());
         EventViewModel viewModel = new ViewModelProvider(this, factory).get(EventViewModel.class);
         viewModel.getEvents().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
             @Override
             public void onChanged(@Nullable List<Event> events) {
+                Log.d("observer", "onChanged: Events");
                 if (events != null && !events.isEmpty()) {
                     recyclerView.setVisibility(View.VISIBLE);
                     textViewEmpty.setVisibility(View.GONE);
@@ -192,15 +207,23 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                     recyclerView.setVisibility(View.GONE);
                     textViewEmpty.setVisibility(View.VISIBLE);
                 }
-                adapter.setEvents(events);
+                eventListAdapter.setEvents(events);
             }
         });
-    }
 
-    // Click to expand cardView
-    @Override
-    public void onEventClick(int position) {
 
+
+        // Time Entries
+//        TimeEntryListViewModelFactory timeEntryListViewModelFactory = InjectorUtils.provideTimeEntryListViewModelFactory((getActivity()));
+//        TimeEntryViewModel timeEntryViewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
+//        timeEntryViewModel.getTimeEntries().observe(getViewLifecycleOwner(), new Observer<List<TimeEntry>>() {
+//            @Override
+//            public void onChanged(List<TimeEntry> timeEntries) {
+//                Log.d("Yoo", timeEntries.get(0).getDurationStr());
+//                timeEntryListAdapter.setTimeEntries(timeEntries);
+//                Log.d("Hey", timeEntries.get(0).getDurationStr());
+//            }
+//        });
     }
 
 

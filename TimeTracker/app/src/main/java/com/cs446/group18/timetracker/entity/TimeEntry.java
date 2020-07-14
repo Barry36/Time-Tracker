@@ -37,6 +37,7 @@ public class TimeEntry {
         this.duration = duration;
     }
 
+    public String myFunction(){return "Barry is Awesome";}
     public long getTimeEntryId() {
         return timeEntryId;
     }
@@ -57,6 +58,8 @@ public class TimeEntry {
         return startTime;
     }
 
+    public String getStartTimeStr(){return startTime.toString();}
+
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
@@ -65,6 +68,8 @@ public class TimeEntry {
         return endTime;
     }
 
+    public String getEndTimeStr(){return endTime.toString();}
+
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
@@ -72,6 +77,8 @@ public class TimeEntry {
     public long getDuration() {
         return duration;
     }
+
+    public String getDurationStr(){return Long.toString(duration);}
 
     public void setDuration(long duration) {
         this.duration = duration;
