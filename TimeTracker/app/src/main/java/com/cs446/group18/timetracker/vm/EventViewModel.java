@@ -25,4 +25,11 @@ public class EventViewModel extends ViewModel {
     public void insert(Event event) {
         repository.createEvent(event);
     }
+
+    public void delete(Event event) { repository.deleteEvent(event); }
+
+    public void deleteAll() { repository.deleteAllEvents(); }
+
+    public void update(Event event) { repository.updateEvent(event); }
+
 }
