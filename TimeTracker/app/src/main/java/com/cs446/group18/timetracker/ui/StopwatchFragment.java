@@ -10,21 +10,41 @@ import android.widget.Button;
 import android.widget.Chronometer;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.cs446.group18.timetracker.R;
+import com.cs446.group18.timetracker.entity.TimeEntry;
+import com.cs446.group18.timetracker.utils.InjectorUtils;
+import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
+import com.cs446.group18.timetracker.vm.TimeEntryViewModel;
+
+import java.util.Date;
 
 public class StopwatchFragment extends Fragment {
     private long mTimerSoFarInMillis;
     private boolean mTimerRunning;
     private long pauseOffset = 0;
-    public StopwatchFragment() {
-
+    private Date startTime;
+    private Date endTime;
+    public static StopwatchFragment newInstance(long eventId) {
+        StopwatchFragment stopwatchFragment= new StopwatchFragment();
+        Bundle args = new Bundle();
+        args.putLong("id", eventId);
+        stopwatchFragment.setArguments(args);
+        return stopwatchFragment;
     }
     @Override
     public View onCreateView(LayoutInflater inflater,
                                 ViewGroup container, Bundle savedInstanceState) {
+        TimeEntryListViewModelFactory factory = InjectorUtils.provideTimeEntryListViewModelFactory(getActivity());
+        TimeEntryViewModel viewModel = new ViewModelProvider(this, factory).get(TimeEntryViewModel.class);
+
+        Long eventId = getArguments().getLong("id");
+        Log.w("Id", eventId.toString());
+
         final View rootView = inflater.inflate(R.layout.fragment_stopwatch, container, false);
         final Chronometer chronometer = rootView.findViewById(R.id.chronometer);
+        startTime = new Date();
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -50,6 +70,7 @@ public class StopwatchFragment extends Fragment {
                 mTimerRunning = false;
             }
         });
+
         final Button mButtonStop = rootView.findViewById(R.id.button_stop);
         mButtonStop.setOnClickListener(v -> {
             if(mTimerRunning) {
@@ -68,10 +89,12 @@ public class StopwatchFragment extends Fragment {
             }
             mTimerRunning = false;
             chronometer.stop();
-            chronometer.setBase(SystemClock.elapsedRealtime());
-            pauseOffset = 0;
+            endTime = new Date();
+            viewModel.insert(new TimeEntry(eventId, startTime, endTime, mTimerSoFarInMillis));
+
             mButtonStartPause.setText("Start");
-            //TODO: send back the time
+            pauseOffset = 0;
+            chronometer.setBase(SystemClock.elapsedRealtime());
 
         });
         return rootView;
