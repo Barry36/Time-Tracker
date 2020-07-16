@@ -240,6 +240,17 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                     }
                     expand(expandableLinearLayout);
                 } else {
+
+                    // Detect if Stop btn is clicked
+                    boolean stopBtnClicked = stopwatchFragment.getHiddenBtnValue();
+                    if(stopBtnClicked){
+                        Log.d("TAG", "Hey");
+                        String startTime = timeEntries.get(timeEntries.size() - 1).getStartTime().toString();
+                        TextView textView = new TextView(getContext());
+                        textView.setText(startTime);
+                        textView.setId(timeEntries.size() - 1);
+                        expandableLinearLayout.addView(textView);
+                    }
                     expandableLinearLayout.removeViews(0, timeEntries.size());
                     collapse(expandableLinearLayout);
                 }

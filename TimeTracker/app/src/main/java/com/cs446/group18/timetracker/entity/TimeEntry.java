@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Entity(
         tableName = "time_entry_table",
-        foreignKeys = {@ForeignKey(entity = Event.class,  parentColumns = {"event_id"}, childColumns = {"event_id"})},
+        foreignKeys = {@ForeignKey(entity = Event.class, onDelete = ForeignKey.CASCADE, parentColumns = {"event_id"}, childColumns = {"event_id"})},
         indices = {@Index("event_id")}
         )
 public class TimeEntry {
