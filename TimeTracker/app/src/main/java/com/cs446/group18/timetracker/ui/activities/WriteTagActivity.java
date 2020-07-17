@@ -13,9 +13,12 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.cs446.group18.timetracker.R;
@@ -32,9 +35,10 @@ public class WriteTagActivity extends Activity
   private boolean        _writeMode = false;
 
   private ImageView      _imageViewImage;
-  private EditText       _editTextData;
   private Button         _buttonWrite;
+  private String         Select_string;
 
+  Spinner dropdown;
   @Override
   public void onCreate(Bundle savedInstanceState)
   {
@@ -42,12 +46,40 @@ public class WriteTagActivity extends Activity
     setContentView(R.layout.layout_writetag);
 
     _imageViewImage = (ImageView) findViewById(R.id.image);
-    _editTextData = (EditText) findViewById(R.id.textData);
     _buttonWrite = (Button) findViewById(R.id.buttonWriteTag);
     _buttonWrite.setOnClickListener(_tagWriter);
 
     _nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
+    dropdown = findViewById(R.id.spinner1);
+    String[] items = new String[]{"Study", "Lunch", "Eat"};
+    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+
+    dropdown.setAdapter(adapter);
+    dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+          case 0:
+            Select_string = "Event{eventId=1, eventName=Study, description=I want to Study}";
+            Toast.makeText(getApplicationContext(),Select_string,Toast.LENGTH_SHORT).show();
+            break;
+          case 1:
+            Select_string = "Event{eventId=2, eventName=Lunch, description=I want to Lunch}";
+            Toast.makeText(getApplicationContext(),Select_string,Toast.LENGTH_SHORT).show();
+            break;
+          case 2:
+            Select_string = "Event{eventId=3, eventName=Eat, description=I want to Eat}";
+            Toast.makeText(getApplicationContext(),Select_string,Toast.LENGTH_SHORT).show();
+            break;
+        }
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+
+      }
+    });
     if (_nfcAdapter == null)
     {
       Toast.makeText(this, "Your device does not support NFC. Cannot run this sample.", Toast.LENGTH_LONG).show();
@@ -91,7 +123,7 @@ public class WriteTagActivity extends Activity
         writeTag(buildNdefMessage(), detectedTag);
 
         _imageViewImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
-        _editTextData.setEnabled(true);
+        dropdown.setEnabled(true);
       }
     }
   }
@@ -101,15 +133,9 @@ public class WriteTagActivity extends Activity
                                                   @Override
                                                   public void onClick(View arg0)
                                                   {
-                                                    if (_editTextData.getText().toString().trim().length() == 0)
-                                                    {
-                                                      Toast.makeText(WriteTagActivity.this, "The data to write is empty. Please fill it!",
-                                                                     Toast.LENGTH_LONG).show();
-                                                    }
-                                                    else
-                                                    {
+
                                                       enableTagWriteMode();
-                                                    }
+
                                                   }
                                                 };
 
@@ -119,9 +145,10 @@ public class WriteTagActivity extends Activity
     _nfcAdapter.enableForegroundDispatch(this, _nfcPendingIntent, _writeTagFilters, null);
 
     _imageViewImage.setImageDrawable(getResources().getDrawable(R.drawable.android_writing_logo));
-    _editTextData.setEnabled(false);
+    dropdown.setEnabled(false);
   }
 
+  
   boolean writeTag(NdefMessage message, Tag tag)
   {
     int size = message.toByteArray().length;
@@ -166,18 +193,23 @@ public class WriteTagActivity extends Activity
 
   private NdefMessage buildNdefMessage()
   {
-    String data = _editTextData.getText().toString().trim();
+    if (Select_string.equals("")){
+      Toast.makeText(getApplicationContext(),"Empty Selected String",Toast.LENGTH_SHORT).show();
+    }else{
+      String data = Select_string;
 
-    String mimeType = "application/com.cs446.group18.timetracker";
+      String mimeType = "application/com.cs446.group18.timetracker";
 
-    byte[] mimeBytes = mimeType.getBytes(Charset.forName("UTF-8"));
-    byte[] dataBytes = data.getBytes(Charset.forName("UTF-8"));
-    byte[] id = new byte[0];
+      byte[] mimeBytes = mimeType.getBytes(Charset.forName("UTF-8"));
+      byte[] dataBytes = data.getBytes(Charset.forName("UTF-8"));
+      byte[] id = new byte[0];
 
-    NdefRecord record = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, mimeBytes, id, dataBytes);
-    NdefMessage message = new NdefMessage(new NdefRecord[]{record});
+      NdefRecord record = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, mimeBytes, id, dataBytes);
+      NdefMessage message = new NdefMessage(new NdefRecord[]{record});
 
-    return message;
+      return message;
+    }
+    return null;
   }
 
   private void checkNfcEnabled()

@@ -16,11 +16,12 @@
 	        android:layout_height="wrap_content"
 	        android:padding="10dp"
 	        android:src="@drawable/ic_launcher" />
-	    <EditText 
-	        android:id="@+id/textData"         
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:hint="Your data here!"/>
+		<Spinner
+			android:id="@+id/spinner1"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@android:drawable/btn_dropdown"
+			android:spinnerMode="dropdown"/>
 	</LinearLayout>        
 
     <LinearLayout 
