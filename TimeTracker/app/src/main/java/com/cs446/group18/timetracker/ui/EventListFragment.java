@@ -37,18 +37,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventListFragment extends Fragment implements EventListAdapter.OnEventListener{
+public class EventListFragment extends Fragment implements EventListAdapter.OnEventListener {
     private EventListAdapter adapter;
     private List<Event> events = new ArrayList<>();
-    private List<TimeEntry> timeEntries = new ArrayList<>();
     RecyclerView recyclerView;
     private TextView textViewEmpty;
-
-
-    // Let's try
-    RecyclerView timeEntryListRecyclerView;
-
-//    private RelativeLayout expandableCardView;
 
     @Nullable
     @Override
@@ -67,7 +60,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         textViewEmpty = eventListView.findViewById(R.id.empty_event_list);
         recyclerView = eventListView.findViewById(R.id.event_list);
         recyclerView.setAdapter(eventListAdapter);
-        
+
 
         // Add New Event
         FloatingActionButton buttonAddEvent = eventListView.findViewById(R.id.button_add_event);
@@ -127,10 +120,10 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                if( direction == ItemTouchHelper.RIGHT){
+                if (direction == ItemTouchHelper.RIGHT) {
                     viewModel.delete(eventListAdapter.getEventAt(viewHolder.getAdapterPosition()));
                     Toast.makeText(eventListView.getContext(), "Event Deleted", Toast.LENGTH_SHORT).show();
-                }else if( direction == ItemTouchHelper.LEFT){
+                } else if (direction == ItemTouchHelper.LEFT) {
                     long eventId = eventListAdapter.getEventAt(viewHolder.getAdapterPosition()).getEventId();
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
                     View promptView = inflater.inflate(R.layout.prompt_add_event, container, false);
@@ -181,7 +174,6 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         }).attachToRecyclerView(recyclerView);
 
 
-
         subscribeUI(eventListAdapter);
         return eventListView;
     }
@@ -208,8 +200,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     }
 
 
-
-// Expandable CardView
+    // Expandable CardView
     @Override
     public void onEventClick(int position) {
         // Time Entries
@@ -231,7 +222,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                 LinearLayout expandableLinearLayout = view.findViewById(R.id.expandable);
                 if (expandableLinearLayout.getVisibility() == View.GONE) {
 
-                    for(int i = 0; i < timeEntries.size(); ++i){
+                    for (int i = 0; i < timeEntries.size(); ++i) {
                         String startTime = timeEntries.get(i).getStartTime().toString();
                         TextView textView = new TextView(getContext());
                         textView.setText(startTime);
@@ -243,7 +234,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
                     // Detect if Stop btn is clicked
                     boolean stopBtnClicked = stopwatchFragment.getHiddenBtnValue();
-                    if(stopBtnClicked){
+                    if (stopBtnClicked) {
                         Log.d("TAG", "Hey");
                         String startTime = timeEntries.get(timeEntries.size() - 1).getStartTime().toString();
                         TextView textView = new TextView(getContext());
@@ -270,7 +261,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         layout.setVisibility(View.GONE);
     }
 
-    private void setEvents(List<Event> events){
+    private void setEvents(List<Event> events) {
         this.events = events;
     }
 }
