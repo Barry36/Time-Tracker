@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(
         tableName = "goal_table",
-        foreignKeys = {@ForeignKey(entity = Event.class, parentColumns = {"event_id"}, childColumns = {"event_id"})},
+        foreignKeys = {@ForeignKey(entity = Event.class, onDelete = ForeignKey.CASCADE, parentColumns = {"event_id"}, childColumns = {"event_id"})},
         indices = {@Index("event_id")}
 )
 public class Goal {

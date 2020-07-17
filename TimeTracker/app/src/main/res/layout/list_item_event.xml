@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
             name="event"
@@ -40,7 +41,23 @@
                 android:layout_below="@id/text_view_title"
                 android:layout_marginStart="56dp"
                 android:text="@{event.description}" />
+
+
         </RelativeLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/expandable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_marginTop="56dp"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
 
     </androidx.cardview.widget.CardView>
 </layout>
