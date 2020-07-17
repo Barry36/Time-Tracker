@@ -28,9 +28,9 @@ public class TimeEntry {
     @ColumnInfo(name = "end_time")
     private Date endTime;
 
-    private Long duration;
+    private long duration;
 
-    public TimeEntry(long eventId, Date startTime, Date endTime, Long duration) {
+    public TimeEntry(long eventId, Date startTime, Date endTime, long duration) {
         this.eventId = eventId;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -69,11 +69,11 @@ public class TimeEntry {
         this.endTime = endTime;
     }
 
-    public Long getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(Long duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 }

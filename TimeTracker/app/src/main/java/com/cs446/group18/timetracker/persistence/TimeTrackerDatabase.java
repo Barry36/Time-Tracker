@@ -25,7 +25,7 @@ import com.cs446.group18.timetracker.utils.DateTimeConverter;
 @TypeConverters({DateTimeConverter.class})
 public abstract class TimeTrackerDatabase extends RoomDatabase {
     // create a singleton instance of database
-    private static TimeTrackerDatabase instance;
+    private static volatile TimeTrackerDatabase instance = null;
 
     public abstract TimeEntryDao timeEntryDao();
     public abstract EventDao eventDao();
@@ -75,8 +75,8 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
             timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-07-22 18:20:00"), DateTimeConverter.fromTimestamp("2020-07-22 18:40:00"), 1200L));
             timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-07-23 10:15:00"), DateTimeConverter.fromTimestamp("2020-07-23 10:20:00"), 300L));
             timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-22 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-22 11:40:00"), 1500L));
-            goalDao.insert(new Goal(1, "Study Goal", "N/A", 20));
-            goalDao.insert(new Goal(1, "Rest Goal", "N/A", 20));
+            goalDao.insert(new Goal(1, "Study Goal", "I have to study for my final exam", 20, 100));
+            goalDao.insert(new Goal(2, "Rest Goal", "I need some rest", 80, 100));
             return null;
         }
     }

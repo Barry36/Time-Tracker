@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-
 import com.cs446.group18.timetracker.dao.GoalDao;
 import com.cs446.group18.timetracker.entity.Goal;
 
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class GoalRepository {
     private GoalDao goalDao;
-    private static volatile  GoalRepository instance;
+    private static volatile GoalRepository instance = null;
 
     public GoalRepository(GoalDao goalDao) {
         this.goalDao = goalDao;
@@ -20,7 +19,7 @@ public class GoalRepository {
 
     public static GoalRepository getInstance(GoalDao goalDao) {
         if (instance == null) {
-            synchronized(GoalRepository.class) {
+            synchronized (GoalRepository.class) {
                 if (instance == null)
                     instance = new GoalRepository(goalDao);
             }

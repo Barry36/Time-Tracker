@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ProjectRepository {
     private ProjectDao projectDao;
-    private static volatile  ProjectRepository instance;
+    private static volatile ProjectRepository instance = null;
 
     public ProjectRepository(ProjectDao projectDao) {
         this.projectDao = projectDao;
@@ -19,7 +19,7 @@ public class ProjectRepository {
 
     public static ProjectRepository getInstance(ProjectDao projectDao) {
         if (instance == null) {
-            synchronized(ProjectRepository.class) {
+            synchronized (ProjectRepository.class) {
                 if (instance == null)
                     instance = new ProjectRepository(projectDao);
             }
