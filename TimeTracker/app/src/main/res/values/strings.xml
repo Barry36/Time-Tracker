@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Time Tracker</string>
+    <string name="text_button_writetag">Write Tag</string>
+    <string name="text_button_readtag">Read Tag</string>
+
+    <string name="text_android">The Android</string>
+
+    <string name="text_warning_nfc_is_off">NFC is currently turned off!</string>
+    <string name="text_turn_on_nfc">This example can\'t be used without NFC enabled. Please turn on NFC in the Settings and then use the back button to return to this app.</string>
+    <string name="text_update_settings">Update Settings</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+
 </resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_events"
+            android:title="Event List" />
+
+        <item
+            android:id="@+id/nav_goals"
+            android:title="My Goals" />
+
+        <item
+            android:id="@+id/nav_activity1"
+            android:title="Write Tag" />
+        <item
+            android:id="@+id/nav_activity2"
+            android:title="Read Tag" />
+    </group>
+</menu>
