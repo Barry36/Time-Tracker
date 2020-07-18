@@ -131,6 +131,7 @@ public class ReadTagActivity extends Activity
       }
       else
       {
+        Toast.makeText(getApplicationContext(),"Test if empty",Toast.LENGTH_SHORT).show();
         // Unknown tag type
         byte[] empty = new byte[]{};
         NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, empty, empty);
@@ -146,7 +147,7 @@ public class ReadTagActivity extends Activity
     }
     return msgs;
   }
-
+  // empty....
   private void confirmDisplayedContentOverwrite(final NdefMessage msg)
   {
     final String data = _textViewData.getText().toString().trim();
