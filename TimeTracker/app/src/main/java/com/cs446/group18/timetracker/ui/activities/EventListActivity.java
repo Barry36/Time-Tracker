@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.adapter.EventListAdapter;
@@ -23,7 +24,7 @@ import com.cs446.group18.timetracker.vm.EventViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventListActivity extends BaseActivity {
+public class EventListActivity extends BaseActivity implements EventListAdapter.OnEventListener {
     private List<Event> events = new ArrayList<>();
     RecyclerView recyclerView;
     private TextView textViewEmpty;
@@ -31,18 +32,21 @@ public class EventListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //inflate your activity layout here!
+        //inflate activity layout here!
         @SuppressLint("InflateParams")
         View contentView = inflater.inflate(R.layout.activity_event_list, null, false);
         drawer.addView(contentView, 0);
         navigationView.setCheckedItem(R.id.nav_events);
-        EventListAdapter adapter = new EventListAdapter(events);
+        EventListAdapter adapter = new EventListAdapter(events,this);
 
         textViewEmpty = findViewById(R.id.empty_event_list);
         recyclerView = findViewById(R.id.event_list);
-        recyclerView.setAdapter(adapter);
 
         subscribeUI(adapter);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+
 
     }
     private void subscribeUI(EventListAdapter adapter) {
@@ -63,4 +67,8 @@ public class EventListActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onEventClick(int position) {
+        Toast.makeText(getApplicationContext(),"Item click at position "+ position,Toast.LENGTH_SHORT).show();
+    }
 }
