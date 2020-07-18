@@ -232,6 +232,9 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                     expand(expandableLinearLayout);
                 } else {
 
+                    FragmentTransaction closeFt = getChildFragmentManager().beginTransaction();
+                    closeFt.remove(stopwatchFragment).commit();
+
                     // Detect if Stop btn is clicked
                     boolean stopBtnClicked = stopwatchFragment.getHiddenBtnValue();
                     if (stopBtnClicked) {
