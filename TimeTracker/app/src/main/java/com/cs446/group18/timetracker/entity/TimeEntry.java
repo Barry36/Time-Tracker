@@ -11,9 +11,9 @@ import java.util.Date;
 
 @Entity(
         tableName = "time_entry_table",
-        foreignKeys = {@ForeignKey(entity = Event.class,  parentColumns = {"event_id"}, childColumns = {"event_id"})},
+        foreignKeys = {@ForeignKey(entity = Event.class, onDelete = ForeignKey.CASCADE, parentColumns = {"event_id"}, childColumns = {"event_id"})},
         indices = {@Index("event_id")}
-        )
+)
 public class TimeEntry {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "time_entry_id")
@@ -28,9 +28,9 @@ public class TimeEntry {
     @ColumnInfo(name = "end_time")
     private Date endTime;
 
-    private Long duration;
+    private long duration;
 
-    public TimeEntry(long eventId, Date startTime, Date endTime, Long duration) {
+    public TimeEntry(long eventId, Date startTime, Date endTime, long duration) {
         this.eventId = eventId;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -57,6 +57,10 @@ public class TimeEntry {
         return startTime;
     }
 
+    public String getStartTimeStr() {
+        return startTime.toString();
+    }
+
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
@@ -65,15 +69,23 @@ public class TimeEntry {
         return endTime;
     }
 
+    public String getEndTimeStr() {
+        return endTime.toString();
+    }
+
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
-    public Long getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(Long duration) {
+    public String getDurationStr() {
+        return Long.toString(duration);
+    }
+
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 }

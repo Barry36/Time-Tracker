@@ -10,20 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.cs446.group18.timetracker.R;
-import com.cs446.group18.timetracker.adapter.GoalListAdapter;
-import com.cs446.group18.timetracker.entity.Goal;
-import com.cs446.group18.timetracker.utils.InjectorUtils;
 import com.cs446.group18.timetracker.utils.NFCUtil;
-import com.cs446.group18.timetracker.vm.GoalListViewModelFactory;
-import com.cs446.group18.timetracker.vm.GoalViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class NFCFragment extends Fragment implements NFCUtil.CodeListener {
     private TextView textViewEmpty;
@@ -36,7 +25,6 @@ public class NFCFragment extends Fragment implements NFCUtil.CodeListener {
         NFCUtil.setNfcListener(this);
 
         return view;
-
     }
 
     @Override
