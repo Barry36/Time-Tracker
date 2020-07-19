@@ -14,19 +14,30 @@ import androidx.navigation.ui.NavigationUI;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.cs446.group18.timetracker.BuildConfig;
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.constants.LocationConstant;
 import com.cs446.group18.timetracker.databinding.MainActivityBinding;
+import com.cs446.group18.timetracker.utils.HttpRequestHandler;
 import com.cs446.group18.timetracker.utils.LocationService;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -53,12 +64,13 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button_get_location).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 @SuppressLint("MissingPermission")
                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();
-                Toast.makeText(getApplicationContext(), longitude + ", " + latitude, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), latitude + ", " + longitude, Toast.LENGTH_SHORT).show();
+                new GetAddress().execute(String.format("%.4f,%.4f", latitude, longitude));
 
             }
         });
@@ -112,6 +124,53 @@ public class MainActivity extends AppCompatActivity {
             intent.setAction(LocationConstant.ACTION_START_LOCATION_SERVICE);
             startService(intent);
             Toast.makeText(this, "Geolocation service started", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class GetAddress extends AsyncTask<String, Void, String> {
+
+//        ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+//            dialog.setMessage("Please wait...");
+//            dialog.setCanceledOnTouchOutside(false);
+//            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                double lat = Double.parseDouble(strings[0].split(",")[0]);
+                double lng = Double.parseDouble(strings[0].split(",")[1]);
+                String response;
+                HttpRequestHandler requestHandler = new HttpRequestHandler();
+                String API_KEY = BuildConfig.API_KEY;
+                String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?latlng=%.4f,%.4f&key=%s", lat, lng, API_KEY);
+                response = requestHandler.getResponse(url);
+                return response;
+            } catch (Exception ex) {
+                Log.e("Http Error", ex.toString());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                String inputTypes = ((JSONArray) jsonObject.get("results")).getJSONObject(0).get("types").toString();
+                String[] placeTypes = inputTypes.substring(1, inputTypes.length() - 1).replaceAll("\"", "").split(",");
+                Log.d("Current address place types", Arrays.toString(placeTypes));
+
+                Toast.makeText(getApplicationContext(), "Place type is: " + inputTypes, Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+//            if (dialog.isShowing())
+//                dialog.dismiss();
         }
     }
 

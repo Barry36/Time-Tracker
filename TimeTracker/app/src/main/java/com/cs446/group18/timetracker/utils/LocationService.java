@@ -11,24 +11,77 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import com.cs446.group18.timetracker.BuildConfig;
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.constants.LocationConstant;
+import com.cs446.group18.timetracker.ui.MainActivity;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LocationService extends Service {
     private LocationCallback mLocationCallback;
+
+    private class GetAddress extends AsyncTask<String, Void, String> {
+
+//        ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+//            dialog.setMessage("Please wait...");
+//            dialog.setCanceledOnTouchOutside(false);
+//            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                double lat = Double.parseDouble(strings[0].split(",")[0]);
+                double lng = Double.parseDouble(strings[0].split(",")[1]);
+                String response;
+                HttpRequestHandler requestHandler = new HttpRequestHandler();
+                String API_KEY = BuildConfig.API_KEY;
+                String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?latlng=%.4f,%.4f&key=%s", lat, lng, API_KEY);
+                response = requestHandler.getResponse(url);
+                return response;
+            } catch (Exception ex) {
+                Log.e("Http Error", ex.toString());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                JSONObject obj = ((JSONArray) jsonObject.get("results")).getJSONObject(0);
+                String address = obj.get("formatted_address").toString();
+                Log.d("Current address", address);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+//            if (dialog.isShowing())
+//                dialog.dismiss();
+        }
+    }
 
 //    public LocationCallback locationCallback = new LocationCallback() {
 //        @Override
@@ -52,7 +105,9 @@ public class LocationService extends Service {
                     // get current location latitude and longitude
                     double latitude = locationResult.getLastLocation().getLatitude();
                     double longitude = locationResult.getLastLocation().getLongitude();
-                    Log.d("Current Location", "latitude " + latitude + ", longitude " + longitude);
+                    new GetAddress().execute(String.format("%.4f,%.4f", latitude, longitude));
+
+                    Log.d("Current geolocation", "latitude " + latitude + ", longitude " + longitude);
                 }
             }
         };
@@ -64,6 +119,7 @@ public class LocationService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+    @SuppressLint("MissingPermission")
     private void startLocationService() {
         String channelId = "location_notification_channel";
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -98,21 +154,11 @@ public class LocationService extends Service {
         }
 
         LocationRequest locationRequest = new LocationRequest();
-        // get current location every 10 seconds
-        locationRequest.setInterval(10000);
+        // get current location every 30 seconds
+        locationRequest.setInterval(30000);
 //        locationRequest.setFastestInterval(2000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
         createLocationCallback();
         LocationServices.getFusedLocationProviderClient(this)
                 .requestLocationUpdates(locationRequest, mLocationCallback, Looper.getMainLooper());
