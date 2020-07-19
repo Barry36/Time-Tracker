@@ -28,6 +28,13 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
+            <Button
+                android:id="@+id/button_get_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Get location" />
+
             <fragment
                 android:id="@+id/event_nav_fragment"
                 android:name="androidx.navigation.fragment.NavHostFragment"
