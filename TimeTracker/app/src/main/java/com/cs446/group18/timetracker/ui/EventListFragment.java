@@ -1,5 +1,6 @@
 package com.cs446.group18.timetracker.ui;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -42,6 +44,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     private List<Event> events = new ArrayList<>();
     RecyclerView recyclerView;
     private TextView textViewEmpty;
+    private FloatingActionButton buttonAddEvent;
 
     @Nullable
     @Override
@@ -63,7 +66,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
 
         // Add New Event
-        FloatingActionButton buttonAddEvent = eventListView.findViewById(R.id.button_add_event);
+        buttonAddEvent = eventListView.findViewById(R.id.button_add_event);
         buttonAddEvent.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -201,6 +204,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
 
     // Expandable CardView
+    @SuppressLint("RestrictedApi")
     @Override
     public void onEventClick(int position) {
         // Time Entries
@@ -230,8 +234,8 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                         expandableLinearLayout.addView(textView);
                     }
                     expand(expandableLinearLayout);
+                    buttonAddEvent.setVisibility(View.GONE);
                 } else {
-
                     FragmentTransaction closeFt = getChildFragmentManager().beginTransaction();
                     closeFt.remove(stopwatchFragment).commit();
 
@@ -247,6 +251,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                     }
                     expandableLinearLayout.removeViews(0, timeEntries.size());
                     collapse(expandableLinearLayout);
+                    buttonAddEvent.setVisibility(View.VISIBLE);
                 }
 
                 adapter.setTimeEntries(timeEntries);
