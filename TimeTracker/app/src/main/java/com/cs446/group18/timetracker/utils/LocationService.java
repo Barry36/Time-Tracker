@@ -1,6 +1,5 @@
 package com.cs446.group18.timetracker.utils;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,24 +7,24 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.cs446.group18.timetracker.BuildConfig;
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.constants.LocationConstant;
-import com.cs446.group18.timetracker.ui.MainActivity;
+import com.cs446.group18.timetracker.constants.QuadTreeConstant;
+import com.cs446.group18.timetracker.entity.Geolocation;
+import com.cs446.group18.timetracker.model.Neighbour;
+import com.cs446.group18.timetracker.model.QuadTree;
+import com.cs446.group18.timetracker.persistence.TimeTrackerDatabase;
+import com.cs446.group18.timetracker.repository.GeolocationRepository;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -35,19 +34,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+import java.util.Set;
+
 public class LocationService extends Service {
     private LocationCallback mLocationCallback;
+    QuadTree quadTree = new QuadTree();
+    GeolocationRepository geolocationRepository = GeolocationRepository.getInstance(TimeTrackerDatabase.getInstance(this).geolocationDao());
 
     private class GetAddress extends AsyncTask<String, Void, String> {
-
-//        ProgressDialog dialog = new ProgressDialog(MainActivity.this);
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            dialog.setMessage("Please wait...");
-//            dialog.setCanceledOnTouchOutside(false);
-//            dialog.show();
+            Log.d("onPreExecute", "started");
         }
 
         @Override
@@ -108,6 +108,10 @@ public class LocationService extends Service {
                     new GetAddress().execute(String.format("%.4f,%.4f", latitude, longitude));
 
                     Log.d("Current geolocation", "latitude " + latitude + ", longitude " + longitude);
+                    Set<Neighbour> neighbours = quadTree.findNeighbours(latitude, longitude, QuadTreeConstant.QUADTREE_LAST_NODE_SIZE_IN_KM);
+                    for (Neighbour neighbour : neighbours) {
+                        Log.d("Adjacent neighbor detected", neighbour.toString());
+                    }
                 }
             }
         };
@@ -121,6 +125,14 @@ public class LocationService extends Service {
 
     @SuppressLint("MissingPermission")
     private void startLocationService() {
+        // add all geolocation to the quad tree
+        new Thread(() -> {
+            List<Geolocation> geolocations = geolocationRepository.getGeolocations();
+            for (Geolocation geolocation : geolocations) {
+                quadTree.addNeighbour(geolocation.getGeolocationId(), geolocation.getLatitude(), geolocation.getLongitude());
+            }
+        }).start();
+
         String channelId = "location_notification_channel";
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Intent resultIntent = new Intent();

@@ -14,7 +14,6 @@ import androidx.navigation.ui.NavigationUI;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,6 +29,7 @@ import com.cs446.group18.timetracker.BuildConfig;
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.constants.LocationConstant;
 import com.cs446.group18.timetracker.databinding.MainActivityBinding;
+import com.cs446.group18.timetracker.repository.GeolocationRepository;
 import com.cs446.group18.timetracker.utils.HttpRequestHandler;
 import com.cs446.group18.timetracker.utils.LocationService;
 
@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 double latitude = location.getLatitude();
                 Toast.makeText(getApplicationContext(), latitude + ", " + longitude, Toast.LENGTH_SHORT).show();
                 new GetAddress().execute(String.format("%.4f,%.4f", latitude, longitude));
-
             }
         });
     }
@@ -128,15 +127,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class GetAddress extends AsyncTask<String, Void, String> {
-
-//        ProgressDialog dialog = new ProgressDialog(MainActivity.this);
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            dialog.setMessage("Please wait...");
-//            dialog.setCanceledOnTouchOutside(false);
-//            dialog.show();
         }
 
         @Override
@@ -168,9 +161,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-//            if (dialog.isShowing())
-//                dialog.dismiss();
         }
     }
 
