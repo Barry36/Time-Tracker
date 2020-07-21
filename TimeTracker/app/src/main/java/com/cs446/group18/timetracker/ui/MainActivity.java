@@ -14,12 +14,15 @@ import androidx.navigation.ui.NavigationUI;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,8 +31,8 @@ import android.widget.Toast;
 import com.cs446.group18.timetracker.BuildConfig;
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.constants.LocationConstant;
+import com.cs446.group18.timetracker.constants.NotificationConstant;
 import com.cs446.group18.timetracker.databinding.MainActivityBinding;
-import com.cs446.group18.timetracker.repository.GeolocationRepository;
 import com.cs446.group18.timetracker.utils.HttpRequestHandler;
 import com.cs446.group18.timetracker.utils.LocationService;
 
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createNotificationChannels();
+
         MainActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
         drawerLayout = binding.drawerLayout;
 
@@ -161,6 +166,26 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void createNotificationChannels() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel geolocationChannel = new NotificationChannel(
+                    NotificationConstant.GEOLOCATION_CHANNEL_ID,
+                    "Geolocation Channel",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            geolocationChannel.setDescription("This is geolocation suggestion channel");
+            NotificationChannel channel2 = new NotificationChannel(
+                    NotificationConstant.PLACE_CHANNEL_ID,
+                    "Place Channel",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            channel2.setDescription("This is place suggestion channel");
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(geolocationChannel);
+            manager.createNotificationChannel(channel2);
         }
     }
 

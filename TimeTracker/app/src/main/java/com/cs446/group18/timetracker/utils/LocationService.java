@@ -1,6 +1,7 @@
 package com.cs446.group18.timetracker.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,10 +16,12 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.cs446.group18.timetracker.BuildConfig;
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.constants.LocationConstant;
+import com.cs446.group18.timetracker.constants.NotificationConstant;
 import com.cs446.group18.timetracker.constants.QuadTreeConstant;
 import com.cs446.group18.timetracker.entity.Event;
 import com.cs446.group18.timetracker.entity.Geolocation;
@@ -50,16 +53,20 @@ public class LocationService extends Service {
     private GeolocationRepository geolocationRepository;
     private TimeEntryRepository timeEntryRepository;
     private EventRepository eventRepository;
-    private PendingIntent pendingIntent;
-    private final String geolocation_channel = "geolocation_notification_channel";
-    private final String place_channel = "place_notification_channel";
-
+    private NotificationManagerCompat notificationManager;
+    private Context context;
 
     public LocationService() {
         this.quadTree = new QuadTree();
         this.geolocationRepository = GeolocationRepository.getInstance(TimeTrackerDatabase.getInstance(this).geolocationDao());
         this.timeEntryRepository = TimeEntryRepository.getInstance(TimeTrackerDatabase.getInstance(this).timeEntryDao());
         this.eventRepository = EventRepository.getInstance(TimeTrackerDatabase.getInstance(this).eventDao());
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        this.context = getApplicationContext();
     }
 
     private class GetAddress extends AsyncTask<String, Void, String> {
@@ -88,25 +95,6 @@ public class LocationService extends Service {
 
         @Override
         protected void onPostExecute(String s) {
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            Intent resultIntent = new Intent();
-            pendingIntent = PendingIntent.getActivity(
-                    getApplicationContext(),
-                    0,
-                    resultIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
-            );
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (notificationManager != null && notificationManager.getNotificationChannel(place_channel) == null) {
-                    NotificationChannel notificationchannel = new NotificationChannel(place_channel,
-                            "Geolocation Service",
-                            NotificationManager.IMPORTANCE_HIGH
-                    );
-                    notificationchannel.setDescription("This channel is used by place service");
-                    notificationManager.createNotificationChannel(notificationchannel);
-                }
-            }
             try {
                 JSONObject jsonObject = new JSONObject(s);
                 JSONObject obj = ((JSONArray) jsonObject.get("results")).getJSONObject(0);
@@ -116,18 +104,14 @@ public class LocationService extends Service {
 
                 // TODO: check for event place mapping here
                 if (!placeTypes[0].equals("street_address")) {
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                            getApplicationContext(),
-                            place_channel
-                    );
-                    builder.setSmallIcon(R.mipmap.ic_launcher);
-                    builder.setContentTitle("Time tracker place suggestion");
-                    builder.setDefaults(NotificationCompat.DEFAULT_ALL);
-                    builder.setContentText("You are now in the range of: " + Arrays.toString(placeTypes));
-                    builder.setContentIntent(pendingIntent);
-                    builder.setAutoCancel(false);
-                    builder.setPriority(NotificationCompat.PRIORITY_MAX);
-                    startForeground(LocationConstant.LOCATION_SERVICE_ID, builder.build());
+                    Notification notification = new NotificationCompat.Builder(getApplicationContext(), NotificationConstant.GEOLOCATION_CHANNEL_ID)
+                            .setSmallIcon(R.drawable.task_icon_foreground)
+                            .setContentTitle("Time tracker place suggestion")
+                            .setContentText("You are now in the range of: " + Arrays.toString(placeTypes))
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                            .build();
+                    notificationManager.notify(2, notification);
                 }
 
                 Log.d("Current address", address);
@@ -164,25 +148,7 @@ public class LocationService extends Service {
                     Log.d("Current geolocation", "latitude " + latitude + ", longitude " + longitude);
                     Set<Neighbour> neighbours = quadTree.findNeighbours(latitude, longitude, QuadTreeConstant.QUADTREE_LAST_NODE_SIZE_IN_KM);
                     Map<Long, Integer> freq = new HashMap<>();
-                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    Intent resultIntent = new Intent();
-                    pendingIntent = PendingIntent.getActivity(
-                            getApplicationContext(),
-                            0,
-                            resultIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        if (notificationManager != null && notificationManager.getNotificationChannel(geolocation_channel) == null) {
-                            NotificationChannel notificationchannel = new NotificationChannel(geolocation_channel,
-                                    "Geolocation Service",
-                                    NotificationManager.IMPORTANCE_HIGH
-                            );
-                            notificationchannel.setDescription("This channel is used by geolocation service");
-                            notificationManager.createNotificationChannel(notificationchannel);
-                        }
-                    }
                     new Thread(() -> {
                         Event eventToNotify = null;
                         int max = 0;
@@ -199,19 +165,14 @@ public class LocationService extends Service {
                             Log.d("Adjacent neighbor detected", neighbour.toString());
                         }
                         if (eventToNotify != null) {
-
-                            NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                                    getApplicationContext(),
-                                    geolocation_channel
-                            );
-                            builder.setSmallIcon(R.mipmap.ic_launcher);
-                            builder.setContentTitle("Time tracker geolocation suggestion");
-                            builder.setDefaults(NotificationCompat.DEFAULT_ALL);
-                            builder.setContentText("Track for event: " + eventToNotify.getEventName());
-                            builder.setContentIntent(pendingIntent);
-                            builder.setAutoCancel(false);
-                            builder.setPriority(NotificationCompat.PRIORITY_MAX);
-                            startForeground(LocationConstant.LOCATION_SERVICE_ID, builder.build());
+                            Notification notification = new NotificationCompat.Builder(getApplicationContext(), NotificationConstant.GEOLOCATION_CHANNEL_ID)
+                                    .setSmallIcon(R.drawable.task_icon_foreground)
+                                    .setContentTitle("Time tracker geolocation suggestion")
+                                    .setContentText("Track for event: " + eventToNotify.getEventName())
+                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                                    .build();
+                            notificationManager.notify(1, notification);
                             Log.d("Event to be notified", eventToNotify.getEventName());
                         }
                     }).start();
@@ -223,7 +184,7 @@ public class LocationService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw new UnsupportedOperationException();
     }
 
     @SuppressLint("MissingPermission")
@@ -236,14 +197,14 @@ public class LocationService extends Service {
             }
         }).start();
 
-
-
         LocationRequest locationRequest = new LocationRequest();
         // get current location every 30 seconds
         locationRequest.setInterval(30000);
 //        locationRequest.setFastestInterval(2000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+        // create notificationManager
+        this.notificationManager = NotificationManagerCompat.from(context);
         createLocationCallback();
         LocationServices.getFusedLocationProviderClient(this)
                 .requestLocationUpdates(locationRequest, mLocationCallback, Looper.getMainLooper());
