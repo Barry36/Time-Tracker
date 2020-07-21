@@ -1,6 +1,7 @@
-package com.cs446.group18.timetracker.ui;
+package com.cs446.group18.timetracker;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
@@ -12,34 +13,41 @@ import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+public class ReadTag extends AppCompatActivity {
 
-import com.cs446.group18.timetracker.R;
 
-public class ReadTagFragment extends Fragment implements OnNewIntentListener {
+    private static final String TAG = ReadTag.class.getSimpleName();
 
+    // NFC-related variables
     private NfcAdapter _nfcAdapter;
     private PendingIntent _nfcPendingIntent;
     IntentFilter[]              _readTagFilters;
 
     private TextView _textViewData;
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View readTagView = inflater.inflate(R.layout.layout_readtag, container, false);
 
-        _textViewData = (TextView) readTagView.findViewById(R.id.textData);
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.layout_readtag);
+        Toast.makeText(getApplicationContext(),"Read Activity",Toast.LENGTH_SHORT).show();
+        _textViewData = (TextView) findViewById(R.id.textData);
+
+        _nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+        if (_nfcAdapter == null)
+        {
+            Toast.makeText(this, "Your device does not support NFC. Cannot run this demo.", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
         checkNfcEnabled();
 
-        _nfcPendingIntent = PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        _nfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
         IntentFilter ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         try
@@ -52,51 +60,45 @@ public class ReadTagFragment extends Fragment implements OnNewIntentListener {
         }
 
         _readTagFilters = new IntentFilter[]{ndefDetected};
-
-
-        return readTagView;
     }
 
     @Override
-    public void onAttach(@NonNull Activity activity) {
-        super.onAttach(activity);
-        _nfcAdapter = NfcAdapter.getDefaultAdapter(activity);
-    }
-
-    @Override
-    public void onResume() {
+    protected void onResume()
+    {
         super.onResume();
-        if (_nfcAdapter != null){
-            checkNfcEnabled();
 
-            if (getActivity().getIntent().getAction() != null)
+        checkNfcEnabled();
+
+        if (getIntent().getAction() != null)
+        {
+            if (getIntent().getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED))
             {
-                if (getActivity().getIntent().getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED))
-                {
-                    NdefMessage[] msgs = getNdefMessagesFromIntent(getActivity().getIntent());
-                    NdefRecord record = msgs[0].getRecords()[0];
-                    byte[] payload = record.getPayload();
+                NdefMessage[] msgs = getNdefMessagesFromIntent(getIntent());
+                NdefRecord record = msgs[0].getRecords()[0];
+                byte[] payload = record.getPayload();
 
-                    String payloadString = new String(payload);
+                String payloadString = new String(payload);
 
-                    _textViewData.setText(payloadString);
-                }
+                _textViewData.setText(payloadString);
             }
-
-            _nfcAdapter.enableForegroundDispatch(getActivity(), _nfcPendingIntent, _readTagFilters, null);
         }
+
+        _nfcAdapter.enableForegroundDispatch(this, _nfcPendingIntent, _readTagFilters, null);
+
     }
 
     @Override
-    public void onPause() {
+    protected void onPause()
+    {
         super.onPause();
-        if (_nfcAdapter != null){
-            _nfcAdapter.disableForegroundDispatch(getActivity());
-        }
+
+        _nfcAdapter.disableForegroundDispatch(this);
     }
 
     @Override
-    public void onNewIntent(Intent intent) {
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
         if (intent.getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED))
         {
             NdefMessage[] msgs = getNdefMessagesFromIntent(intent);
@@ -105,7 +107,7 @@ public class ReadTagFragment extends Fragment implements OnNewIntentListener {
         }
         else if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED))
         {
-            Toast.makeText(getContext(), "This NFC tag has no NDEF data.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "This NFC tag has no NDEF data.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -138,15 +140,17 @@ public class ReadTagFragment extends Fragment implements OnNewIntentListener {
         }
         else
         {
-            Log.e("Read Tag", "Unknown intent.");
+            Log.e(TAG, "Unknown intent.");
+            finish();
         }
         return msgs;
     }
+
     private void confirmDisplayedContentOverwrite(final NdefMessage msg)
     {
         final String data = _textViewData.getText().toString().trim();
 
-        new AlertDialog.Builder(getContext()).setTitle("New tag found!").setMessage("Do you wanna show the content of this tag?")
+        new AlertDialog.Builder(this).setTitle("New tag found!").setMessage("Do you wanna show the content of this tag?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener()
                 {
                     @Override
@@ -166,23 +170,22 @@ public class ReadTagFragment extends Fragment implements OnNewIntentListener {
             }
         }).show();
     }
+
     private void checkNfcEnabled()
     {
-        if (_nfcAdapter != null){
-            Boolean nfcEnabled = _nfcAdapter.isEnabled();
-            if (!nfcEnabled)
-            {
-                new AlertDialog.Builder(getContext()).setTitle(getString(R.string.text_warning_nfc_is_off))
-                        .setMessage(getString(R.string.text_turn_on_nfc)).setCancelable(false)
-                        .setPositiveButton(getString(R.string.text_update_settings), new DialogInterface.OnClickListener()
+        Boolean nfcEnabled = _nfcAdapter.isEnabled();
+        if (!nfcEnabled)
+        {
+            new AlertDialog.Builder(ReadTag.this).setTitle(getString(R.string.text_warning_nfc_is_off))
+                    .setMessage(getString(R.string.text_turn_on_nfc)).setCancelable(false)
+                    .setPositiveButton(getString(R.string.text_update_settings), new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id)
                         {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                                startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-                            }
-                        }).create().show();
-            }
+                            startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+                        }
+                    }).create().show();
         }
     }
 }
