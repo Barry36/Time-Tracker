@@ -30,9 +30,13 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
     private static volatile TimeTrackerDatabase instance = null;
 
     public abstract TimeEntryDao timeEntryDao();
+
     public abstract EventDao eventDao();
+
     public abstract ProjectDao projectDao();
+
     public abstract GoalDao goalDao();
+
     public abstract GeolocationDao geolocationDao();
 
     // synchronized is used to avoid concurrent access in multithreading environment
@@ -75,8 +79,8 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
         protected Void doInBackground(Void... voids) {
             projectDao.insert(new Project("Study", "N/A", "#FF4081"));
             projectDao.insert(new Project("Rest", "N/A", "#3F51B5"));
-            eventDao.insert(new Event(1,"Prepare for interview", "LC 161 & LC 162"));
-            eventDao.insert(new Event(2, "Watch Youtube", "Watch drama"));
+            eventDao.insert(new Event(1, "Study", "LC 161 & LC 162"));
+            eventDao.insert(new Event(2, "Rest", "Watch drama"));
             timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-07-22 18:20:00"), DateTimeConverter.fromTimestamp("2020-07-22 18:40:00"), 1200L));
             timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-07-23 10:15:00"), DateTimeConverter.fromTimestamp("2020-07-23 10:20:00"), 300L));
             timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-22 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-22 11:40:00"), 1500L));
@@ -85,11 +89,11 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
 
             goalDao.insert(new Goal(1, "Study Goal", "I have to study for my final exam", 20, 100));
             goalDao.insert(new Goal(2, "Rest Goal", "I need some rest", 80, 100));
-            geolocationDao.insert(new Geolocation(1, 43.46552, -80.5226817));
-            geolocationDao.insert(new Geolocation(2, 43.47363, -80.5370301));
-            geolocationDao.insert(new Geolocation(3, 43.48177, -80.5255692));
-            geolocationDao.insert(new Geolocation(4, 43.48177, -80.5255692));
-            geolocationDao.insert(new Geolocation(5, 43.46567, -80.522683));
+            geolocationDao.insert(new Geolocation(1, 43.46552, -80.5226817)); // Captain Boil
+            geolocationDao.insert(new Geolocation(2, 43.46567, -80.522683)); // Nick & Nat's Uptown 21
+            geolocationDao.insert(new Geolocation(3, 43.46552, -80.5226817)); // Captain Boil
+            geolocationDao.insert(new Geolocation(4, 43.48177, -80.5255692)); // McDonald's
+            geolocationDao.insert(new Geolocation(5, 43.47363, -80.5370301)); // Blair House
 
             return null;
         }

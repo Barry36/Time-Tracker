@@ -29,6 +29,10 @@ public class GeolocationRepository {
         return geolocationDao.getGeolocations();
     }
 
+    public Geolocation getGeolocationById(long id) {
+        return geolocationDao.getGeolocationById(id);
+    }
+
     public void createGeolocation(Geolocation geolocation) {
         AsyncTask.execute(() -> geolocationDao.insert(geolocation));
     }

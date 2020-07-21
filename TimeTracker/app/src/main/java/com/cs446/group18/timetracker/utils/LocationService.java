@@ -20,11 +20,15 @@ import com.cs446.group18.timetracker.BuildConfig;
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.constants.LocationConstant;
 import com.cs446.group18.timetracker.constants.QuadTreeConstant;
+import com.cs446.group18.timetracker.entity.Event;
 import com.cs446.group18.timetracker.entity.Geolocation;
+import com.cs446.group18.timetracker.entity.TimeEntry;
 import com.cs446.group18.timetracker.model.Neighbour;
 import com.cs446.group18.timetracker.model.QuadTree;
 import com.cs446.group18.timetracker.persistence.TimeTrackerDatabase;
+import com.cs446.group18.timetracker.repository.EventRepository;
 import com.cs446.group18.timetracker.repository.GeolocationRepository;
+import com.cs446.group18.timetracker.repository.TimeEntryRepository;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -34,20 +38,30 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class LocationService extends Service {
     private LocationCallback mLocationCallback;
-    QuadTree quadTree = new QuadTree();
-    GeolocationRepository geolocationRepository = GeolocationRepository.getInstance(TimeTrackerDatabase.getInstance(this).geolocationDao());
+    private QuadTree quadTree;
+    private GeolocationRepository geolocationRepository;
+    private TimeEntryRepository timeEntryRepository;
+    private EventRepository eventRepository;
+
+    public LocationService() {
+        this.quadTree = new QuadTree();
+        this.geolocationRepository = GeolocationRepository.getInstance(TimeTrackerDatabase.getInstance(this).geolocationDao());
+        this.timeEntryRepository = TimeEntryRepository.getInstance(TimeTrackerDatabase.getInstance(this).timeEntryDao());
+        this.eventRepository = EventRepository.getInstance(TimeTrackerDatabase.getInstance(this).eventDao());
+    }
 
     private class GetAddress extends AsyncTask<String, Void, String> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Log.d("onPreExecute", "started");
         }
 
         @Override
@@ -109,9 +123,26 @@ public class LocationService extends Service {
 
                     Log.d("Current geolocation", "latitude " + latitude + ", longitude " + longitude);
                     Set<Neighbour> neighbours = quadTree.findNeighbours(latitude, longitude, QuadTreeConstant.QUADTREE_LAST_NODE_SIZE_IN_KM);
-                    for (Neighbour neighbour : neighbours) {
-                        Log.d("Adjacent neighbor detected", neighbour.toString());
-                    }
+                    Map<Long, Integer> freq = new HashMap<>();
+                    new Thread(() -> {
+                        Event eventToNotify = null;
+                        int max = 0;
+                        for (Neighbour neighbour : neighbours) {
+                            Geolocation geolocation = geolocationRepository.getGeolocationById(neighbour.getId());
+                            TimeEntry timeEntry = timeEntryRepository.getTimeEntryById(geolocation.getTimeEntryId());
+                            Event event = eventRepository.getEventById(timeEntry.getEventId());
+                            int count = freq.getOrDefault(event.getEventId(), 0) + 1;
+                            if (max < count) {
+                                max = count;
+                                eventToNotify = event;
+                            }
+                            freq.put(event.getEventId(), count);
+                            Log.d("Adjacent neighbor detected", neighbour.toString());
+                        }
+                        if (eventToNotify != null) {
+                            Log.d("Event to be notified", eventToNotify.getEventName());
+                        }
+                    }).start();
                 }
             }
         };
