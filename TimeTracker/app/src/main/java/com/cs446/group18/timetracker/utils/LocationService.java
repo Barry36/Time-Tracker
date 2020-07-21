@@ -26,6 +26,7 @@ import com.cs446.group18.timetracker.constants.QuadTreeConstant;
 import com.cs446.group18.timetracker.entity.Event;
 import com.cs446.group18.timetracker.entity.Geolocation;
 import com.cs446.group18.timetracker.entity.TimeEntry;
+import com.cs446.group18.timetracker.mapping.PlaceMapping;
 import com.cs446.group18.timetracker.model.Neighbour;
 import com.cs446.group18.timetracker.model.QuadTree;
 import com.cs446.group18.timetracker.persistence.TimeTrackerDatabase;
@@ -38,6 +39,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,6 +49,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LocationService extends Service {
     private LocationCallback mLocationCallback;
@@ -56,12 +60,14 @@ public class LocationService extends Service {
     private EventRepository eventRepository;
     private NotificationManagerCompat notificationManager;
     private Context context;
+    private Map<String, String> mappings;
 
     public LocationService() {
         this.quadTree = new QuadTree();
         this.geolocationRepository = GeolocationRepository.getInstance(TimeTrackerDatabase.getInstance(this).geolocationDao());
         this.timeEntryRepository = TimeEntryRepository.getInstance(TimeTrackerDatabase.getInstance(this).timeEntryDao());
         this.eventRepository = EventRepository.getInstance(TimeTrackerDatabase.getInstance(this).eventDao());
+        this.mappings = new PlaceMapping().getMapping();
     }
 
     @Override
@@ -98,13 +104,23 @@ public class LocationService extends Service {
         protected void onPostExecute(String s) {
             try {
                 JSONObject jsonObject = new JSONObject(s);
-                JSONObject obj = ((JSONArray) jsonObject.get("results")).getJSONObject(0);
-                String address = obj.get("formatted_address").toString();
                 String inputTypes = ((JSONArray) jsonObject.get("results")).getJSONObject(0).get("types").toString();
                 String[] placeTypes = inputTypes.substring(1, inputTypes.length() - 1).replaceAll("\"", "").split(",");
+                String patternString = "\\b(" + StringUtils.join(placeTypes, "|") + ")\\b";
+                Pattern pattern = Pattern.compile(patternString);
+                String matchedPlace = "";
+                String matchedEvent = "";
 
-                // TODO: check for event place mapping here
-                if (!placeTypes[0].equals("street_address")) {
+                for (Map.Entry<String, String> entry : mappings.entrySet()) {
+                    Matcher matcher = pattern.matcher(entry.getValue());
+                    if (matcher.find()) {
+                        matchedPlace = matcher.group(1);
+                        matchedEvent = entry.getKey();
+                        break;
+                    }
+                }
+
+                if (!matchedPlace.isEmpty()) {
                     Intent activityIntent = new Intent(getApplicationContext(), MainActivity.class);
                     PendingIntent contentIntent = PendingIntent.getActivity(
                             getApplicationContext(),
@@ -119,7 +135,8 @@ public class LocationService extends Service {
                             .setLargeIcon(largeIcon)
                             .setStyle(new NotificationCompat.BigTextStyle()
                                     .setSummaryText("place service"))
-                            .setContentText("You are now in the range of: " + Arrays.toString(placeTypes))
+                            .setContentTitle("You are close to: " + matchedPlace)
+                            .setContentText("You can start to track for event: " + matchedEvent)
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                             .setColor(Color.rgb(15, 163, 232))
@@ -130,7 +147,7 @@ public class LocationService extends Service {
                     notificationManager.notify(2, notification);
                 }
 
-                Log.d("Current address", address);
+                Log.d("Current place types", Arrays.toString(placeTypes));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
