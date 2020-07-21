@@ -16,10 +16,6 @@ public class QuadTree {
         rootNode = new QuadTreeNode(0, 0, TOTAL_Y_DEGREES, TOTAL_X_DEGREES);
     }
 
-    public QuadTree(QuadTreeNode rootNode) {
-        this.rootNode = rootNode;
-    }
-
     public synchronized void addNeighbour(long id, double latitude, double longitude) {
         Neighbour neighbour = new Neighbour(id, normalizeLatitude(latitude),
                 normalizeLongitude(longitude));
@@ -36,20 +32,6 @@ public class QuadTree {
         Rectangle2D areaOfInterest = getRangeAsRectangle(normalizeLatitude(latitude), normalizeLongitude(longitude), rangeInDegrees);
         rootNode.findNeighboursWithinRectangle(neighbourSet, areaOfInterest);
         return neighbourSet;
-    }
-
-    public Set<Long> findNeighboursIds(double latitude, double longitude, double rangeInKm) {
-        Set<Neighbour> neighbourSet = findNeighbours(latitude, longitude, rangeInKm);
-        Set<Long> neighboursIds = new HashSet<>();
-
-        for (Neighbour neighbour : neighbourSet)
-            neighboursIds.add(neighbour.getId());
-
-        return neighboursIds;
-    }
-
-    protected QuadTreeNode getRootNode() {
-        return rootNode;
     }
 
     public double normalizeLatitude(double latitude) {

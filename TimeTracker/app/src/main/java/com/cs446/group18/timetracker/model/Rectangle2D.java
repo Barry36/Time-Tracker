@@ -3,11 +3,8 @@ package com.cs446.group18.timetracker.model;
 public class Rectangle2D {
 
     public double x;
-
     public double y;
-
     public double width;
-
     public double height;
 
     public Rectangle2D(double x, double y, double w, double h) {
