@@ -34,7 +34,7 @@ import com.cs446.group18.timetracker.constants.LocationConstant;
 import com.cs446.group18.timetracker.constants.NotificationConstant;
 import com.cs446.group18.timetracker.databinding.MainActivityBinding;
 import com.cs446.group18.timetracker.utils.HttpRequestHandler;
-import com.cs446.group18.timetracker.utils.LocationService;
+import com.cs446.group18.timetracker.service.LocationService;
 
 import org.json.JSONArray;
 import org.json.JSONException;

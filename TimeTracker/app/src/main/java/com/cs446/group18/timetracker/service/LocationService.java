@@ -1,4 +1,4 @@
-package com.cs446.group18.timetracker.utils;
+package com.cs446.group18.timetracker.service;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -34,6 +34,7 @@ import com.cs446.group18.timetracker.repository.EventRepository;
 import com.cs446.group18.timetracker.repository.GeolocationRepository;
 import com.cs446.group18.timetracker.repository.TimeEntryRepository;
 import com.cs446.group18.timetracker.ui.MainActivity;
+import com.cs446.group18.timetracker.utils.HttpRequestHandler;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
