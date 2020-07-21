@@ -2,14 +2,14 @@ package com.cs446.group18.timetracker.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
@@ -32,6 +32,7 @@ import com.cs446.group18.timetracker.persistence.TimeTrackerDatabase;
 import com.cs446.group18.timetracker.repository.EventRepository;
 import com.cs446.group18.timetracker.repository.GeolocationRepository;
 import com.cs446.group18.timetracker.repository.TimeEntryRepository;
+import com.cs446.group18.timetracker.ui.MainActivity;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -104,12 +105,27 @@ public class LocationService extends Service {
 
                 // TODO: check for event place mapping here
                 if (!placeTypes[0].equals("street_address")) {
+                    Intent activityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                    PendingIntent contentIntent = PendingIntent.getActivity(
+                            getApplicationContext(),
+                            0,
+                            activityIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+                    Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.checklist);
+
                     Notification notification = new NotificationCompat.Builder(getApplicationContext(), NotificationConstant.GEOLOCATION_CHANNEL_ID)
-                            .setSmallIcon(R.drawable.task_icon_foreground)
-                            .setContentTitle("Time tracker place suggestion")
+                            .setSmallIcon(R.drawable.ic_notification)
+                            .setLargeIcon(largeIcon)
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .setSummaryText("place service"))
                             .setContentText("You are now in the range of: " + Arrays.toString(placeTypes))
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                            .setColor(Color.rgb(15, 163, 232))
+                            .setContentIntent(contentIntent)
+                            .setAutoCancel(true)
+                            .setOnlyAlertOnce(true)
                             .build();
                     notificationManager.notify(2, notification);
                 }
@@ -165,12 +181,28 @@ public class LocationService extends Service {
                             Log.d("Adjacent neighbor detected", neighbour.toString());
                         }
                         if (eventToNotify != null) {
+                            Intent activityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                            PendingIntent contentIntent = PendingIntent.getActivity(
+                                    getApplicationContext(),
+                                    0,
+                                    activityIntent,
+                                    PendingIntent.FLAG_UPDATE_CURRENT
+                            );
+                            Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.checklist);
+
                             Notification notification = new NotificationCompat.Builder(getApplicationContext(), NotificationConstant.GEOLOCATION_CHANNEL_ID)
-                                    .setSmallIcon(R.drawable.task_icon_foreground)
-                                    .setContentTitle("Time tracker geolocation suggestion")
+                                    .setSmallIcon(R.drawable.ic_notification)
+                                    .setLargeIcon(largeIcon)
+                                    .setStyle(new NotificationCompat.BigTextStyle()
+                                            .setBigContentTitle("Time tracker")
+                                            .setSummaryText("geolocation service"))
                                     .setContentText("Track for event: " + eventToNotify.getEventName())
                                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                                    .setColor(Color.rgb(15, 163, 232))
+                                    .setContentIntent(contentIntent)
+                                    .setAutoCancel(true)
+                                    .setOnlyAlertOnce(true)
                                     .build();
                             notificationManager.notify(1, notification);
                             Log.d("Event to be notified", eventToNotify.getEventName());
