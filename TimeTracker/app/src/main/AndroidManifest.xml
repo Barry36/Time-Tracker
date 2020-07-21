@@ -1,63 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.cs446.group18.timetracker">
+
 
     <application
         android:name=".MyApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activities.GoalListActivity"
-            android:parentActivityName=".ui.activities.BaseActivity"
-            ></activity>
-        <activity
-            android:name=".ui.activities.BaseActivity" />
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.activities.EventListActivity"
             android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/com.cs446.group18.timetracker" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.nfc.action.TECH_DISCOVERED"
-                android:resource="@xml/nfc" />
         </activity>
-        <activity
-            android:name=".ui.activities.WriteTagActivity"
-            android:label="Write Tag"
-            android:parentActivityName=".ui.activities.BaseActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activities.ReadTagActivity"
-            android:label="Read Tag"
-            android:parentActivityName=".ui.activities.BaseActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-            <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <data android:mimeType="application/com.cs446.group18.timetracker" />
-        </intent-filter>
-
-
-        </activity>
-
     </application>
-
     <uses-feature
         android:name="android.hardware.nfc"
-        android:required="true" />
+        android:required="true"
+        tools:ignore="DuplicateUsesFeature,ManifestOrder" />
 
     <uses-permission android:name="android.permission.NFC" />
 
