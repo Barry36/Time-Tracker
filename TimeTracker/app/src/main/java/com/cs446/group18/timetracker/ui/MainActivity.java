@@ -8,12 +8,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.databinding.ActivityEventBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
+    OnNewIntentListener newIntentListener;
     private DrawerLayout drawerLayout;
     private NavController navController;
 
@@ -28,6 +30,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
         NavigationUI.setupWithNavController(binding.navigationView, navController);
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        newIntentListener.onNewIntent(intent);
+        super.onNewIntent(intent);
     }
 
     @Override

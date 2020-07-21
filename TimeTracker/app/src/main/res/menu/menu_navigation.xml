@@ -8,9 +8,10 @@
         android:title="My goals"/>
 
     <item
-        android:id="@+id/nfc_fragment"
-        android:title="NFC Reader"/>
+        android:id="@+id/read_tag_fragment"
+        android:title="Read Tag"/>
     <item
-        android:id="@+id/nfc_writer_fragment"
-        android:title="NFC Writer"/>
+        android:id="@+id/write_tag_fragment"
+        android:title="Write Tag"/>
+
 </menu>
