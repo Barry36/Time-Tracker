@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity  {
         navController = Navigation.findNavController(this, R.id.event_nav_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
         NavigationUI.setupWithNavController(binding.navigationView, navController);
-        binding.navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        /*binding.navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity  {
                 }
                 return false;
             }
-        });
+        }); */
 
     }
 

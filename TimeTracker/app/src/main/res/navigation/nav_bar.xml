@@ -22,6 +22,17 @@
         android:label="NFC Reader"
         tools:layout="@layout/fragment_nfc" />
 
+    <activity
+        android:id="@+id/read_tag_fragment"
+        android:name="com.cs446.group18.timetracker.ReadTag"
+        android:label="Read Tag"
+        tools:layout="@layout/activity_read_tag" />
+
+    <activity
+        android:id="@+id/write_tag_fragment"
+        android:name="com.cs446.group18.timetracker.WriteTag"
+        android:label="Write Tag"
+        tools:layout="@layout/activity_write_tag2" />
 
 
 
