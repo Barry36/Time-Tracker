@@ -10,6 +10,7 @@ import com.cs446.group18.timetracker.vm.EventListViewModelFactory;
 import com.cs446.group18.timetracker.vm.GoalListViewModelFactory;
 import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
 
+// abstract factory responsible for creating families of related or dependent objects without specifying their concrete classes
 public class InjectorUtils {
     private static TimeEntryRepository getTimeEntryRepository(Context context) {
         return TimeEntryRepository.getInstance(TimeTrackerDatabase.getInstance(context).timeEntryDao());

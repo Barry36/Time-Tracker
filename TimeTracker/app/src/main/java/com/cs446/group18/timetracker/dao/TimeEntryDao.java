@@ -27,6 +27,21 @@ public interface TimeEntryDao {
     @Query("SELECT * FROM time_entry_table ORDER BY start_time DESC")
     LiveData<List<TimeEntry>> getAllTimeEntries();
 
+
+//    @Query("SELECT * FROM time_entry_table WHERE event_id = :event_id")
+//    LiveData<List<TimeEntry>> getTimeEntriesByEventID(long event_id);
+
+
+    @Query("SELECT * FROM time_entry_table WHERE event_id = :event_id")
+    LiveData<List<TimeEntry>> getTimeEntriesByEventID(long event_id);
+
+    @Query("SELECT * FROM time_entry_table ORDER BY event_id DESC")
+    List<TimeEntry> getAllTimeEntriesStatic();
+
+
+    @Query("SELECT * FROM time_entry_table WHERE time_entry_id = :time_entry_id")
+    TimeEntry getTimeEntryById(long time_entry_id);
+
     @Transaction
     @Query("SELECT * FROM event_table")
     LiveData<List<EventWithTimeEntries>> getEventWithTimeEntries();

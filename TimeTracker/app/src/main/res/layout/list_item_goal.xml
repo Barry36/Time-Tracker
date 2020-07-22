@@ -3,7 +3,7 @@
     <data>
         <variable
             name="goal"
-            type="com.cs446.group18.timetracker.entity.Goal"/>
+            type="com.cs446.group18.timetracker.entity.Goal" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp">
+
             <TextView
                 android:id="@+id/text_view_title"
                 android:layout_width="wrap_content"
@@ -25,7 +26,8 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{goal.name}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
             <TextView
                 android:id="@+id/text_view_description"
                 android:layout_width="wrap_content"
@@ -34,5 +36,24 @@
                 android:text="@{goal.description}" />
         </RelativeLayout>
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="-5dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="@{goal.progressValue}"
+            android:scaleY="3" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_below="@+id/progress_bar"
+            android:text="N/100" />
     </androidx.cardview.widget.CardView>
 </layout>

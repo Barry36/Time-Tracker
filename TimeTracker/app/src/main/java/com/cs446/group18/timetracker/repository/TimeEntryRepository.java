@@ -12,7 +12,7 @@ import java.util.List;
 
 public class TimeEntryRepository {
     private TimeEntryDao timeEntryDao;
-    private static volatile TimeEntryRepository instance;
+    private static volatile TimeEntryRepository instance = null;
 
     public TimeEntryRepository(TimeEntryDao timeEntryDao) {
         this.timeEntryDao = timeEntryDao;
@@ -20,7 +20,7 @@ public class TimeEntryRepository {
 
     public static TimeEntryRepository getInstance(TimeEntryDao timeEntryDao) {
         if (instance == null) {
-            synchronized(TimeEntryRepository.class) {
+            synchronized (TimeEntryRepository.class) {
                 if (instance == null)
                     instance = new TimeEntryRepository(timeEntryDao);
             }
@@ -31,6 +31,21 @@ public class TimeEntryRepository {
     public LiveData<List<TimeEntry>> getTimeEntries() {
         return timeEntryDao.getAllTimeEntries();
     }
+
+    public TimeEntry getTimeEntryById(long id) {
+        return timeEntryDao.getTimeEntryById(id);
+    }
+
+
+//    public LiveData<List<TimeEntry>> getTimeEntriesByEventID(int event_id){
+//        return timeEntryDao.getTimeEntriesByEventID(event_id);
+//    }
+
+    public LiveData<List<TimeEntry>> getTimeEntriesByEventID(long event_id){
+        return timeEntryDao.getTimeEntriesByEventID(event_id);
+    }
+
+
 
     public LiveData<List<EventWithTimeEntries>> getEventWithTimeEntries() {
         return timeEntryDao.getEventWithTimeEntries();

@@ -1,22 +1,12 @@
 package com.cs446.group18.timetracker.utils;
 
-import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
-import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.webkit.URLUtil;
-import android.widget.Toast;
-
-
-import com.cs446.group18.timetracker.MyApplication;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 
 
@@ -52,7 +42,7 @@ public class NFCUtil {
 
             Ndef ndef = Ndef.get(tag);
             if (ndef == null) {
-// NDEF is not supported by this Tag.
+                // NDEF is not supported by this Tag.
                 return null;
             }
 
@@ -68,8 +58,7 @@ public class NFCUtil {
                         }
                     }
                 }
-            }else
-            {
+            } else {
                 return "";
             }
 
@@ -95,16 +84,15 @@ public class NFCUtil {
                 payload = record.getPayload();
             }
 
-// Get the Text Encoding
+            // Get the Text Encoding
             String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
 
-// Get the Language Code
+            // Get the Language Code
             int languageCodeLength = payload[0] & 0063;
 
-// String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
-// e.g. "en"
+//            String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
 
-// Get the Text
+            // Get the Text
             return new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
         }
 
@@ -112,7 +100,7 @@ public class NFCUtil {
         protected void onPostExecute(String result) {
             if (result != null) {
                 if (nfcListener != null) {
-//result = result.substring(result.lastIndexOf('/') + 1);
+//                    result = result.substring(result.lastIndexOf('/') + 1);
                     nfcListener.onCodeRetrieved(result, CodeType.NFC);
                 }
             }
