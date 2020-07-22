@@ -16,11 +16,18 @@
         android:label="My goals"
         tools:layout="@layout/fragment_goal_list" />
 
-     <fragment
-        android:id="@+id/nfc_fragment"
-        android:name="com.cs446.group18.timetracker.ui.NFCFragment"
-        android:label="NFC Reader"
-        tools:layout="@layout/fragment_nfc" />
+    <activity
+        android:id="@+id/read_tag_activity"
+        android:name="com.cs446.group18.timetracker.ui.NFCReadActivity"
+        android:label="Read Tag"
+        tools:layout="@layout/activity_read_nfc" />
+
+    <activity
+        android:id="@+id/write_tag_activity"
+        android:name="com.cs446.group18.timetracker.ui.NFCWriteActivity"
+        android:label="Write Tag"
+        tools:layout="@layout/activity_write_nfc" />
+
 
 
 </navigation>
