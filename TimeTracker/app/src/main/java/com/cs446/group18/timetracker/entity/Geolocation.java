@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(
         tableName = "geolocation_table",
-        foreignKeys = {@ForeignKey(entity = TimeEntry.class, parentColumns = {"time_entry_id"}, childColumns = {"time_entry_id"})},
+        foreignKeys = {@ForeignKey(entity = TimeEntry.class, onDelete = ForeignKey.CASCADE, parentColumns = {"time_entry_id"}, childColumns = {"time_entry_id"})},
         indices = {@Index("time_entry_id")}
 )
 public class Geolocation {
