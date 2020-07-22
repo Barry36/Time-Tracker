@@ -177,7 +177,10 @@ public class LocationService extends Service {
                     // get current location latitude and longitude
                     double latitude = locationResult.getLastLocation().getLatitude();
                     double longitude = locationResult.getLastLocation().getLongitude();
-                    new GetAddress().execute(String.format("%.4f,%.4f", latitude, longitude));
+
+                    // TODO: uncomment later
+                    //  disable API call to Google API to save quota
+//                    new GetAddress().execute(String.format("%.4f,%.4f", latitude, longitude));
 
                     Log.d("Current geolocation", "latitude " + latitude + ", longitude " + longitude);
                     Set<Neighbour> neighbours = quadTree.findNeighbours(latitude, longitude, QuadTreeConstant.QUADTREE_LAST_NODE_SIZE_IN_KM);

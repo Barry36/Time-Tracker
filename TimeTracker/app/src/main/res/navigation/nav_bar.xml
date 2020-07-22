@@ -15,4 +15,19 @@
         android:name="com.cs446.group18.timetracker.ui.GoalListFragment"
         android:label="My goals"
         tools:layout="@layout/fragment_goal_list" />
+
+    <activity
+        android:id="@+id/read_tag_activity"
+        android:name="com.cs446.group18.timetracker.ui.NFCReadActivity"
+        android:label="Read Tag"
+        tools:layout="@layout/activity_read_nfc" />
+
+    <activity
+        android:id="@+id/write_tag_activity"
+        android:name="com.cs446.group18.timetracker.ui.NFCWriteActivity"
+        android:label="Write Tag"
+        tools:layout="@layout/activity_write_nfc" />
+
+
+
 </navigation>
