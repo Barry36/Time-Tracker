@@ -16,6 +16,9 @@ public interface EventDao {
     @Query("SELECT * FROM event_table")
     LiveData<List<Event>> getEvents();
 
+    @Query("SELECT * FROM event_table WHERE event_id = :event_id")
+    Event getEventById(long event_id);
+
     @Insert
     void insert(Event event);
 

@@ -82,7 +82,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                                 String eventName = eventNameText.getText().toString();
                                 String eventDescription = eventDescriptionText.getText().toString();
                                 try {
-                                    viewModel.insert(new Event(1, eventName, eventDescription));
+                                    viewModel.insert(new Event(eventName, eventDescription));
                                     Toast.makeText(eventListView.getContext(), "Add new event: " + eventName, Toast.LENGTH_SHORT).show();
                                 } catch (Exception e) {
                                     dialog.dismiss();
@@ -141,7 +141,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                                     String eventName = eventNameText.getText().toString();
                                     String eventDescription = eventDescriptionText.getText().toString();
                                     try {
-                                        Event event = new Event(1, eventName, eventDescription);
+                                        Event event = new Event(eventName, eventDescription);
                                         event.setEventId(eventId);
                                         viewModel.update(event);
                                         Toast.makeText(eventListView.getContext(), "Event Update", Toast.LENGTH_SHORT).show();

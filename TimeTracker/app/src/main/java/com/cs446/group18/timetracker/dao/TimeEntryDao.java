@@ -39,6 +39,9 @@ public interface TimeEntryDao {
     List<TimeEntry> getAllTimeEntriesStatic();
 
 
+    @Query("SELECT * FROM time_entry_table WHERE time_entry_id = :time_entry_id")
+    TimeEntry getTimeEntryById(long time_entry_id);
+
     @Transaction
     @Query("SELECT * FROM event_table")
     LiveData<List<EventWithTimeEntries>> getEventWithTimeEntries();

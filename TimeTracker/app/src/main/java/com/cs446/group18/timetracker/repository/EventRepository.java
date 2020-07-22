@@ -31,6 +31,10 @@ public class EventRepository {
         return eventDao.getEvents();
     }
 
+    public Event getEventById(long id) {
+        return eventDao.getEventById(id);
+    }
+
     public void createEvent(Event event) {
         AsyncTask.execute(() -> eventDao.insert(event));
     }
