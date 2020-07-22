@@ -1,5 +1,9 @@
 package com.cs446.group18.timetracker.ui;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -16,11 +20,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.cs446.group18.timetracker.R;
+import com.cs446.group18.timetracker.entity.Geolocation;
 import com.cs446.group18.timetracker.entity.TimeEntry;
 import com.cs446.group18.timetracker.utils.InjectorUtils;
+import com.cs446.group18.timetracker.vm.GeolocationViewModel;
+import com.cs446.group18.timetracker.vm.GeolocationViewModelFactory;
 import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
 import com.cs446.group18.timetracker.vm.TimeEntryViewModel;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 public class StopwatchFragment extends Fragment {
@@ -42,8 +52,10 @@ public class StopwatchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        TimeEntryListViewModelFactory factory = InjectorUtils.provideTimeEntryListViewModelFactory(getActivity());
-        TimeEntryViewModel viewModel = new ViewModelProvider(this, factory).get(TimeEntryViewModel.class);
+        TimeEntryListViewModelFactory timeEntryListViewModelFactory = InjectorUtils.provideTimeEntryListViewModelFactory(getActivity());
+        TimeEntryViewModel timeEntryViewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
+        GeolocationViewModelFactory geolocationViewModelFactory = InjectorUtils.provideGeolocationViewModelFactory(getActivity());
+        GeolocationViewModel geolocationViewModel = new ViewModelProvider(this, geolocationViewModelFactory).get(GeolocationViewModel.class);
 
         Long eventId = getArguments().getLong("id");
         Log.w("Id", eventId.toString());
@@ -110,8 +122,13 @@ public class StopwatchFragment extends Fragment {
             mTimerRunning = false;
             chronometer.stop();
             endTime = new Date();
-            viewModel.insert(new TimeEntry(eventId, startTime, endTime, mTimerSoFarInMillis));
-
+            long timeEntryId = timeEntryViewModel.insert(new TimeEntry(eventId, startTime, endTime, mTimerSoFarInMillis));
+            LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            @SuppressLint("MissingPermission")
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            double longitude = round(location.getLongitude(), 4);
+            double latitude = round(location.getLatitude(), 4);
+            geolocationViewModel.insert(new Geolocation(timeEntryId, latitude, longitude));
 //            mButtonStartPause.setText("Start");
             pauseOffset = 0;
             chronometer.setBase(SystemClock.elapsedRealtime());
@@ -122,6 +139,12 @@ public class StopwatchFragment extends Fragment {
 
     public boolean getHiddenBtnValue() {
         return stopBtnClicked;
+    }
+
+    private double round(double value, int places) {
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
 }

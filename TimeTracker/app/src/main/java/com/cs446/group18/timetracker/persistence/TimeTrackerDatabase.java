@@ -82,11 +82,11 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
             timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-17 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-17 11:40:00"), 1500L));
             goalDao.insert(new Goal(1, "Study Goal", "I have to study for my final exam", 20, 100));
             goalDao.insert(new Goal(2, "Rest Goal", "I need some rest", 80, 100));
-            geolocationDao.insert(new Geolocation(1, 43.46552, -80.5226817)); // Captain Boil
-            geolocationDao.insert(new Geolocation(2, 43.46567, -80.522683)); // Nick & Nat's Uptown 21
-            geolocationDao.insert(new Geolocation(3, 43.46552, -80.5226817)); // Captain Boil
-            geolocationDao.insert(new Geolocation(4, 43.48177, -80.5255692)); // McDonald's
-            geolocationDao.insert(new Geolocation(5, 43.47363, -80.5370301)); // Blair House
+            geolocationDao.insert(new Geolocation(1, 43.4655, -80.5227)); // Captain Boil
+            geolocationDao.insert(new Geolocation(2, 43.4657, -80.5227)); // Nick & Nat's Uptown 21
+            geolocationDao.insert(new Geolocation(3, 43.4655, -80.5227)); // Captain Boil
+            geolocationDao.insert(new Geolocation(4, 43.4818, -80.5256)); // McDonald's
+            geolocationDao.insert(new Geolocation(5, 43.4736, -80.5370)); // Blair House
 
             return null;
         }
