@@ -8,10 +8,10 @@
         android:title="My goals"/>
 
     <item
-        android:id="@+id/read_tag_fragment"
+        android:id="@+id/read_tag_activity"
         android:title="Read Tag"/>
     <item
-        android:id="@+id/write_tag_fragment"
+        android:id="@+id/write_tag_activity"
         android:title="Write Tag"/>
 
 </menu>
