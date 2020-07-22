@@ -2,8 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/event_list_fragment"
-        android:title="Event list"/>
+        android:title="My events"/>
     <item
         android:id="@+id/goal_list_fragment"
         android:title="My goals"/>
+
+    <item
+        android:id="@+id/read_tag_activity"
+        android:title="Read Tag"/>
+    <item
+        android:id="@+id/write_tag_activity"
+        android:title="Write Tag"/>
+
 </menu>

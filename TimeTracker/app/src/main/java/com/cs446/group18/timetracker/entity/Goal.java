@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(
         tableName = "goal_table",
-        foreignKeys = {@ForeignKey(entity = Event.class, parentColumns = {"event_id"}, childColumns = {"event_id"})},
+        foreignKeys = {@ForeignKey(entity = Event.class, onDelete = ForeignKey.CASCADE, parentColumns = {"event_id"}, childColumns = {"event_id"})},
         indices = {@Index("event_id")}
 )
 public class Goal {
@@ -25,14 +25,18 @@ public class Goal {
     @ColumnInfo(name = "goal_description")
     private String description;
 
-    @ColumnInfo(name = "goal_target")
-    private double targetValue;
+    @ColumnInfo(name = "goal_progress")
+    private int progressValue;
 
-    public Goal(long eventId, String name, String description, double targetValue) {
+    @ColumnInfo(name = "goal_target")
+    private int targetValue;
+
+    public Goal(long eventId, String name, String description, int progressValue, int targetValue) {
         this.eventId = eventId;
         this.name = name;
-        this.targetValue = targetValue;
+        this.progressValue = progressValue;
         this.description = description;
+        this.targetValue = targetValue;
     }
 
     public long getGoalId() {
@@ -67,11 +71,19 @@ public class Goal {
         this.description = description;
     }
 
-    public double getTargetValue() {
+    public int getProgressValue() {
+        return progressValue;
+    }
+
+    public void setProgressValue(int progressValue) {
+        this.progressValue = progressValue;
+    }
+
+    public int getTargetValue() {
         return targetValue;
     }
 
-    public void setTargetValue(double targetValue) {
+    public void setTargetValue(int targetValue) {
         this.targetValue = targetValue;
     }
 }
