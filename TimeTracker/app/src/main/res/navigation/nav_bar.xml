@@ -28,6 +28,10 @@
         android:label="Write Tag"
         tools:layout="@layout/activity_write_nfc" />
 
-
+    <fragment
+        android:id="@+id/report_fragment"
+        android:name="com.cs446.group18.timetracker.ui.ReportFragment"
+        android:label="Reports"
+        tools:layout="@layout/fragment_report" />
 
 </navigation>
