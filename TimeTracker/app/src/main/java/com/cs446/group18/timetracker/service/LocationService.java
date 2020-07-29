@@ -59,7 +59,6 @@ public class LocationService extends Service {
     private GeolocationRepository geolocationRepository;
     private TimeEntryRepository timeEntryRepository;
     private EventRepository eventRepository;
-    private NotificationManagerCompat notificationManager;
     private Context context;
     private Map<String, String> mappings;
 
@@ -122,30 +121,9 @@ public class LocationService extends Service {
                 }
 
                 if (!matchedPlace.isEmpty()) {
-                    Intent activityIntent = new Intent(getApplicationContext(), MainActivity.class);
-                    PendingIntent contentIntent = PendingIntent.getActivity(
-                            getApplicationContext(),
-                            0,
-                            activityIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
-                    Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.checklist);
-
-                    Notification notification = new NotificationCompat.Builder(getApplicationContext(), NotificationConstant.GEOLOCATION_CHANNEL_ID)
-                            .setSmallIcon(R.drawable.ic_notification)
-                            .setLargeIcon(largeIcon)
-                            .setStyle(new NotificationCompat.BigTextStyle()
-                                    .setSummaryText("place service"))
-                            .setContentTitle("You are close to: " + matchedPlace)
-                            .setContentText("You can start to track for event: " + matchedEvent)
-                            .setPriority(NotificationCompat.PRIORITY_HIGH)
-                            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                            .setColor(Color.rgb(15, 163, 232))
-                            .setContentIntent(contentIntent)
-                            .setAutoCancel(true)
-                            .setOnlyAlertOnce(true)
-                            .build();
-                    notificationManager.notify(2, notification);
+                    String[] messages = new String[]{matchedPlace, matchedEvent};
+                    NotificationStrategyContext strategyContext = new NotificationStrategyContext(new PlaceNotificationStrategy(context));
+                    strategyContext.notify(getResources(), messages);
                 }
 
                 Log.d("Current place types", Arrays.toString(placeTypes));
@@ -180,7 +158,7 @@ public class LocationService extends Service {
 
                     // TODO: uncomment later
                     //  disable API call to Google API to save quota
-//                    new GetAddress().execute(String.format("%.4f,%.4f", latitude, longitude));
+                    new GetAddress().execute(String.format("%.4f,%.4f", latitude, longitude));
 
                     Log.d("Current geolocation", "latitude " + latitude + ", longitude " + longitude);
                     Set<Neighbour> neighbours = quadTree.findNeighbours(latitude, longitude, QuadTreeConstant.QUADTREE_LAST_NODE_SIZE_IN_KM);
@@ -202,30 +180,9 @@ public class LocationService extends Service {
                             Log.d("Adjacent neighbor detected", neighbour.toString());
                         }
                         if (eventToNotify != null) {
-                            Intent activityIntent = new Intent(getApplicationContext(), MainActivity.class);
-                            PendingIntent contentIntent = PendingIntent.getActivity(
-                                    getApplicationContext(),
-                                    0,
-                                    activityIntent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT
-                            );
-                            Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.checklist);
-
-                            Notification notification = new NotificationCompat.Builder(getApplicationContext(), NotificationConstant.GEOLOCATION_CHANNEL_ID)
-                                    .setSmallIcon(R.drawable.ic_notification)
-                                    .setLargeIcon(largeIcon)
-                                    .setStyle(new NotificationCompat.BigTextStyle()
-                                            .setBigContentTitle("Time tracker")
-                                            .setSummaryText("geolocation service"))
-                                    .setContentText("Track for event: " + eventToNotify.getEventName())
-                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                                    .setColor(Color.rgb(15, 163, 232))
-                                    .setContentIntent(contentIntent)
-                                    .setAutoCancel(true)
-                                    .setOnlyAlertOnce(true)
-                                    .build();
-                            notificationManager.notify(1, notification);
+                            String[] messages = new String[]{eventToNotify.getEventName()};
+                            NotificationStrategyContext strategyContext = new NotificationStrategyContext(new GeolocationNotificationStrategy(context));
+                            strategyContext.notify(getResources(), messages);
                             Log.d("Event to be notified", eventToNotify.getEventName());
                         }
                     }).start();
@@ -256,8 +213,6 @@ public class LocationService extends Service {
 //        locationRequest.setFastestInterval(2000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        // create notificationManager
-        this.notificationManager = NotificationManagerCompat.from(context);
         createLocationCallback();
         LocationServices.getFusedLocationProviderClient(this)
                 .requestLocationUpdates(locationRequest, mLocationCallback, Looper.getMainLooper());
