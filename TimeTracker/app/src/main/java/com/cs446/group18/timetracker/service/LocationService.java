@@ -158,7 +158,7 @@ public class LocationService extends Service {
 
                     // TODO: uncomment later
                     //  disable API call to Google API to save quota
-                    new GetAddress().execute(String.format("%.4f,%.4f", latitude, longitude));
+//                    new GetAddress().execute(String.format("%.4f,%.4f", latitude, longitude));
 
                     Log.d("Current geolocation", "latitude " + latitude + ", longitude " + longitude);
                     Set<Neighbour> neighbours = quadTree.findNeighbours(latitude, longitude, QuadTreeConstant.QUADTREE_LAST_NODE_SIZE_IN_KM);
