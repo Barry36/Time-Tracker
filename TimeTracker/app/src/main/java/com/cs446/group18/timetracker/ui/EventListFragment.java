@@ -1,5 +1,6 @@
 package com.cs446.group18.timetracker.ui;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -42,6 +44,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     private List<Event> events = new ArrayList<>();
     RecyclerView recyclerView;
     private TextView textViewEmpty;
+    private FloatingActionButton buttonAddEvent;
 
     @Nullable
     @Override
@@ -63,7 +66,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
 
         // Add New Event
-        FloatingActionButton buttonAddEvent = eventListView.findViewById(R.id.button_add_event);
+        buttonAddEvent = eventListView.findViewById(R.id.button_add_event);
         buttonAddEvent.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -79,7 +82,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                                 String eventName = eventNameText.getText().toString();
                                 String eventDescription = eventDescriptionText.getText().toString();
                                 try {
-                                    viewModel.insert(new Event(1, eventName, eventDescription));
+                                    viewModel.insert(new Event(eventName, eventDescription));
                                     Toast.makeText(eventListView.getContext(), "Add new event: " + eventName, Toast.LENGTH_SHORT).show();
                                 } catch (Exception e) {
                                     dialog.dismiss();
@@ -138,7 +141,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                                     String eventName = eventNameText.getText().toString();
                                     String eventDescription = eventDescriptionText.getText().toString();
                                     try {
-                                        Event event = new Event(1, eventName, eventDescription);
+                                        Event event = new Event(eventName, eventDescription);
                                         event.setEventId(eventId);
                                         viewModel.update(event);
                                         Toast.makeText(eventListView.getContext(), "Event Update", Toast.LENGTH_SHORT).show();
@@ -201,6 +204,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
 
     // Expandable CardView
+    @SuppressLint("RestrictedApi")
     @Override
     public void onEventClick(int position) {
         // Time Entries
@@ -230,7 +234,10 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                         expandableLinearLayout.addView(textView);
                     }
                     expand(expandableLinearLayout);
+                    buttonAddEvent.setVisibility(View.GONE);
                 } else {
+                    FragmentTransaction closeFt = getChildFragmentManager().beginTransaction();
+                    closeFt.remove(stopwatchFragment).commit();
 
                     // Detect if Stop btn is clicked
                     boolean stopBtnClicked = stopwatchFragment.getHiddenBtnValue();
@@ -244,6 +251,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                     }
                     expandableLinearLayout.removeViews(0, timeEntries.size());
                     collapse(expandableLinearLayout);
+                    buttonAddEvent.setVisibility(View.VISIBLE);
                 }
 
                 adapter.setTimeEntries(timeEntries);

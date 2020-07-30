@@ -3,30 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.cs446.group18.timetracker">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.NFC" />
+
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="true"
         tools:ignore="DuplicateUsesFeature,ManifestOrder" />
 
-    <uses-permission android:name="android.permission.NFC" />
-
     <application
-        android:name=".MyApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ReadTag"></activity>
-        <activity android:name=".WriteTag" />
+        <activity android:name=".ui.NFCReadActivity"></activity>
+        <activity android:name=".ui.NFCWriteActivity" />
         <activity
             android:name=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.nfc.action.TECH_DISCOVERED"
                 android:resource="@xml/nfc" />
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
@@ -34,14 +35,16 @@
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="application/com.cs446.group18.timetracker" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".service.LocationService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

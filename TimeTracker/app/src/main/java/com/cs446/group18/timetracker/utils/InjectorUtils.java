@@ -4,9 +4,11 @@ import android.content.Context;
 
 import com.cs446.group18.timetracker.persistence.TimeTrackerDatabase;
 import com.cs446.group18.timetracker.repository.EventRepository;
+import com.cs446.group18.timetracker.repository.GeolocationRepository;
 import com.cs446.group18.timetracker.repository.GoalRepository;
 import com.cs446.group18.timetracker.repository.TimeEntryRepository;
 import com.cs446.group18.timetracker.vm.EventListViewModelFactory;
+import com.cs446.group18.timetracker.vm.GeolocationViewModelFactory;
 import com.cs446.group18.timetracker.vm.GoalListViewModelFactory;
 import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
 
@@ -24,6 +26,10 @@ public class InjectorUtils {
         return GoalRepository.getInstance(TimeTrackerDatabase.getInstance(context).goalDao());
     }
 
+    private static GeolocationRepository getGeolocationRepository(Context context) {
+        return GeolocationRepository.getInstance(TimeTrackerDatabase.getInstance(context).geolocationDao());
+    }
+
     public static TimeEntryListViewModelFactory provideTimeEntryListViewModelFactory(Context context) {
         return new TimeEntryListViewModelFactory(getTimeEntryRepository(context));
     }
@@ -34,5 +40,9 @@ public class InjectorUtils {
 
     public static GoalListViewModelFactory provideGoalListViewModelFactory(Context context) {
         return new GoalListViewModelFactory(getGoalRepository(context));
+    }
+
+    public static GeolocationViewModelFactory provideGeolocationViewModelFactory(Context context) {
+        return new GeolocationViewModelFactory(getGeolocationRepository(context));
     }
 }
