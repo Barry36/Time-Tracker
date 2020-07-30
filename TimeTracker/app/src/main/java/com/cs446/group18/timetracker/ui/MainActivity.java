@@ -1,5 +1,6 @@
 package com.cs446.group18.timetracker.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -10,9 +11,14 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.cs446.group18.timetracker.R;
+import com.cs446.group18.timetracker.ReadTag;
+import com.cs446.group18.timetracker.WriteTag;
 import com.cs446.group18.timetracker.databinding.ActivityEventBinding;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity  {
     OnNewIntentListener newIntentListener;
@@ -29,6 +35,20 @@ public class MainActivity extends AppCompatActivity  {
         navController = Navigation.findNavController(this, R.id.event_nav_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
         NavigationUI.setupWithNavController(binding.navigationView, navController);
+        /*binding.navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.write_tag_fragment:
+                        startActivity(new Intent(MainActivity.this, WriteTag.class));
+                        break;
+                    case R.id.read_tag_fragment:
+                        startActivity(new Intent(MainActivity.this, ReadTag.class));
+                        break;
+                }
+                return false;
+            }
+        }); */
 
     }
 
@@ -51,4 +71,6 @@ public class MainActivity extends AppCompatActivity  {
             super.onBackPressed();
         }
     }
+
+
 }
