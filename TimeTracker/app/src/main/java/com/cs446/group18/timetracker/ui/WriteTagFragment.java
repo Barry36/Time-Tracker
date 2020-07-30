@@ -1,6 +1,4 @@
-package com.cs446.group18.timetracker;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.cs446.group18.timetracker.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,7 +12,9 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,11 +22,18 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.cs446.group18.timetracker.R;
+
 import java.nio.charset.Charset;
+import java.util.Objects;
 
-public class WriteTag extends Activity {
+public class WriteTagFragment extends Fragment implements OnNewIntentListener {
 
-    //NFC-related variables
     private NfcAdapter _nfcAdapter;
     private PendingIntent _nfcPendingIntent;
     private IntentFilter[] _writeTagFilters;
@@ -37,22 +44,22 @@ public class WriteTag extends Activity {
     private String         Select_string;
 
     Spinner dropdown;
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_writetag);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View writeTagFragment = inflater.inflate(R.layout.layout_writetag, container, false);
 
-        _imageViewImage = (ImageView) findViewById(R.id.image);
-        _buttonWrite = (Button) findViewById(R.id.buttonWriteTag);
+
+
+        _imageViewImage = (ImageView) writeTagFragment.findViewById(R.id.image);
+        _buttonWrite = (Button) writeTagFragment.findViewById(R.id.buttonWriteTag);
         _buttonWrite.setOnClickListener(_tagWriter);
 
-        _nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-        dropdown = findViewById(R.id.spinner1);
+
+        dropdown = writeTagFragment.findViewById(R.id.spinner1);
         String[] items = new String[]{"Study", "Lunch", "Eat"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()), android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -60,15 +67,15 @@ public class WriteTag extends Activity {
                 switch (position) {
                     case 0:
                         Select_string = "Event{eventId=1, eventName=Study, description=I want to Study}";
-                        Toast.makeText(getApplicationContext(),Select_string,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(),Select_string,Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
-                        Select_string = "Event{eventId=2, eventName=Lunch, description=I want to Lunch}";
-                        Toast.makeText(getApplicationContext(),Select_string,Toast.LENGTH_SHORT).show();
+                        //Select_string = "Event{eventId=2, eventName=Lunch, description=I want to Lunch}";
+                        Toast.makeText(getContext(),Select_string,Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
-                        Select_string = "Event{eventId=3, eventName=Eat, description=I want to Eat}";
-                        Toast.makeText(getApplicationContext(),Select_string,Toast.LENGTH_SHORT).show();
+                        //Select_string = "Event{eventId=3, eventName=Eat, description=I want to Eat}";
+                        Toast.makeText(getContext(),Select_string,Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
@@ -80,39 +87,44 @@ public class WriteTag extends Activity {
         });
         if (_nfcAdapter == null)
         {
-            Toast.makeText(this, "Your device does not support NFC. Cannot run this sample.", Toast.LENGTH_LONG).show();
-            finish();
-            return;
+            Toast.makeText(getContext(), "Your device does not support NFC. Cannot run this sample.", Toast.LENGTH_LONG).show();
+
         }
 
         checkNfcEnabled();
 
-        _nfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        _nfcPendingIntent = PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
 
         _writeTagFilters = new IntentFilter[]{tagDetected};
+
+
+        return writeTagFragment;
     }
 
     @Override
-    protected void onResume()
-    {
+    public void onAttach(@NonNull Activity activity) {
+        super.onAttach(activity);
+        _nfcAdapter = NfcAdapter.getDefaultAdapter(activity);
+    }
+
+    @Override
+    public void onResume() {
         super.onResume();
-
-        checkNfcEnabled();
+        if (_nfcAdapter != null)checkNfcEnabled();
     }
 
     @Override
-    protected void onPause()
-    {
+    public void onPause() {
         super.onPause();
-
-        _nfcAdapter.disableForegroundDispatch(this);
+        if (_nfcAdapter != null){
+            _nfcAdapter.disableForegroundDispatch(getActivity());
+        }
     }
 
     @Override
-    protected void onNewIntent(Intent intent)
-    {
+    public void onNewIntent(Intent intent) {
         if (_writeMode)
         {
             if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED))
@@ -140,13 +152,11 @@ public class WriteTag extends Activity {
     private void enableTagWriteMode()
     {
         _writeMode = true;
-        _nfcAdapter.enableForegroundDispatch(this, _nfcPendingIntent, _writeTagFilters, null);
+        _nfcAdapter.enableForegroundDispatch(getActivity(), _nfcPendingIntent, _writeTagFilters, null);
 
         _imageViewImage.setImageDrawable(getResources().getDrawable(R.drawable.android_writing_logo));
         dropdown.setEnabled(false);
     }
-
-
     boolean writeTag(NdefMessage message, Tag tag)
     {
         int size = message.toByteArray().length;
@@ -160,39 +170,38 @@ public class WriteTag extends Activity {
 
                 if (!ndef.isWritable())
                 {
-                    Toast.makeText(this, "Cannot write to this tag. This tag is read-only.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Cannot write to this tag. This tag is read-only.", Toast.LENGTH_LONG).show();
                     return false;
                 }
 
                 if (ndef.getMaxSize() < size)
                 {
-                    Toast.makeText(this,
+                    Toast.makeText(getContext(),
                             "Cannot write to this tag. Message size (" + size + " bytes) exceeds this tag's capacity of " + ndef.getMaxSize()
                                     + " bytes.", Toast.LENGTH_LONG).show();
                     return false;
                 }
 
                 ndef.writeNdefMessage(message);
-                Toast.makeText(this, "A pre-formatted tag was successfully updated.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "A pre-formatted tag was successfully updated.", Toast.LENGTH_LONG).show();
                 return true;
             }
 
-            Toast.makeText(this, "Cannot write to this tag. This tag does not support NDEF.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Cannot write to this tag. This tag does not support NDEF.", Toast.LENGTH_LONG).show();
             return false;
 
         }
         catch (Exception e)
         {
-            Toast.makeText(this, "Cannot write to this tag due to an Exception.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Cannot write to this tag due to an Exception.", Toast.LENGTH_LONG).show();
         }
 
         return false;
     }
-
     private NdefMessage buildNdefMessage()
     {
         if (Select_string.equals("")){
-            Toast.makeText(getApplicationContext(),"Empty Selected String",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Empty Selected String",Toast.LENGTH_SHORT).show();
         }else{
             String data = Select_string;
 
@@ -209,22 +218,23 @@ public class WriteTag extends Activity {
         }
         return null;
     }
-
     private void checkNfcEnabled()
     {
-        Boolean nfcEnabled = _nfcAdapter.isEnabled();
-        if (!nfcEnabled)
-        {
-            new AlertDialog.Builder(WriteTag.this).setTitle(getString(R.string.text_warning_nfc_is_off))
-                    .setMessage(getString(R.string.text_turn_on_nfc)).setCancelable(false)
-                    .setPositiveButton(getString(R.string.text_update_settings), new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id)
-                        {
-                            startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-                        }
-                    }).create().show();
-        }
+       if (_nfcAdapter != null){
+           Boolean nfcEnabled = _nfcAdapter.isEnabled();
+           if (!nfcEnabled)
+           {
+               new AlertDialog.Builder(getContext()).setTitle(getString(R.string.text_warning_nfc_is_off))
+                       .setMessage(getString(R.string.text_turn_on_nfc)).setCancelable(false)
+                       .setPositiveButton(getString(R.string.text_update_settings), new DialogInterface.OnClickListener()
+                       {
+                           @Override
+                           public void onClick(DialogInterface dialog, int id)
+                           {
+                               startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+                           }
+                       }).create().show();
+           }
+       }
     }
 }

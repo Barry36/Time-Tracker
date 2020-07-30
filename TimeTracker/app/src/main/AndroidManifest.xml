@@ -3,12 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.cs446.group18.timetracker">
 
-    <uses-feature
-        android:name="android.hardware.nfc"
-        android:required="true"
-        tools:ignore="DuplicateUsesFeature,ManifestOrder" />
-
-    <uses-permission android:name="android.permission.NFC" />
 
     <application
         android:name=".MyApplication"
@@ -18,30 +12,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ReadTag"></activity>
-        <activity android:name=".WriteTag" />
         <activity
             android:name=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.nfc.action.TECH_DISCOVERED"
                 android:resource="@xml/nfc" />
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="application/com.cs446.group18.timetracker" />
             </intent-filter>
         </activity>
     </application>
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true"
+        tools:ignore="DuplicateUsesFeature,ManifestOrder" />
+
+    <uses-permission android:name="android.permission.NFC" />
 
 </manifest>
