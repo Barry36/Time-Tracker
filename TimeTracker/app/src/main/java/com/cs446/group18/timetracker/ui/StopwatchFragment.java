@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,11 +30,14 @@ import com.cs446.group18.timetracker.vm.TimeEntryViewModel;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 public class StopwatchFragment extends Fragment {
     public boolean stopBtnClicked;
     private long mTimerSoFarInMillis;
+    private boolean mTimerRunning;
+    private long pauseOffset = 0;
     private Date startTime;
     private Date endTime;
 
@@ -69,16 +74,53 @@ public class StopwatchFragment extends Fragment {
             }
         });
 
-        final ImageView mButtonStart = rootView.findViewById(R.id.button_start);
-        mButtonStart.setOnClickListener(v -> {
-            chronometer.start();
-            mButtonStart.setVisibility(View.GONE);
+        final ImageView mButtonStartPause = rootView.findViewById(R.id.button_start_pause);
+        mButtonStartPause.setOnClickListener(v -> {
+
+            // Set Flag
+            TextView textView = rootView.findViewById(R.id.btn_clicked);
+            textView.setText("0");
+            this.stopBtnClicked = false;
+
+            // Set Flag Ends
+
+            if (!mTimerRunning) {
+//                mButtonStartPause.setText("Pause");
+                chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+                chronometer.start();
+                mTimerRunning = true;
+                mButtonStartPause.setVisibility(View.GONE);
+            } else {
+//                mButtonStartPause.setText("Start");
+                chronometer.stop();
+                pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
+                mTimerRunning = false;
+            }
         });
 
         final ImageView mButtonStop = rootView.findViewById(R.id.button_stop);
         mButtonStop.setOnClickListener(v -> {
-            mTimerSoFarInMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
-            Log.w("stopped when it is running", Long.toString(mTimerSoFarInMillis));
+            // Set Flag
+            TextView timer_stop_clicked = rootView.findViewById(R.id.btn_clicked);
+            timer_stop_clicked.setText("1");
+            this.stopBtnClicked = true;
+            // Set Flag Ends
+
+            if (mTimerRunning) {
+                //if the stopwatch has not yet been paused
+                if (pauseOffset > 0) {
+                    mTimerSoFarInMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
+                } else {
+                    mTimerSoFarInMillis = SystemClock.elapsedRealtime() - pauseOffset - chronometer.getBase();
+                    Log.w("pauseoffset is not larger than 0", Long.toString(mTimerSoFarInMillis));
+                }
+                Log.w("stopped when it is running", Long.toString(mTimerSoFarInMillis));
+            } else {
+                //if the stopwatch is paused
+                mTimerSoFarInMillis = pauseOffset;
+                Log.w("stopped when it is paused", Long.toString(mTimerSoFarInMillis));
+            }
+            mTimerRunning = false;
             chronometer.stop();
             endTime = new Date();
             long timeEntryId = timeEntryViewModel.insert(new TimeEntry(eventId, startTime, endTime, mTimerSoFarInMillis));
@@ -88,8 +130,9 @@ public class StopwatchFragment extends Fragment {
             double longitude = round(location.getLongitude(), 4);
             double latitude = round(location.getLatitude(), 4);
             geolocationViewModel.insert(new Geolocation(timeEntryId, latitude, longitude));
+//            mButtonStartPause.setText("Start");
+            pauseOffset = 0;
             chronometer.setBase(SystemClock.elapsedRealtime());
-            mButtonStart.setVisibility(View.VISIBLE);
 
         });
         return rootView;
