@@ -47,6 +47,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     RecyclerView recyclerView;
     private TextView textViewEmpty;
     private FloatingActionButton buttonAddEvent;
+    private int position;
 
     @Nullable
     @Override
@@ -217,6 +218,9 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     @Override
     public void onEventClick(int position) {
 
+        Log.d("EventListFragment", "recyclerView is: " + recyclerView);
+        setRecyclerView(recyclerView);
+        this.position = position;
         // Time Entries
         long eventID = events.get(position).getEventId();
         TimeEntryListViewModelFactory timeEntryListViewModelFactory = InjectorUtils.provideTimeEntryListViewModelFactory((getActivity()));
@@ -231,6 +235,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         View view = linearLayoutManager.findViewByPosition(position);
+
         LinearLayout expandableLinearLayout = view.findViewById(R.id.expandable);
 
 
@@ -271,11 +276,23 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     }
 
 
-    private void collapse(LinearLayout layout) {
+    public void collapse(LinearLayout layout) {
         layout.setVisibility(View.GONE);
     }
 
     private void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+    public int getPosition(){
+        return this.position;
+    }
+
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
+    public void setRecyclerView(RecyclerView recyclerView){
+        this.recyclerView = recyclerView;
     }
 }
