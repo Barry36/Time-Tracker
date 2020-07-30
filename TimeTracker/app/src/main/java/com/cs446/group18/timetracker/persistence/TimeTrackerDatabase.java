@@ -75,11 +75,11 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
             eventDao.insert(new Event("Rest", "Watch drama"));
             eventDao.insert(new Event("Exercise", "Go to the gym"));
             eventDao.insert(new Event("Meal", "have lunch"));
+            timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-17 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-17 11:40:00"), 1500L));
+            timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-18 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-18 11:40:00"), 1500L));
+            timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-22 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-22 11:40:00"), 1500L));
             timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-07-22 18:20:00"), DateTimeConverter.fromTimestamp("2020-07-22 18:40:00"), 1200L));
             timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-07-23 10:15:00"), DateTimeConverter.fromTimestamp("2020-07-23 10:20:00"), 300L));
-            timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-22 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-22 11:40:00"), 1500L));
-            timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-18 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-18 11:40:00"), 1500L));
-            timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-17 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-17 11:40:00"), 1500L));
             goalDao.insert(new Goal(1, "Study Goal", "I have to study for my final exam", 20, 100));
             goalDao.insert(new Goal(2, "Rest Goal", "I need some rest", 80, 100));
             geolocationDao.insert(new Geolocation(1, 43.4655, -80.5227)); // Captain Boil
