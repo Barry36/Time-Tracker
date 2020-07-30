@@ -36,6 +36,8 @@ import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
 import com.cs446.group18.timetracker.vm.TimeEntryViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -165,6 +167,13 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                             .setNegativeButton("Cancel",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
+                                            TextView eventNameTextView = viewHolder.itemView.findViewById(R.id.text_view_title);
+                                            String eventName = eventNameTextView.getText().toString();
+                                            TextView eventDescriptionTextView = viewHolder.itemView.findViewById(R.id.text_view_description);
+                                            String eventDescription = eventDescriptionTextView.getText().toString();
+                                            Event event = new Event(eventName, eventDescription);
+                                            event.setEventId(eventId);
+                                            viewModel.update(event);
                                             dialog.cancel();
                                         }
                                     });
@@ -207,53 +216,50 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     @SuppressLint("RestrictedApi")
     @Override
     public void onEventClick(int position) {
+
         // Time Entries
         long eventID = events.get(position).getEventId();
         TimeEntryListViewModelFactory timeEntryListViewModelFactory = InjectorUtils.provideTimeEntryListViewModelFactory((getActivity()));
         TimeEntryViewModel timeEntryViewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
+
         //integration to stopwatch, should be changed later
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         StopwatchFragment stopwatchFragment = StopwatchFragment.newInstance(eventID);
         ft.replace(R.id.stopwatch, stopwatchFragment);
         ft.commit();
 
+
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        View view = linearLayoutManager.findViewByPosition(position);
+        LinearLayout expandableLinearLayout = view.findViewById(R.id.expandable);
+
+
+        if (expandableLinearLayout.getVisibility() == View.GONE) {
+            expand(expandableLinearLayout);
+            buttonAddEvent.setVisibility(View.GONE);
+        } else {
+            FragmentTransaction closeFt = getChildFragmentManager().beginTransaction();
+            closeFt.remove(stopwatchFragment).commit();
+            if(expandableLinearLayout.getChildCount() > 0){
+                expandableLinearLayout.removeAllViews();
+            }
+            collapse(expandableLinearLayout);
+            buttonAddEvent.setVisibility(View.VISIBLE);
+        }
+
         timeEntryViewModel.getTimeEntriesByEventID(eventID).observe(getViewLifecycleOwner(), new Observer<List<TimeEntry>>() {
             @Override
             public void onChanged(List<TimeEntry> timeEntries) {
-
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                View view = linearLayoutManager.findViewByPosition(position);
-                LinearLayout expandableLinearLayout = view.findViewById(R.id.expandable);
-                if (expandableLinearLayout.getVisibility() == View.GONE) {
-
-                    for (int i = 0; i < timeEntries.size(); ++i) {
-                        String startTime = timeEntries.get(i).getStartTime().toString();
-                        TextView textView = new TextView(getContext());
-                        textView.setText(startTime);
-                        textView.setId(i);
-                        expandableLinearLayout.addView(textView);
-                    }
-                    expand(expandableLinearLayout);
-                    buttonAddEvent.setVisibility(View.GONE);
-                } else {
-                    FragmentTransaction closeFt = getChildFragmentManager().beginTransaction();
-                    closeFt.remove(stopwatchFragment).commit();
-
-                    // Detect if Stop btn is clicked
-                    boolean stopBtnClicked = stopwatchFragment.getHiddenBtnValue();
-                    if (stopBtnClicked) {
-                        Log.d("TAG", "Hey");
-                        String startTime = timeEntries.get(timeEntries.size() - 1).getStartTime().toString();
-                        TextView textView = new TextView(getContext());
-                        textView.setText(startTime);
-                        textView.setId(timeEntries.size() - 1);
-                        expandableLinearLayout.addView(textView);
-                    }
-                    expandableLinearLayout.removeViews(0, timeEntries.size());
-                    collapse(expandableLinearLayout);
-                    buttonAddEvent.setVisibility(View.VISIBLE);
+                if(expandableLinearLayout.getChildCount() > 0){
+                    expandableLinearLayout.removeAllViews();
                 }
-
+                for (int i = 0; i < timeEntries.size(); ++i) {
+                    String startTime = timeEntries.get(i).getStartTime().toString();
+                    TextView textView = new TextView(getContext());
+                    textView.setText(startTime);
+                    textView.setId(i);
+                    expandableLinearLayout.addView(textView);
+                }
                 adapter.setTimeEntries(timeEntries);
             }
         });

@@ -81,6 +81,7 @@ public class StopwatchFragment extends Fragment {
             TextView textView = rootView.findViewById(R.id.btn_clicked);
             textView.setText("0");
             this.stopBtnClicked = false;
+
             // Set Flag Ends
 
             if (!mTimerRunning) {
@@ -103,8 +104,8 @@ public class StopwatchFragment extends Fragment {
             TextView timer_stop_clicked = rootView.findViewById(R.id.btn_clicked);
             timer_stop_clicked.setText("1");
             this.stopBtnClicked = true;
-
             // Set Flag Ends
+
             if (mTimerRunning) {
                 //if the stopwatch has not yet been paused
                 if (pauseOffset > 0) {
@@ -138,6 +139,7 @@ public class StopwatchFragment extends Fragment {
     }
 
     public boolean getHiddenBtnValue() {
+        Log.d("TAG", "getHiddenBtnValue is called");
         return stopBtnClicked;
     }
 
