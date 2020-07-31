@@ -8,8 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.adapter.EventListAdapter;
+import com.cs446.group18.timetracker.adapter.IconListAdaptor;
 import com.cs446.group18.timetracker.entity.Event;
 import com.cs446.group18.timetracker.entity.TimeEntry;
 import com.cs446.group18.timetracker.utils.InjectorUtils;
@@ -39,6 +44,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EventListFragment extends Fragment implements EventListAdapter.OnEventListener {
@@ -76,6 +82,12 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
                 View promptView = inflater.inflate(R.layout.prompt_add_event, container, false);
+                //create icon list view
+                final ArrayList<Integer> iconList = new ArrayList<>(Arrays.asList(R.drawable.ic_cafe, R.drawable.ic_yoga, R.drawable.ic_homework, R.drawable.ic_movies, R.drawable.ic_music, R.drawable.ic_soccer));
+                final GridView list = promptView.findViewById(R.id.iconList);
+                IconListAdaptor iconAdapter = new IconListAdaptor(promptView.getContext(), R.layout.list_item_icon, iconList);
+                list.setAdapter(iconAdapter);
+
 
                 final EditText eventNameText = promptView.findViewById(R.id.event_name);
                 final EditText eventDescriptionText = promptView.findViewById(R.id.event_description);
