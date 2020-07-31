@@ -65,6 +65,7 @@ public class StopwatchFragment extends Fragment{
 
         final View rootView = inflater.inflate(R.layout.fragment_stopwatch, container, false);
         final Chronometer chronometer = rootView.findViewById(R.id.chronometer);
+        
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override

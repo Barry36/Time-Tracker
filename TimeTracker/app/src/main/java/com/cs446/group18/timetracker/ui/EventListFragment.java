@@ -48,6 +48,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     private TextView textViewEmpty;
     private FloatingActionButton buttonAddEvent;
     private int position;
+    private int prevPosition;
 
     @Nullable
     @Override
@@ -218,13 +219,10 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     @Override
     public void onEventClick(int position) {
 
-        Log.d("EventListFragment", "recyclerView is: " + recyclerView);
         setRecyclerView(recyclerView);
         this.position = position;
         // Time Entries
         long eventID = events.get(position).getEventId();
-        TimeEntryListViewModelFactory timeEntryListViewModelFactory = InjectorUtils.provideTimeEntryListViewModelFactory((getActivity()));
-        TimeEntryViewModel timeEntryViewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
 
         //integration to stopwatch, should be changed later
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
@@ -235,12 +233,36 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         View view = linearLayoutManager.findViewByPosition(position);
-
         LinearLayout expandableLinearLayout = view.findViewById(R.id.expandable);
 
+        View preView = linearLayoutManager.findViewByPosition(prevPosition);
+        LinearLayout preExpandableLinearLayout = view.findViewById(R.id.expandable);
 
+
+        TimeEntryListViewModelFactory timeEntryListViewModelFactory = InjectorUtils.provideTimeEntryListViewModelFactory((getActivity()));
+        TimeEntryViewModel timeEntryViewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
+        timeEntryViewModel.getTimeEntriesByEventID(eventID).observe(getViewLifecycleOwner(), new Observer<List<TimeEntry>>() {
+            @Override
+            public void onChanged(List<TimeEntry> timeEntries) {
+                Log.d("EventListFragment", "onChanged is called");
+                if(expandableLinearLayout.getChildCount() > 0){
+                    expandableLinearLayout.removeAllViews();
+                }
+                for (int i = 0; i < timeEntries.size(); ++i) {
+                    int duration = (int)timeEntries.get(i).getDuration()/1000;
+                    String text = "Duration: " + Integer.toString(duration) + " second";
+                    TextView textView = new TextView(getContext());
+                    textView.setText(text);
+                    textView.setId(i);
+                    expandableLinearLayout.addView(textView);
+                }
+                adapter.setTimeEntries(timeEntries);
+            }
+        });
         if (expandableLinearLayout.getVisibility() == View.GONE) {
             expand(expandableLinearLayout);
+
+            prevPosition = position;
             buttonAddEvent.setVisibility(View.GONE);
         } else {
             FragmentTransaction closeFt = getChildFragmentManager().beginTransaction();
@@ -252,24 +274,8 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
             buttonAddEvent.setVisibility(View.VISIBLE);
         }
 
-        timeEntryViewModel.getTimeEntriesByEventID(eventID).observe(getViewLifecycleOwner(), new Observer<List<TimeEntry>>() {
-            @Override
-            public void onChanged(List<TimeEntry> timeEntries) {
-                if(expandableLinearLayout.getChildCount() > 0){
-                    expandableLinearLayout.removeAllViews();
-                }
-                for (int i = 0; i < timeEntries.size(); ++i) {
-                    String startTime = timeEntries.get(i).getStartTime().toString();
-                    TextView textView = new TextView(getContext());
-                    textView.setText(startTime);
-                    textView.setId(i);
-                    expandableLinearLayout.addView(textView);
-                }
-                adapter.setTimeEntries(timeEntries);
-            }
-        });
-
     }
+
 
     private void expand(LinearLayout layout) {
         layout.setVisibility(View.VISIBLE);
