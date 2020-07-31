@@ -71,10 +71,10 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            eventDao.insert(new Event("Study", "LC 161 & LC 162"));
-            eventDao.insert(new Event("Rest", "Watch drama"));
-            eventDao.insert(new Event("Exercise", "Go to the gym"));
-            eventDao.insert(new Event("Meal", "have lunch"));
+            eventDao.insert(new Event("Study", "LC 161 & LC 162", 2131165326));
+            eventDao.insert(new Event("Rest", "Watch drama", 2131165349));
+            eventDao.insert(new Event("Exercise", "Go to the gym", 2131165343));
+            eventDao.insert(new Event("Meal", "have lunch", 2131165322));
             timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-17 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-17 11:40:00"), 1500L));
             timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-18 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-18 11:40:00"), 1500L));
             timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-22 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-22 11:40:00"), 1500L));

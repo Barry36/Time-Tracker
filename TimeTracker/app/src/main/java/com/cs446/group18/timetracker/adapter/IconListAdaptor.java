@@ -3,7 +3,6 @@ package com.cs446.group18.timetracker.adapter;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,5 +41,12 @@ public class IconListAdaptor extends ArrayAdapter<Integer> {
             }
         });
         return rowView;
+    }
+    public int getSelected(){
+        if (selected == -1){
+            return -1;
+        }else{
+            return this.icons.get(selected);
+        }
     }
 }

@@ -83,11 +83,10 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
                 View promptView = inflater.inflate(R.layout.prompt_add_event, container, false);
                 //create icon list view
-                final ArrayList<Integer> iconList = new ArrayList<>(Arrays.asList(R.drawable.ic_cafe, R.drawable.ic_yoga, R.drawable.ic_homework, R.drawable.ic_movies, R.drawable.ic_music, R.drawable.ic_soccer));
+                final ArrayList<Integer> iconList = new ArrayList<>(Arrays.asList(R.drawable.ic_cooking, R.drawable.ic_yoga, R.drawable.ic_homework, R.drawable.ic_movies, R.drawable.ic_music, R.drawable.ic_soccer));
                 final GridView list = promptView.findViewById(R.id.iconList);
                 IconListAdaptor iconAdapter = new IconListAdaptor(promptView.getContext(), R.layout.list_item_icon, iconList);
                 list.setAdapter(iconAdapter);
-
 
                 final EditText eventNameText = promptView.findViewById(R.id.event_name);
                 final EditText eventDescriptionText = promptView.findViewById(R.id.event_description);
@@ -96,8 +95,10 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                             public void onClick(DialogInterface dialog, int id) {
                                 String eventName = eventNameText.getText().toString();
                                 String eventDescription = eventDescriptionText.getText().toString();
+                                // get selected icon
+                                int selectedIcon = iconAdapter.getSelected();
                                 try {
-                                    viewModel.insert(new Event(eventName, eventDescription));
+                                    viewModel.insert(new Event(eventName, eventDescription, selectedIcon));
                                     Toast.makeText(eventListView.getContext(), "Add new event: " + eventName, Toast.LENGTH_SHORT).show();
                                 } catch (Exception e) {
                                     dialog.dismiss();
@@ -146,6 +147,12 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
                     View promptView = inflater.inflate(R.layout.prompt_add_event, container, false);
 
+                    //create icon list view
+                    final ArrayList<Integer> iconList = new ArrayList<>(Arrays.asList(R.drawable.ic_cooking, R.drawable.ic_yoga, R.drawable.ic_homework, R.drawable.ic_movies, R.drawable.ic_music, R.drawable.ic_soccer));
+                    final GridView list = promptView.findViewById(R.id.iconList);
+                    IconListAdaptor iconAdapter = new IconListAdaptor(promptView.getContext(), R.layout.list_item_icon, iconList);
+                    list.setAdapter(iconAdapter);
+
 
                     final EditText eventNameText = promptView.findViewById(R.id.event_name);
                     final EditText eventDescriptionText = promptView.findViewById(R.id.event_description);
@@ -155,8 +162,10 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                                     int pos = viewHolder.getAdapterPosition();
                                     String eventName = eventNameText.getText().toString();
                                     String eventDescription = eventDescriptionText.getText().toString();
+                                    // get selected icon
+                                    int selectedIcon = iconAdapter.getSelected();
                                     try {
-                                        Event event = new Event(eventName, eventDescription);
+                                        Event event = new Event(eventName, eventDescription, selectedIcon);
                                         event.setEventId(eventId);
                                         viewModel.update(event);
                                         Toast.makeText(eventListView.getContext(), "Event Update", Toast.LENGTH_SHORT).show();
@@ -184,7 +193,10 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                                             String eventName = eventNameTextView.getText().toString();
                                             TextView eventDescriptionTextView = viewHolder.itemView.findViewById(R.id.text_view_description);
                                             String eventDescription = eventDescriptionTextView.getText().toString();
-                                            Event event = new Event(eventName, eventDescription);
+                                            // get selected icon
+                                            Event temp = eventListAdapter.getEventAt(viewHolder.getAdapterPosition());
+                                            int iconId = temp.getIcon();
+                                            Event event = new Event(eventName, eventDescription, iconId);
                                             event.setEventId(eventId);
                                             viewModel.update(event);
                                             dialog.cancel();
