@@ -1,0 +1,18 @@
+{
+  "GOALS": [
+    {
+      "eventID": 1,
+      "name": "study for exam",
+      "description": "I have to study for my final exam",
+      "progessValue": 20,
+      "targetValue": 100
+    },
+    {
+      "eventID": 2,
+      "name": "rest",
+      "description": "I need to",
+      "progessValue": 20,
+      "targetValue": 100
+    }
+  ]
+}

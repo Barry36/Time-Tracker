@@ -1,0 +1,24 @@
+{
+  "events": [
+    {
+      "timeEntryId": 1,
+      "latitude": 43.46552,
+      "longitude": -80.5226817
+    },
+    {
+      "timeEntryId": 2,
+      "latitude": 43.46567,
+      "longitude": -80.522683
+    },
+    {
+      "timeEntryId": 3,
+      "latitude": 43.46552,
+      "longitude": -80.5226817
+    },
+    {
+      "timeEntryId": 4,
+      "latitude": 43.48177,
+      "longitude": -80.5255692
+    }
+  ]
+}

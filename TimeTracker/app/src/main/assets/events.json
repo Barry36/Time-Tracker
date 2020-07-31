@@ -1,0 +1,20 @@
+{
+  "events": [
+    {
+      "eventName": "Study",
+      "description": "LC 161 & LC 162"
+    },
+    {
+      "eventName": "Rest",
+      "description": "Watch drama"
+    },
+    {
+      "eventName": "Exercise",
+      "description": "Go to the gym"
+    },
+    {
+      "eventName": "Meal",
+      "description": "Have lunch"
+    }
+  ]
+}

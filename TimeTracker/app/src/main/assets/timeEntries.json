@@ -1,0 +1,46 @@
+{
+  "timeEntries": [
+    {
+      "eventID": "Study",
+      "startTime": "2020-07-22 18:20:00",
+      "endTime": "2020-07-22 18:40:00",
+      "duration": 1200
+    },
+    {
+      "eventID": "Study",
+      "startTime": "2020-07-23 10:15:00",
+      "endTime": "2020-07-23 10:20:00",
+      "duration": 900
+    },
+    {
+      "eventID": "Study",
+      "startTime": "2020-07-22 11:15:00",
+      "endTime": "2020-07-22 11:40:00",
+      "duration": 600
+    },
+    {
+      "eventID": "Study",
+      "startTime": "2020-07-18 11:15:00",
+      "endTime": "2020-07-18 11:40:00",
+      "duration": 1200
+    },
+    {
+      "eventID": "Study",
+      "startTime": "2020-07-19 11:15:00",
+      "endTime": "2020-07-19 11:40:00",
+      "duration": 1200
+    },
+    {
+      "eventID": "Study",
+      "startTime": "2020-07-19 11:15:00",
+      "endTime": "2020-07-19 11:40:00",
+      "duration": 1200
+    },
+    {
+      "eventID": "Study",
+      "startTime": "2020-07-20 11:15:00",
+      "endTime": "2020-07-20 11:40:00",
+      "duration": 1200
+    }
+  ]
+}
