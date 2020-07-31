@@ -19,6 +19,11 @@
       "timeEntryId": 4,
       "latitude": 43.48177,
       "longitude": -80.5255692
+    },
+    {
+      "timeEntryId": 5,
+      "latitude": 43.47363,
+      "longitude": -80.5370301
     }
   ]
 }

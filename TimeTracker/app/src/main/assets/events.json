@@ -15,6 +15,50 @@
     {
       "eventName": "Meal",
       "description": "Have lunch"
+    },
+    {
+      "eventName": "Chores",
+      "description": "Daily cleaning, cooking"
+    },
+    {
+      "eventName": "School",
+      "description": "Attend classes"
+    },
+    {
+      "eventName": "Exercise",
+      "description": "Sports, workout"
+    },
+    {
+      "eventName": "Selfcare",
+      "description": "Haircut, beauty salon, wellness"
+    },
+    {
+      "eventName": "Groceries",
+      "description": "Get groceries"
+    },
+    {
+      "eventName": "Travel",
+      "description": "Travel and vacations"
+    },
+    {
+      "eventName": "Entertainement",
+      "description": "Movie theater, bar, pub, amusement park, aquarium, museum, etc."
+    },
+    {
+      "eventName": "Shopping",
+      "description": "Shopping at a mall or at a branch store"
+    },
+    {
+      "eventName": "Shopping",
+      "description": "Shopping at a mall or at a branch store"
+    },
+    {
+      "eventName": "Religion",
+      "description": "Going to church, mosque, temple, etc."
+    },
+    {
+      "eventName": "Transit",
+      "description": "Taking the public transportation"
     }
   ]
 }
