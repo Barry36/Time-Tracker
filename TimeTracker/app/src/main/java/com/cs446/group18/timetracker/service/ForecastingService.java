@@ -255,6 +255,7 @@ public class ForecastingService extends Service implements NotificationStrategy{
     // Return Target Time Entry
     private static int gettargetSecond(List<Date> dates) {
         long totalSeconds = 0L;
+        long averageSeconds = 0L;
         for(Date date: dates) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
@@ -264,10 +265,14 @@ public class ForecastingService extends Service implements NotificationStrategy{
             int tmp = hour * 60 * 60 + minute * 60 + second;
 
             totalSeconds += tmp;
-
         }
 
-        long averageSeconds = totalSeconds / dates.size();
+        if(dates.size() == 0){
+            averageSeconds = totalSeconds;
+        }else{
+            averageSeconds = totalSeconds / dates.size();
+        }
+
         return (int)averageSeconds;
     }
 
