@@ -1,7 +1,6 @@
 package com.cs446.group18.timetracker.ui;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -55,6 +55,9 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     private FloatingActionButton buttonAddEvent;
     private int position;
     private int prevPosition;
+    private final ArrayList<Integer> iconList = new ArrayList<>(Arrays.asList(R.drawable.ic_cooking, R.drawable.ic_yoga, R.drawable.ic_homework, R.drawable.ic_movies, R.drawable.ic_music, R.drawable.ic_soccer,
+            R.drawable.ic_gym, R.drawable.ic_cafe, R.drawable.ic_cleaning, R.drawable.ic_coffee, R.drawable.ic_shopping_cart, R.drawable.ic_task, R.drawable.ic_television, R.drawable.ic_youtube, R.drawable.ic_sms));
+
 
     @Nullable
     @Override
@@ -81,10 +84,9 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 View promptView = inflater.inflate(R.layout.prompt_add_event, container, false);
                 //create icon list view
-                final ArrayList<Integer> iconList = new ArrayList<>(Arrays.asList(R.drawable.ic_cooking, R.drawable.ic_yoga, R.drawable.ic_homework, R.drawable.ic_movies, R.drawable.ic_music, R.drawable.ic_soccer));
                 final GridView list = promptView.findViewById(R.id.iconList);
                 IconListAdaptor iconAdapter = new IconListAdaptor(promptView.getContext(), R.layout.list_item_icon, iconList);
                 list.setAdapter(iconAdapter);
@@ -145,11 +147,10 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
                     Toast.makeText(eventListView.getContext(), "Event Deleted", Toast.LENGTH_SHORT).show();
                 } else if (direction == ItemTouchHelper.LEFT) {
                     long eventId = eventListAdapter.getEventAt(viewHolder.getAdapterPosition()).getEventId();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     View promptView = inflater.inflate(R.layout.prompt_add_event, container, false);
 
                     //create icon list view
-                    final ArrayList<Integer> iconList = new ArrayList<>(Arrays.asList(R.drawable.ic_cooking, R.drawable.ic_yoga, R.drawable.ic_homework, R.drawable.ic_movies, R.drawable.ic_music, R.drawable.ic_soccer));
                     final GridView list = promptView.findViewById(R.id.iconList);
                     IconListAdaptor iconAdapter = new IconListAdaptor(promptView.getContext(), R.layout.list_item_icon, iconList);
                     list.setAdapter(iconAdapter);
@@ -269,11 +270,11 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
             @Override
             public void onChanged(List<TimeEntry> timeEntries) {
                 Log.d("EventListFragment", "onChanged is called");
-                if(expandableLinearLayout.getChildCount() > 0){
+                if (expandableLinearLayout.getChildCount() > 0) {
                     expandableLinearLayout.removeAllViews();
                 }
                 for (int i = 0; i < timeEntries.size(); ++i) {
-                    int duration = (int)timeEntries.get(i).getDuration()/1000;
+                    int duration = (int) timeEntries.get(i).getDuration() / 1000;
                     String text = "Duration: " + Integer.toString(duration) + " second";
                     TextView textView = new TextView(getContext());
                     textView.setText(text);
@@ -291,7 +292,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         } else {
             FragmentTransaction closeFt = getChildFragmentManager().beginTransaction();
             closeFt.remove(stopwatchFragment).commit();
-            if(expandableLinearLayout.getChildCount() > 0){
+            if (expandableLinearLayout.getChildCount() > 0) {
                 expandableLinearLayout.removeAllViews();
             }
             collapse(expandableLinearLayout);
@@ -314,7 +315,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         this.events = events;
     }
 
-    public int getPosition(){
+    public int getPosition() {
         return this.position;
     }
 
@@ -322,7 +323,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         return recyclerView;
     }
 
-    public void setRecyclerView(RecyclerView recyclerView){
+    public void setRecyclerView(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
     }
 }

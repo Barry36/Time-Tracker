@@ -11,8 +11,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="10dp"
-        android:text="Event Name"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:text="Event Name"/>
 
     <EditText
         android:id="@+id/event_name"
@@ -31,8 +30,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
-        android:text="Event Description: "
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:text="Event Description"/>
 
     <EditText
         android:id="@+id/event_description"
@@ -52,6 +50,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
         android:text="Select Icon"/>
+
     <GridView
         android:id="@+id/iconList"
         android:layout_height="wrap_content"
