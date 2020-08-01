@@ -9,7 +9,8 @@
         android:orientation="vertical"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:background="?android:attr/colorBackground">
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
@@ -28,7 +29,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/colorBackground">
         <Button
             android:id="@+id/buttonWriteTag"
             android:layout_width="match_parent"

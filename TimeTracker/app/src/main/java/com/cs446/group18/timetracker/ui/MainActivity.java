@@ -2,6 +2,7 @@ package com.cs446.group18.timetracker.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -27,6 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.cs446.group18.timetracker.BuildConfig;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     OnNewIntentListener newIntentListener;
     private DrawerLayout drawerLayout;
     private NavController navController;
+//    private Button btnToggleDark;
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
@@ -68,6 +71,21 @@ public class MainActivity extends AppCompatActivity {
         } else {
             startLocationService();
         }
+
+//        btnToggleDark
+//                = findViewById(R.id.btnToggleDark);
+//
+//        btnToggleDark.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view)
+//                    {
+//                        AppCompatDelegate
+//                                .setDefaultNightMode(
+//                                        AppCompatDelegate
+//                                                .MODE_NIGHT_YES);
+//                    }
+//                });
     }
 
     @Override
