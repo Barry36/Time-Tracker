@@ -5,11 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".ui.CalendarFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <CalendarView
-        android:id="@+id/calendarView"
+    <com.cs446.group18.timetracker.ui.EventCalendarView
+        android:id="@id/calendar_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="335dp"
+        android:background="?android:attr/colorBackground"
+        android:elevation="4dp"
+        android:visibility="visible"
+        class = "com.cs446.group18.timetracker.ui.EventCalendarView"/>
+
+<!--    <com.cs446.group18.timetracker.ui.AgendaView-->
+<!--        android:id="@id/agenda_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="287dp"-->
+<!--        class="com.cs446.group18.timetracker.ui.AgendaView"/>-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_add_event"

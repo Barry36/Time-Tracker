@@ -29,10 +29,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckedTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cs446.group18.timetracker.BuildConfig;
 import com.cs446.group18.timetracker.R;
+import com.cs446.group18.timetracker.utils.CalendarUtils;
 import com.cs446.group18.timetracker.databinding.ActivityMainBinding;
 import com.cs446.group18.timetracker.constants.LocationConstant;
 import com.cs446.group18.timetracker.constants.NotificationConstant;
@@ -49,7 +52,10 @@ public class MainActivity extends AppCompatActivity {
     OnNewIntentListener newIntentListener;
     private DrawerLayout drawerLayout;
     private NavController navController;
-//    private Button btnToggleDark;
+//    private TextView mToolbar;
+    private EventCalendarView mCalendarView;
+//    private AgendaView mAgendaView;
+    private final Coordinator mCoordinator = new Coordinator();
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
@@ -72,20 +78,11 @@ public class MainActivity extends AppCompatActivity {
             startLocationService();
         }
 
-//        btnToggleDark
-//                = findViewById(R.id.btnToggleDark);
-//
-//        btnToggleDark.setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view)
-//                    {
-//                        AppCompatDelegate
-//                                .setDefaultNightMode(
-//                                        AppCompatDelegate
-//                                                .MODE_NIGHT_YES);
-//                    }
-//                });
+        mCalendarView =(EventCalendarView) findViewById(R.id.calendar_view);
+//        mAgendaView = (AgendaView) findViewById(R.id.agenda_view);
+//        mToolbar = findViewById(R.id.month);
+
+//        mCoordinator.coordinate(mToolbar, mCalendarView, mAgendaView);
     }
 
     @Override
@@ -223,4 +220,91 @@ public class MainActivity extends AppCompatActivity {
 //            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
 //        }
 //    }
+
+    /**
+     * Coordinator utility that synchronizes calendar to agenda
+     */
+    static class Coordinator {
+        private static final String STATE_SELECTED_DATE = "state:selectedDate";
+
+        private final EventCalendarView.OnChangeListener mCalendarListener
+                = new EventCalendarView.OnChangeListener() {
+            @Override
+            public void onSelectedDayChange(long calendarDate) {
+                sync(calendarDate, mCalendarView);
+            }
+        };
+        private final AgendaView.OnDateChangeListener mAgendaListener
+                = new AgendaView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(long dayMillis) {
+                sync(dayMillis, mAgendaView);
+            }
+        };
+        private TextView mTextView;
+        private EventCalendarView mCalendarView;
+        private AgendaView mAgendaView;
+        private long mSelectedDayMillis = -1;
+
+        /**
+         * Set up widgets to be synchronized
+         * @param textView      title
+         * @param calendarView  calendar view
+         * @param agendaView    agenda view
+         */
+        public void coordinate(@NonNull TextView textView,
+                               @NonNull EventCalendarView calendarView,
+                               @NonNull AgendaView agendaView) {
+            if (mCalendarView != null) {
+                mCalendarView.setOnChangeListener(null);
+            }
+            if (mAgendaView != null) {
+                mAgendaView.setOnDateChangeListener(null);
+            }
+            mTextView = textView;
+            mCalendarView = calendarView;
+            mAgendaView = agendaView;
+            mSelectedDayMillis = CalendarUtils.today();
+            mCalendarView.setSelectedDay(mSelectedDayMillis);
+            agendaView.setSelectedDay(mSelectedDayMillis);
+            updateTitle(mSelectedDayMillis);
+            calendarView.setOnChangeListener(mCalendarListener);
+            agendaView.setOnDateChangeListener(mAgendaListener);
+        }
+
+        void saveState(Bundle outState) {
+            outState.putLong(STATE_SELECTED_DATE, mSelectedDayMillis);
+        }
+
+        void restoreState(Bundle savedState) {
+            mSelectedDayMillis = savedState.getLong(STATE_SELECTED_DATE,
+                    CalendarUtils.NO_TIME_MILLIS);
+        }
+
+        void reset() {
+            mSelectedDayMillis = CalendarUtils.today();
+            if (mCalendarView != null) {
+                mCalendarView.reset();
+            }
+            if (mAgendaView != null) {
+                mAgendaView.reset();
+            }
+            updateTitle(mSelectedDayMillis);
+        }
+
+        private void sync(long dayMillis, View originator) {
+            mSelectedDayMillis = dayMillis;
+            if (originator != mCalendarView) {
+                mCalendarView.setSelectedDay(dayMillis);
+            }
+            if (originator != mAgendaView) {
+                mAgendaView.setSelectedDay(dayMillis);
+            }
+            updateTitle(dayMillis);
+        }
+
+        private void updateTitle(long dayMillis) {
+            mTextView.setText(CalendarUtils.toMonthString(mTextView.getContext(), dayMillis));
+        }
+    }
 }
