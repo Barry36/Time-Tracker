@@ -1,19 +1,13 @@
 package com.cs446.group18.timetracker.ui;
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.provider.CalendarContract;
 import androidx.annotation.*;
 import androidx.recyclerview.widget.*;
-import androidx.core.content.ContextCompat;
+
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.format.DateUtils;
-import android.text.style.ReplacementSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +21,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.cs446.group18.timetracker.R;
-import com.cs446.group18.timetracker.utils.EventCursor;
 import com.cs446.group18.timetracker.utils.CalendarUtils;
 import com.cs446.group18.timetracker.utils.CircleSpan;
 import com.cs446.group18.timetracker.utils.UnderDotSpan;

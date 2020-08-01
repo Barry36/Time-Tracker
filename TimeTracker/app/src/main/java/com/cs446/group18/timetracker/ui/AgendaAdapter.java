@@ -1,10 +1,8 @@
 package com.cs446.group18.timetracker.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcel;
@@ -24,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.cs446.group18.timetracker.R;
-import com.cs446.group18.timetracker.utils.EventCursor;
 
 /**
  * 'Unlimited' adapter that load more and prune items

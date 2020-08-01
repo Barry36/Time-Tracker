@@ -9,9 +9,7 @@ import androidx.viewpager.widget.*;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cs446.group18.timetracker.ui.MonthView;
 import com.cs446.group18.timetracker.utils.CalendarUtils;
-import com.cs446.group18.timetracker.utils.EventCursor;
 
 import java.util.ArrayList;
 import java.util.List;
