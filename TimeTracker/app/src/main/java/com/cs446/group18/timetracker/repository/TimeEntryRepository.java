@@ -37,10 +37,9 @@ public class TimeEntryRepository {
         return timeEntryDao.getTimeEntryById(id);
     }
 
-
-//    public LiveData<List<TimeEntry>> getTimeEntriesByEventID(int event_id){
-//        return timeEntryDao.getTimeEntriesByEventID(event_id);
-//    }
+    public List<TimeEntry> getTimeEntriesByEventIDStatic(long eventID){
+        return timeEntryDao.getTimeEntriesByEventIDStatic(eventID);
+    }
 
     public LiveData<List<TimeEntry>> getTimeEntriesByEventID(long event_id){
         return timeEntryDao.getTimeEntriesByEventID(event_id);
