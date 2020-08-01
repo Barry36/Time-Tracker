@@ -8,6 +8,10 @@
         android:title="My goals"/>
 
     <item
+        android:id="@+id/calendar_fragment"
+        android:title="Calendar"/>
+
+    <item
         android:id="@+id/read_tag_activity"
         android:title="Read Tag"/>
     <item
