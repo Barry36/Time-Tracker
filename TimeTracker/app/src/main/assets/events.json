@@ -2,63 +2,78 @@
   "events": [
     {
       "eventName": "Study",
-      "description": "LC 161 & LC 162"
+      "description": "LC 161 & LC 162",
+      "icon": 2131165326
     },
     {
       "eventName": "Rest",
-      "description": "Watch drama"
+      "description": "Watch drama",
+      "icon": 2131165349
     },
     {
       "eventName": "Exercise",
-      "description": "Go to the gym"
+      "description": "Go to the gym",
+      "icon": 2131165343
     },
     {
       "eventName": "Meal",
-      "description": "Have lunch"
+      "description": "Have meal",
+      "icon": 2131165322
     },
     {
       "eventName": "Chores",
-      "description": "Daily cleaning, cooking"
+      "description": "Daily cleaning, cooking",
+      "icon": 2131165322
     },
     {
       "eventName": "School",
-      "description": "Attend classes"
+      "description": "Attend classes",
+      "icon": 2131165322
     },
     {
       "eventName": "Exercise",
-      "description": "Sports, workout"
+      "description": "Sports, workout",
+      "icon": 2131165322
     },
     {
       "eventName": "Selfcare",
-      "description": "Haircut, beauty salon, wellness"
+      "description": "Haircut, beauty salon, wellness",
+      "icon": 2131165322
     },
     {
       "eventName": "Groceries",
-      "description": "Get groceries"
+      "description": "Get groceries",
+      "icon": 2131165322
     },
     {
       "eventName": "Travel",
-      "description": "Travel and vacations"
+      "description": "Travel and vacations",
+      "icon": 2131165322
     },
     {
       "eventName": "Entertainement",
-      "description": "Movie theater, bar, pub, amusement park, aquarium, museum, etc."
+      "description": "Movie theater, bar, pub, amusement park, aquarium, museum, etc.",
+      "icon": 2131165322
     },
     {
       "eventName": "Shopping",
-      "description": "Shopping at a mall or at a branch store"
+      "description": "Shopping at a mall or at a branch store",
+      "icon": 2131165322
     },
     {
       "eventName": "Shopping",
-      "description": "Shopping at a mall or at a branch store"
+      "description": "Shopping at a mall or at a branch store",
+      "icon": 2131165322
     },
     {
       "eventName": "Religion",
-      "description": "Going to church, mosque, temple, etc."
+      "description": "Going to church, mosque, temple, etc.",
+      "icon": 2131165322
     },
     {
       "eventName": "Transit",
-      "description": "Taking the public transportation"
+      "description": "Taking the public transportation",
+      "icon": 2131165322
     }
   ]
 }

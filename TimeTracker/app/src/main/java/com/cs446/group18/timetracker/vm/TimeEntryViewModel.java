@@ -24,11 +24,9 @@ public class TimeEntryViewModel extends ViewModel {
     }
 
 
-
 //    public LiveData<List<TimeEntry>> getTimeEntriesByEventID(int event_id){
 //        return repository.getTimeEntriesByEventID(event_id);
 //    }
-
 
     public LiveData<List<EventWithTimeEntries>> getEventWithTimeEntries() {
         return repository.getEventWithTimeEntries();
@@ -38,8 +36,8 @@ public class TimeEntryViewModel extends ViewModel {
         return repository.getTimeEntriesByEventID(event_id);
     }
 
-    public void insert(TimeEntry timeEntry) {
-        repository.createTimeEntry(timeEntry);
+    public long insert(TimeEntry timeEntry) {
+        return repository.createTimeEntry(timeEntry);
     }
 
     public void update(TimeEntry timeEntry) {
