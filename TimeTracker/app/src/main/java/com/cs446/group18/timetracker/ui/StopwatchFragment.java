@@ -14,12 +14,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.cs446.group18.timetracker.R;
+
 import com.cs446.group18.timetracker.entity.Geolocation;
 import com.cs446.group18.timetracker.entity.TimeEntry;
 import com.cs446.group18.timetracker.utils.InjectorUtils;
@@ -30,16 +31,17 @@ import com.cs446.group18.timetracker.vm.TimeEntryViewModel;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
+
 import java.util.Date;
 
-public class StopwatchFragment extends Fragment {
+public class StopwatchFragment extends Fragment{
     public boolean stopBtnClicked;
     private long mTimerSoFarInMillis;
     private boolean mTimerRunning;
     private long pauseOffset = 0;
     private Date startTime;
     private Date endTime;
+
 
     public static StopwatchFragment newInstance(long eventId) {
         StopwatchFragment stopwatchFragment = new StopwatchFragment();
@@ -57,12 +59,13 @@ public class StopwatchFragment extends Fragment {
         GeolocationViewModelFactory geolocationViewModelFactory = InjectorUtils.provideGeolocationViewModelFactory(getActivity());
         GeolocationViewModel geolocationViewModel = new ViewModelProvider(this, geolocationViewModelFactory).get(GeolocationViewModel.class);
 
+
         Long eventId = getArguments().getLong("id");
         Log.w("Id", eventId.toString());
 
         final View rootView = inflater.inflate(R.layout.fragment_stopwatch, container, false);
         final Chronometer chronometer = rootView.findViewById(R.id.chronometer);
-        startTime = new Date();
+        
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -77,14 +80,9 @@ public class StopwatchFragment extends Fragment {
         final ImageView mButtonStartPause = rootView.findViewById(R.id.button_start_pause);
         mButtonStartPause.setOnClickListener(v -> {
 
-            // Set Flag
-            TextView textView = rootView.findViewById(R.id.btn_clicked);
-            textView.setText("0");
-            this.stopBtnClicked = false;
-            // Set Flag Ends
-
             if (!mTimerRunning) {
 //                mButtonStartPause.setText("Pause");
+                startTime = new Date();
                 chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
                 chronometer.start();
                 mTimerRunning = true;
@@ -99,12 +97,6 @@ public class StopwatchFragment extends Fragment {
 
         final ImageView mButtonStop = rootView.findViewById(R.id.button_stop);
         mButtonStop.setOnClickListener(v -> {
-            // Set Flag
-            TextView timer_stop_clicked = rootView.findViewById(R.id.btn_clicked);
-            timer_stop_clicked.setText("1");
-            this.stopBtnClicked = true;
-
-            // Set Flag Ends
             if (mTimerRunning) {
                 //if the stopwatch has not yet been paused
                 if (pauseOffset > 0) {
@@ -132,7 +124,7 @@ public class StopwatchFragment extends Fragment {
 //            mButtonStartPause.setText("Start");
             pauseOffset = 0;
             chronometer.setBase(SystemClock.elapsedRealtime());
-
+            mButtonStartPause.setVisibility(View.VISIBLE);
         });
         return rootView;
     }

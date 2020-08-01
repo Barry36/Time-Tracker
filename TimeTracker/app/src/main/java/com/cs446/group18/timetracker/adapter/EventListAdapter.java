@@ -5,6 +5,7 @@ import android.media.MediaDrm;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -49,6 +50,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Event currentEvent = getEventAt(position);
+        ImageView imageIcon = holder.itemView.findViewById(R.id.imageView);
+        if (imageIcon != null){
+            imageIcon.setImageResource(currentEvent.getIcon());
+        }
         holder.bind(currentEvent);
     }
 
