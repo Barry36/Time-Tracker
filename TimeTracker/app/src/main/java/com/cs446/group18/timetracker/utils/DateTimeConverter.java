@@ -24,6 +24,8 @@ public class DateTimeConverter {
             }
         } catch (ParseException e) {
             throw new UServiceException("TXN_101", "", "Date parse error", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return date;
     }

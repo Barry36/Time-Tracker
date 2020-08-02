@@ -2,6 +2,7 @@ package com.cs446.group18.timetracker.ui;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,10 +34,13 @@ import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.adapter.EventListAdapter;
 import com.cs446.group18.timetracker.adapter.IconListAdaptor;
 import com.cs446.group18.timetracker.entity.Event;
+import com.cs446.group18.timetracker.entity.Geolocation;
 import com.cs446.group18.timetracker.entity.TimeEntry;
 import com.cs446.group18.timetracker.utils.InjectorUtils;
 import com.cs446.group18.timetracker.vm.EventListViewModelFactory;
 import com.cs446.group18.timetracker.vm.EventViewModel;
+import com.cs446.group18.timetracker.vm.GeolocationViewModel;
+import com.cs446.group18.timetracker.vm.GeolocationViewModelFactory;
 import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
 import com.cs446.group18.timetracker.vm.TimeEntryViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -47,7 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class EventListFragment extends Fragment implements EventListAdapter.OnEventListener {
+public class EventListFragment extends Fragment implements EventListAdapter.OnEventListener, FragmentDatabaseSaver {
     private EventListAdapter adapter;
     private List<Event> events = new ArrayList<>();
     RecyclerView recyclerView;
@@ -214,6 +218,10 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
 
         subscribeUI(eventListAdapter);
+        TimeEntryListViewModelFactory timeEntryListViewModelFactory = InjectorUtils.provideTimeEntryListViewModelFactory(getActivity());
+        timeEntryViewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
+        GeolocationViewModelFactory geolocationViewModelFactory = InjectorUtils.provideGeolocationViewModelFactory(getActivity());
+        geolocationViewModel = new ViewModelProvider(this, geolocationViewModelFactory).get(GeolocationViewModel.class);
         return eventListView;
     }
 
@@ -242,19 +250,25 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     // Expandable CardView
     @SuppressLint("RestrictedApi")
     @Override
-    public void onEventClick(int position) {
+    public void onEventClick(int position, boolean isFromNFC) {
 
         setRecyclerView(recyclerView);
         this.position = position;
         // Time Entries
         long eventID = events.get(position).getEventId();
-
-        //integration to stopwatch, should be changed later
-        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        StopwatchFragment stopwatchFragment = StopwatchFragment.newInstance(eventID);
-        ft.replace(R.id.stopwatch, stopwatchFragment);
-        ft.commit();
-
+        boolean isFragmentAlreadyAVailable=false;
+        for(Fragment fragment:getChildFragmentManager().getFragments()){
+            if(fragment instanceof StopwatchFragment){
+                isFragmentAlreadyAVailable=true;
+            }
+        }
+        if(!isFragmentAlreadyAVailable) {
+            //integration to stopwatch, should be changed later
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            StopwatchFragment stopwatchFragment = StopwatchFragment.newInstance(eventID, isFromNFC);
+            ft.replace(R.id.stopwatch, stopwatchFragment);
+            ft.commit();
+        }else{}
 
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         View view = linearLayoutManager.findViewByPosition(position);
@@ -288,14 +302,33 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
             prevPosition = position;
             buttonAddEvent.setVisibility(View.GONE);
+
+//            stopwatchFragment.startPlayButton();
         } else {
-            FragmentTransaction closeFt = getChildFragmentManager().beginTransaction();
-            closeFt.remove(stopwatchFragment).commit();
-            if (expandableLinearLayout.getChildCount() > 0) {
-                expandableLinearLayout.removeAllViews();
+            if(isFromNFC)
+                if(getChildFragmentManager()!=null&&getChildFragmentManager().getFragments()!=null)
+                    for(Fragment fragment:getChildFragmentManager().getFragments()){
+                        if(fragment instanceof StopwatchFragment){
+                            StopwatchFragment fragmentSTp=((StopwatchFragment)fragment);
+                            if(fragmentSTp.getTimerRunningState())
+                                fragmentSTp.stopPlayButton();
+                            else fragmentSTp.startPlayButton();
+                        }
+                    }
+            //            stopwatchFragment.stopPlayButton();
+            if(!isFromNFC) {
+                FragmentTransaction closeFt = getChildFragmentManager().beginTransaction();
+                for(Fragment fragment:getChildFragmentManager().getFragments())
+                    if(fragment instanceof StopwatchFragment){
+                        closeFt.remove(fragment).commit();
+                    }
+
+                if (expandableLinearLayout.getChildCount() > 0) {
+                    expandableLinearLayout.removeAllViews();
+                }
+                collapse(expandableLinearLayout);
+                buttonAddEvent.setVisibility(View.VISIBLE);
             }
-            collapse(expandableLinearLayout);
-            buttonAddEvent.setVisibility(View.VISIBLE);
         }
 
     }
@@ -324,5 +357,25 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
     public void setRecyclerView(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
+    }
+    public void receivedNFCTagEvent(String eventName){
+        if(events!=null)
+            for(int i=0;i<events.size();i++)
+                if(events.get(i).getEventName()!=null &&events.get(i).getEventName().equalsIgnoreCase(eventName)){
+                    onEventClick(i,true);
+                    break;
+                }
+    }
+
+    private TimeEntryViewModel timeEntryViewModel;
+    private GeolocationViewModel geolocationViewModel;
+    @Override
+    public void updateGeoLocation(Geolocation geolocation) {
+        geolocationViewModel.insert(geolocation);
+    }
+
+    @Override
+    public long updateTimeEntry(TimeEntry timeEntry) {
+        return timeEntryViewModel.insert(timeEntry);
     }
 }
