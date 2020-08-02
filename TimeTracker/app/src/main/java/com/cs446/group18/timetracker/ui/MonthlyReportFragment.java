@@ -59,7 +59,7 @@ public class MonthlyReportFragment extends Fragment {
             protected Boolean doInBackground(Void... v) {
                 TimeEntryRepository timeEntryRepository = TimeEntryRepository.getInstance(
                         TimeTrackerDatabase.getInstance(getContext()).timeEntryDao());
-                List<EventWithTimeEntries> eventsWithTimeEntries = timeEntryRepository.getEventsWithTimeEntries();
+                List<EventWithTimeEntries> eventsWithTimeEntries = timeEntryRepository.getEventsWithTimeEntriesStatic();
 
                 updateData(eventsWithTimeEntries);
                 return true;

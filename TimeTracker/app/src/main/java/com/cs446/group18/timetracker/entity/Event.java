@@ -16,9 +16,13 @@ public class Event {
     @ColumnInfo(name = "event_description")
     private String description;
 
-    public Event(String eventName, String description) {
+    @ColumnInfo(name = "icon")
+    private Integer icon;
+
+    public Event(String eventName, String description, int icon) {
         this.eventName = eventName;
         this.description = description;
+        this.icon = icon;
     }
 
     public long getEventId() {
@@ -43,5 +47,13 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Integer icon) {
+        this.icon = icon;
     }
 }

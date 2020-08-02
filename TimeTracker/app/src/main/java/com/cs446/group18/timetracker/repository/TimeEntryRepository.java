@@ -9,6 +9,7 @@ import com.cs446.group18.timetracker.entity.TimeEntry;
 import com.cs446.group18.timetracker.relation.EventWithTimeEntries;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class TimeEntryRepository {
     private TimeEntryDao timeEntryDao;
@@ -36,23 +37,40 @@ public class TimeEntryRepository {
         return timeEntryDao.getTimeEntryById(id);
     }
 
-
-//    public LiveData<List<TimeEntry>> getTimeEntriesByEventID(int event_id){
-//        return timeEntryDao.getTimeEntriesByEventID(event_id);
-//    }
+    public List<TimeEntry> getTimeEntriesByEventIDStatic(long eventID){
+        return timeEntryDao.getTimeEntriesByEventIDStatic(eventID);
+    }
 
     public LiveData<List<TimeEntry>> getTimeEntriesByEventID(long event_id){
         return timeEntryDao.getTimeEntriesByEventID(event_id);
     }
 
-    public List<EventWithTimeEntries> getEventsWithTimeEntries() {
-        return timeEntryDao.getEventsWithTimeEntries();
+    public List<EventWithTimeEntries> getEventsWithTimeEntriesStatic() {
+        return timeEntryDao.getEventsWithTimeEntriesStatic();
     }
 
     // Room does not allow database operation on the main thread, it will freeze the app
     // Hence we need async task to execute operation
-    public void createTimeEntry(TimeEntry timeEntry) {
-        AsyncTask.execute(() -> timeEntryDao.insert(timeEntry));
+    public long createTimeEntry(TimeEntry timeEntry) {
+        try {
+            return new InsertTimeEntryAsyncTask(timeEntryDao).execute(timeEntry).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    private static class InsertTimeEntryAsyncTask extends AsyncTask<TimeEntry, Void, Long> {
+        private TimeEntryDao timeEntryDao;
+        private InsertTimeEntryAsyncTask(TimeEntryDao timeEntryDao) {
+            this.timeEntryDao = timeEntryDao;
+        }
+
+        @Override
+        protected Long doInBackground(TimeEntry... timeEntries) {
+            return timeEntryDao.insert(timeEntries[0]);
+        }
+
     }
 
     public void updateTimeEntry(TimeEntry timeEntry) {

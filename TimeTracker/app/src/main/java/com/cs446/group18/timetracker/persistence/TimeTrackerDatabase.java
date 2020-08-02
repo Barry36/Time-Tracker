@@ -10,6 +10,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.dao.EventDao;
 import com.cs446.group18.timetracker.dao.GeolocationDao;
 import com.cs446.group18.timetracker.dao.GoalDao;
@@ -71,10 +72,10 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            eventDao.insert(new Event("Study", "LC 161 & LC 162"));
-            eventDao.insert(new Event("Rest", "Watch drama"));
-            eventDao.insert(new Event("Exercise", "Go to the gym"));
-            eventDao.insert(new Event("Meal", "have lunch"));
+            eventDao.insert(new Event("Study", "LC 161 & LC 162", R.drawable.ic_homework));
+            eventDao.insert(new Event("Rest", "Watch drama", R.drawable.ic_yoga));
+            eventDao.insert(new Event("Exercise", "Go to the gym", R.drawable.ic_soccer));
+            eventDao.insert(new Event("Meal", "have lunch", R.drawable.ic_cooking));
             timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-08-01 17:20:00"),
                     DateTimeConverter.fromTimestamp("2020-08-01 18:40:00"),
                     Math.abs(DateTimeConverter.fromTimestamp("2020-08-01 18:40:00").getTime()
@@ -101,11 +102,11 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
                             - DateTimeConverter.fromTimestamp("2020-08-02 6:40:00").getTime())));
             goalDao.insert(new Goal(1, "Study Goal", "I have to study for my final exam", 20, 100));
             goalDao.insert(new Goal(2, "Rest Goal", "I need some rest", 80, 100));
-            geolocationDao.insert(new Geolocation(1, 43.46552, -80.5226817)); // Captain Boil
-            geolocationDao.insert(new Geolocation(2, 43.46567, -80.522683)); // Nick & Nat's Uptown 21
-            geolocationDao.insert(new Geolocation(3, 43.46552, -80.5226817)); // Captain Boil
-            geolocationDao.insert(new Geolocation(4, 43.48177, -80.5255692)); // McDonald's
-            geolocationDao.insert(new Geolocation(5, 43.47363, -80.5370301)); // Blair House
+            geolocationDao.insert(new Geolocation(1, 43.4655, -80.5227)); // Captain Boil
+            geolocationDao.insert(new Geolocation(2, 43.4657, -80.5227)); // Nick & Nat's Uptown 21
+            geolocationDao.insert(new Geolocation(3, 43.4655, -80.5227)); // Captain Boil
+            geolocationDao.insert(new Geolocation(4, 43.4818, -80.5256)); // McDonald's
+            geolocationDao.insert(new Geolocation(5, 43.4736, -80.5370)); // Blair House
 
             return null;
         }
