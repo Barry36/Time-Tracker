@@ -24,7 +24,24 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
+                    app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                    <CheckedTextView
+                        android:id="@+id/currentMonth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:checked="false"
+                        android:drawablePadding="5dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:text="August" />
+
+                </androidx.appcompat.widget.Toolbar>
+
+
 
             </com.google.android.material.appbar.AppBarLayout>
 

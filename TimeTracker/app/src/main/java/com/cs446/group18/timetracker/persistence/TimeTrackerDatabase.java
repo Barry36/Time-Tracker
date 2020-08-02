@@ -108,7 +108,9 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
                     JSONObject jo_inside = m_jArray.getJSONObject(i);
                     String eventName = jo_inside.getString("eventName");
                     String description = jo_inside.getString("description");
-                    eventDao.insert(new Event(eventName, description));
+                    int icon = jo_inside.getInt("icon");
+
+                    eventDao.insert(new Event(eventName, description, icon));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
