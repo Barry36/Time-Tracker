@@ -28,8 +28,8 @@ public interface TimeEntryDao {
     LiveData<List<TimeEntry>> getAllTimeEntries();
 
 
-//    @Query("SELECT * FROM time_entry_table WHERE event_id = :event_id")
-//    LiveData<List<TimeEntry>> getTimeEntriesByEventID(long event_id);
+    @Query("SELECT * FROM time_entry_table WHERE event_id = :event_id")
+    List<TimeEntry> getTimeEntriesByEventIDStatic(long event_id);
 
 
     @Query("SELECT * FROM time_entry_table WHERE event_id = :event_id")

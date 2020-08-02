@@ -13,35 +13,22 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
-import com.cs446.group18.timetracker.BuildConfig;
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.databinding.ActivityMainBinding;
 import com.cs446.group18.timetracker.constants.LocationConstant;
 import com.cs446.group18.timetracker.constants.NotificationConstant;
-import com.cs446.group18.timetracker.utils.HttpRequestHandler;
+import com.cs446.group18.timetracker.service.ForecastingService;
 import com.cs446.group18.timetracker.service.LocationService;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     OnNewIntentListener newIntentListener;
@@ -68,6 +55,17 @@ public class MainActivity extends AppCompatActivity {
         } else {
             startLocationService();
         }
+
+        // Start Forecasting service
+        startForecastingService();
+
+    }
+
+    private void startForecastingService() {
+
+        ForecastingService forecastingService = new ForecastingService(getApplicationContext());
+        forecastingService.startForecastingService(1, getApplicationContext());
+        Toast.makeText(this, "Forecasting service started", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -194,7 +192,21 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(geolocationChannel);
             manager.createNotificationChannel(channel2);
+
+
+
+            // Forecasting Channel
+            NotificationChannel forecastingChannel = new NotificationChannel(
+                    NotificationConstant.FORECASTING_CHANNEL_ID,
+                    "Forecasting Channel",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+
+            forecastingChannel.setDescription("This is forecasting suggestion channel");
+            NotificationManager manager2 = getSystemService(NotificationManager.class);
+            manager2.createNotificationChannel(forecastingChannel);
         }
+
     }
 
 //    private void stopLocationService() {
