@@ -21,11 +21,11 @@
             android:textSize="@dimen/report_title_size" />
 
         <View
-            android:id="@+id/divider"
+            android:id="@+id/divider10"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginHorizontal="100dp"
-            android:layout_marginBottom="@dimen/divider_margin_bottom"
+            android:layout_marginBottom="@dimen/divider_margin_vertical"
             android:background="?android:attr/listDivider"
             android:textAlignment="center" />
 
@@ -51,10 +51,10 @@
                     android:layout_margin="10dp" />
 
                 <View
-                    android:id="@+id/divider2"
+                    android:id="@+id/divider12"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="@dimen/divider_margin_bottom"
+                    android:layout_marginVertical="@dimen/divider_margin_vertical"
                     android:background="?android:attr/listDivider" />
 
                 <Spinner
@@ -70,10 +70,10 @@
                     android:layout_margin="10dp" />
 
                 <View
-                    android:id="@+id/divider3"
+                    android:id="@+id/divider13"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="@dimen/divider_margin_bottom"
+                    android:layout_marginVertical="@dimen/divider_margin_vertical"
                     android:background="?android:attr/listDivider" />
             </LinearLayout>
         </ScrollView>

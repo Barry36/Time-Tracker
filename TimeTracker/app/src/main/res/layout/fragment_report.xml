@@ -19,19 +19,19 @@
             android:id="@+id/tab_weekly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Weekly" />
+            android:text="@string/tab_weekly" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_monthly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Monthly" />
+            android:text="@string/tab_monthly" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_yearly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Yearly" />
+            android:text="@string/tab_yearly" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager

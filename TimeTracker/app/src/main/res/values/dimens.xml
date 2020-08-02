@@ -3,5 +3,5 @@
     <!-- for Reports -->
     <dimen name="report_title_size">20sp</dimen>
     <dimen name="chart_height">260dp</dimen>
-    <dimen name="divider_margin_bottom">5dp</dimen>
+    <dimen name="divider_margin_vertical">5dp</dimen>
 </resources>

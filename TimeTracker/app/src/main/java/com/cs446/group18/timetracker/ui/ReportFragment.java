@@ -16,12 +16,15 @@ public class ReportFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_report,  container, false);
+        return inflater.inflate(R.layout.fragment_report,  container, false);
+    }
 
-        TabLayout tabBar = v.findViewById(R.id.tab_bar_time);
-        final ViewPager viewPager = v.findViewById(R.id.viewPager);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        TabLayout tabBar = view.findViewById(R.id.tab_bar_time);
+        final ViewPager viewPager = view.findViewById(R.id.viewPager);
 
-        PageAdapter pageAdapter = new PageAdapter(getParentFragmentManager(), tabBar.getTabCount());
+        PageAdapter pageAdapter = new PageAdapter(getChildFragmentManager(), tabBar.getTabCount());
         viewPager.setAdapter(pageAdapter);
 
         tabBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -37,10 +40,8 @@ public class ReportFragment extends Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                viewPager.setCurrentItem(tab.getPosition());
             }
         });
-
-        return v;
     }
 }

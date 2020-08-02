@@ -44,5 +44,5 @@ public interface TimeEntryDao {
 
     @Transaction
     @Query("SELECT * FROM event_table")
-    LiveData<List<EventWithTimeEntries>> getEventWithTimeEntries();
+    List<EventWithTimeEntries> getEventsWithTimeEntries();
 }

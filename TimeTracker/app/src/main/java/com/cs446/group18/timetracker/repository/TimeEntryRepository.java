@@ -45,10 +45,8 @@ public class TimeEntryRepository {
         return timeEntryDao.getTimeEntriesByEventID(event_id);
     }
 
-
-
-    public LiveData<List<EventWithTimeEntries>> getEventWithTimeEntries() {
-        return timeEntryDao.getEventWithTimeEntries();
+    public List<EventWithTimeEntries> getEventsWithTimeEntries() {
+        return timeEntryDao.getEventsWithTimeEntries();
     }
 
     // Room does not allow database operation on the main thread, it will freeze the app
