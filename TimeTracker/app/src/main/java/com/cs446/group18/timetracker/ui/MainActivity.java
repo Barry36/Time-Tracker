@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     OnNewIntentListener newIntentListener;
     private DrawerLayout drawerLayout;
     private NavController navController;
-    public String TAG="MainActivity";
+    public String TAG = "MainActivity";
     // NFC-related variables
     private NfcAdapter _nfcAdapter;
     private PendingIntent _nfcPendingIntent;
@@ -79,8 +79,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (_nfcAdapter == null) {
             Toast.makeText(this, "Your device does not support NFC. Cannot run this demo.", Toast.LENGTH_LONG).show();
-//            finish();
-//            return;
         }
 
 //        checkNfcEnabled();
@@ -110,34 +108,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        if(newIntentListener!=null)
+        if (newIntentListener != null)
             newIntentListener.onNewIntent(intent);
         super.onNewIntent(intent);
-//        findViewById(R.id.button_get_location).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//                @SuppressLint("MissingPermission")
-//                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//                double longitude = location.getLongitude();
-//                double latitude = location.getLatitude();
-//                Toast.makeText(getApplicationContext(), latitude + ", " + longitude, Toast.LENGTH_SHORT).show();
-//                new GetAddress().execute(String.format("%.4f,%.4f", latitude, longitude));
-//            }
-//        });
+
         if (intent.getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
             NdefMessage[] c = getNdefMessagesFromIntent(intent);
-            if(c!=null &&c.length>0&&c[0]!=null&&c[0].getRecords()!=null){
-                NdefMessage[] ndefMessages= getNdefMessagesFromIntent(intent);
-                if(ndefMessages!=null&&ndefMessages.length>0&&ndefMessages[0].getRecords()!=null&&ndefMessages[0].getRecords().length>0&&ndefMessages[0].getRecords()[0]!=null) {
-                    String identifiedEvent=new String(getNdefMessagesFromIntent(intent)[0].getRecords()[0].getPayload()).split(", ")[1].split("=")[1];
+            if (c != null && c.length > 0 && c[0] != null && c[0].getRecords() != null) {
+                NdefMessage[] ndefMessages = getNdefMessagesFromIntent(intent);
+                if (ndefMessages != null && ndefMessages.length > 0 && ndefMessages[0].getRecords() != null && ndefMessages[0].getRecords().length > 0 && ndefMessages[0].getRecords()[0] != null) {
+                    String identifiedEvent = new String(getNdefMessagesFromIntent(intent)[0].getRecords()[0].getPayload()).split(", ")[1].split("=")[1];
                     Toast.makeText(this, "The Received Event:" + identifiedEvent, Toast.LENGTH_SHORT).show();
-                    FragmentManager fragmentManager=getSupportFragmentManager();
-                    if(getSupportFragmentManager().getFragments().get(0)!=null&&
-                            getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments()!=null)
-                        for(Fragment fragment:getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments()){
-                            if(fragment instanceof EventListFragment){
-                                ((EventListFragment)fragment).receivedNFCTagEvent(identifiedEvent);
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    if (getSupportFragmentManager().getFragments().get(0) != null &&
+                            getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments() != null)
+                        for (Fragment fragment : getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments()) {
+                            if (fragment instanceof EventListFragment) {
+                                ((EventListFragment) fragment).receivedNFCTagEvent(identifiedEvent);
                                 break;
                             }
                         }
@@ -206,44 +193,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    private class GetAddress extends AsyncTask<String, Void, String> {
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected String doInBackground(String... strings) {
-//            try {
-//                double lat = Double.parseDouble(strings[0].split(",")[0]);
-//                double lng = Double.parseDouble(strings[0].split(",")[1]);
-//                String response;
-//                HttpRequestHandler requestHandler = new HttpRequestHandler();
-//                String API_KEY = BuildConfig.API_KEY;
-//                String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?latlng=%.4f,%.4f&key=%s", lat, lng, API_KEY);
-//                response = requestHandler.getResponse(url);
-//                return response;
-//            } catch (Exception ex) {
-//                Log.e("Http Error", ex.toString());
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String s) {
-//            try {
-//                JSONObject jsonObject = new JSONObject(s);
-//                String inputTypes = ((JSONArray) jsonObject.get("results")).getJSONObject(0).get("types").toString();
-//                String[] placeTypes = inputTypes.substring(1, inputTypes.length() - 1).replaceAll("\"", "").split(",");
-//                Log.d("Current address place types", Arrays.toString(placeTypes));
-//
-//                Toast.makeText(getApplicationContext(), "Place type is: " + inputTypes, Toast.LENGTH_SHORT).show();
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
     private void createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel geolocationChannel = new NotificationChannel(
@@ -263,7 +212,6 @@ public class MainActivity extends AppCompatActivity {
             manager.createNotificationChannel(channel2);
 
 
-
             // Forecasting Channel
             NotificationChannel forecastingChannel = new NotificationChannel(
                     NotificationConstant.FORECASTING_CHANNEL_ID,
@@ -278,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    private void stopLocationService() {
+    //    private void stopLocationService() {
 //        if (!isLocationServiceRunning()) {
 //            Intent intent = new Intent(getApplicationContext(), LocationService.class);
 //            intent.setAction(LocationConstant.ACTION_STOP_LOCATION_SERVICE);
