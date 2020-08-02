@@ -22,8 +22,9 @@ public class ForecastingNotificationStrategy implements NotificationStrategy {
 
     public ForecastingNotificationStrategy(Context context) {
         this.context = context;
-        this.notificationManager =  NotificationManagerCompat.from(context);
+        this.notificationManager = NotificationManagerCompat.from(context);
     }
+
     @Override
     public void notify(Resources resources, String[] messages) {
         Intent activityIntent = new Intent(context, MainActivity.class);
@@ -33,15 +34,12 @@ public class ForecastingNotificationStrategy implements NotificationStrategy {
                 activityIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
-        Bitmap largeIcon = BitmapFactory.decodeResource(resources, R.drawable.checklist);
 
         Notification notification = new NotificationCompat.Builder(context, NotificationConstant.FORECASTING_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setLargeIcon(largeIcon)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .setBigContentTitle("Time tracker")
                         .setSummaryText("Forecasting service"))
-                .setContentText("Suggested time for Study is: " + messages[0] + messages[0])
+                .setContentTitle("Suggested schedule for Study: " + messages[0])
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setColor(Color.rgb(15, 163, 232))

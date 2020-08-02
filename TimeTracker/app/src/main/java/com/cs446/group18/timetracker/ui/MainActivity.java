@@ -112,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
             newIntentListener.onNewIntent(intent);
         super.onNewIntent(intent);
 
+        if (intent.getAction() == null) {
+            return;
+        }
+
         if (intent.getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
             NdefMessage[] c = getNdefMessagesFromIntent(intent);
             if (c != null && c.length > 0 && c[0] != null && c[0].getRecords() != null) {
