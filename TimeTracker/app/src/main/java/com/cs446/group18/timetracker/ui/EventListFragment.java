@@ -283,8 +283,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         timeEntryViewModel.getTimeEntriesByEventID(eventID).observe(getViewLifecycleOwner(), new Observer<List<TimeEntry>>() {
             @Override
             public void onChanged(List<TimeEntry> timeEntries) {
-                Log.d("EventListFragment", "onChanged is called");
-                if (expandableLinearLayout.getChildCount() > 0) {
+                if(expandableLinearLayout.getChildCount() > 0){
                     expandableLinearLayout.removeAllViews();
                 }
                 for (int i = 0; i < timeEntries.size(); ++i) {
