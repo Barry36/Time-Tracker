@@ -21,6 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.NFCReadActivity"></activity>
+        <activity android:name=".ui.AddEvent"></activity>
         <activity android:name=".ui.NFCWriteActivity" />
         <activity
             android:name=".ui.MainActivity"

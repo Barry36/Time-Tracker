@@ -2,7 +2,6 @@ package com.cs446.group18.timetracker.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -14,42 +13,28 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import com.cs446.group18.timetracker.BuildConfig;
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.databinding.ActivityMainBinding;
 import com.cs446.group18.timetracker.constants.LocationConstant;
 import com.cs446.group18.timetracker.constants.NotificationConstant;
-import com.cs446.group18.timetracker.utils.HttpRequestHandler;
+import com.cs446.group18.timetracker.entity.Event;
+import com.cs446.group18.timetracker.entity.dateSelected;
 import com.cs446.group18.timetracker.service.LocationService;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Arrays;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements dateSelected {
     OnNewIntentListener newIntentListener;
     private DrawerLayout drawerLayout;
     private NavController navController;
-//    private Button btnToggleDark;
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
@@ -71,21 +56,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             startLocationService();
         }
-
-//        btnToggleDark
-//                = findViewById(R.id.btnToggleDark);
-//
-//        btnToggleDark.setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view)
-//                    {
-//                        AppCompatDelegate
-//                                .setDefaultNightMode(
-//                                        AppCompatDelegate
-//                                                .MODE_NIGHT_YES);
-//                    }
-//                });
     }
 
     @Override
@@ -223,4 +193,28 @@ public class MainActivity extends AppCompatActivity {
 //            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
 //        }
 //    }
+
+    @Override
+    public void itemSelected(final String year, final String month, final String dayOfMonth) {
+
+        // TODO: show list of events for that day
+
+//        ArrayList<Event> eventList = new ArrayList<>();
+//        CalendarFragment ef = (CalendarFragment) getSupportFragmentManager().findFragmentById(R.id.calendar_event_list);
+//
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Object o) {
+//            if(eventList != null && !eventList.isEmpty()) {
+//                ef.setViewEmpty();
+//                ef.setList(eventList);
+//            } else {
+//                ef.setViewEmpty();
+//            }
+//            super.onPostExecute(o);
+//        }
+    }
 }
