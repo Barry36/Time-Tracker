@@ -54,7 +54,7 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="nfc_fragment">
+                  <entry key="read_tag_activity">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -66,24 +66,12 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="read_tag_fragment">
+                  <entry key="write_tag_activity">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="write_tag_fragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="12" />
+                            <option name="x" value="256" />
                             <option name="y" value="12" />
                           </Point>
                         </option>

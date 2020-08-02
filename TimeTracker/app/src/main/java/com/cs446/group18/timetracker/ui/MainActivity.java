@@ -7,10 +7,13 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -19,12 +22,17 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -47,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
     OnNewIntentListener newIntentListener;
     private DrawerLayout drawerLayout;
     private NavController navController;
+    public String TAG="MainActivity";
+    // NFC-related variables
+    private NfcAdapter _nfcAdapter;
+    private PendingIntent _nfcPendingIntent;
+    IntentFilter[] _readTagFilters;
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
@@ -68,11 +81,33 @@ public class MainActivity extends AppCompatActivity {
         } else {
             startLocationService();
         }
+        _nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+        if (_nfcAdapter == null) {
+            Toast.makeText(this, "Your device does not support NFC. Cannot run this demo.", Toast.LENGTH_LONG).show();
+//            finish();
+//            return;
+        }
+
+//        checkNfcEnabled();
+
+        _nfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+
+        IntentFilter ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+        try {
+            ndefDetected.addDataType("application/com.cs446.group18.timetracker");
+        } catch (IntentFilter.MalformedMimeTypeException e) {
+            throw new RuntimeException("Could not add MIME type.", e);
+        }
+
+        _readTagFilters = new IntentFilter[]{ndefDetected};
+
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
-        newIntentListener.onNewIntent(intent);
+        if(newIntentListener!=null)
+            newIntentListener.onNewIntent(intent);
         super.onNewIntent(intent);
 //        findViewById(R.id.button_get_location).setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -86,6 +121,34 @@ public class MainActivity extends AppCompatActivity {
 //                new GetAddress().execute(String.format("%.4f,%.4f", latitude, longitude));
 //            }
 //        });
+        if (intent.getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
+            NdefMessage[] c = getNdefMessagesFromIntent(intent);
+            if(c!=null &&c.length>0&&c[0]!=null&&c[0].getRecords()!=null){
+                NdefMessage[] ndefMessages= getNdefMessagesFromIntent(intent);
+                if(ndefMessages!=null&&ndefMessages.length>0&&ndefMessages[0].getRecords()!=null&&ndefMessages[0].getRecords().length>0&&ndefMessages[0].getRecords()[0]!=null) {
+                    String identifiedEvent=new String(getNdefMessagesFromIntent(intent)[0].getRecords()[0].getPayload()).split(", ")[1].split("=")[1];
+                    Toast.makeText(this, "The Received Event:" + identifiedEvent, Toast.LENGTH_SHORT).show();
+                    FragmentManager fragmentManager=getSupportFragmentManager();
+                    if(getSupportFragmentManager().getFragments().get(0)!=null&&
+                            getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments()!=null)
+                        for(Fragment fragment:getSupportFragmentManager().getFragments().get(0).getChildFragmentManager().getFragments()){
+                            if(fragment instanceof EventListFragment){
+                                ((EventListFragment)fragment).receivedNFCTagEvent(identifiedEvent);
+                                break;
+                            }
+                        }
+
+                }
+            }
+
+        } else if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
+            Toast.makeText(this, "This NFC tag has no NDEF data.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();//_nfcAdapter.enableForegroundDispatch(this, _nfcPendingIntent, _readTagFilters, null);
     }
 
     @Override
@@ -197,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    private void stopLocationService() {
+    //    private void stopLocationService() {
 //        if (!isLocationServiceRunning()) {
 //            Intent intent = new Intent(getApplicationContext(), LocationService.class);
 //            intent.setAction(LocationConstant.ACTION_STOP_LOCATION_SERVICE);
@@ -205,4 +268,30 @@ public class MainActivity extends AppCompatActivity {
 //            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
 //        }
 //    }
+    NdefMessage[] getNdefMessagesFromIntent(Intent intent) {
+        // Parse the intent
+        NdefMessage[] msgs = null;
+        String action = intent.getAction();
+        if (action.equals(NfcAdapter.ACTION_TAG_DISCOVERED) || action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
+            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            if (rawMsgs != null) {
+                msgs = new NdefMessage[rawMsgs.length];
+                for (int i = 0; i < rawMsgs.length; i++) {
+                    msgs[i] = (NdefMessage) rawMsgs[i];
+                }
+
+            } else {
+                // Unknown tag type
+                byte[] empty = new byte[]{};
+                NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, empty, empty);
+                NdefMessage msg = new NdefMessage(new NdefRecord[]{record});
+                msgs = new NdefMessage[]{msg};
+            }
+
+        } else {
+            Log.e(TAG, "Unknown intent.");
+            finish();
+        }
+        return msgs;
+    }
 }

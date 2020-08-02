@@ -95,7 +95,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
                 @Override
                 public void onClick(View v) {
-                    onEventListener.onEventClick(getAdapterPosition());
+                    onEventListener.onEventClick(getAdapterPosition(),false);
 //                    eventID = events.get(getAdapterPosition()).getEventId();
                 }
             });
@@ -114,7 +114,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         // Implemented in Activity - EventListFragment.java to handle unfold action
 
         public interface OnEventListener {
-            void onEventClick(int position);
+        /*
+        * @Param isFromNFC gives wether the event was triggered from NFC to automatically
+        * start Timer
+        * */
+            void onEventClick(int position, boolean isFromNFC);
         }
 
 

@@ -24,6 +24,7 @@
         <activity android:name=".ui.NFCWriteActivity" />
         <activity
             android:name=".ui.MainActivity"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.nfc.action.TECH_DISCOVERED"
