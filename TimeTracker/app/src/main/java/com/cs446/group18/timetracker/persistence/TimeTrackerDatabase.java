@@ -10,6 +10,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.dao.EventDao;
 import com.cs446.group18.timetracker.dao.GeolocationDao;
 import com.cs446.group18.timetracker.dao.GoalDao;
@@ -71,10 +72,10 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            eventDao.insert(new Event("Study", "LC 161 & LC 162", 2131165326));
-            eventDao.insert(new Event("Rest", "Watch drama", 2131165349));
-            eventDao.insert(new Event("Exercise", "Go to the gym", 2131165343));
-            eventDao.insert(new Event("Meal", "have lunch", 2131165322));
+            eventDao.insert(new Event("Study", "LC 161 & LC 162", R.drawable.ic_task));
+            eventDao.insert(new Event("Rest", "Watch drama", R.drawable.ic_yoga));
+            eventDao.insert(new Event("Exercise", "Go to the gym", R.drawable.ic_soccer));
+            eventDao.insert(new Event("Meal", "have lunch", R.drawable.ic_cooking));
             timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-17 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-17 11:40:00"), 1500L));
             timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-18 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-18 11:40:00"), 1500L));
             timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-07-22 11:15:00"), DateTimeConverter.fromTimestamp("2020-07-22 11:40:00"), 1500L));

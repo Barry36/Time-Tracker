@@ -5,6 +5,8 @@ import android.media.MediaDrm;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -22,16 +24,17 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
+public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> implements Filterable {
     private List<Event> events = new ArrayList<>();
+    private List<Event> eventsListFull;
     private List<TimeEntry> timeEntries = new ArrayList<>();
     private LayoutInflater layoutInflater;
     private OnEventListener onEventListener;
     ListItemEventBinding binding;
 
     public EventListAdapter(List<Event> events, OnEventListener onEventListener) {
-
         this.events = events;
+        eventsListFull = new ArrayList<>(events);
         this.onEventListener = onEventListener;
     }
 
@@ -62,9 +65,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         return events.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        return searchFilter;
+    }
+
     // get List of Event LiveData
     public void setEvents(List<Event> events) {
         this.events = events;
+        eventsListFull = new ArrayList<>(events);
         // there's more efficient way to update adapter
         notifyDataSetChanged();
     }
@@ -107,7 +116,35 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                 binding.setEvent(event);
                 binding.executePendingBindings();
             }
+    }
+
+    private Filter searchFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Event> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(eventsListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Event item : eventsListFull) {
+                    if (item.getEventName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
         }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            events.clear();
+            events.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
 
         // Interface for the itemView onClick Listener
