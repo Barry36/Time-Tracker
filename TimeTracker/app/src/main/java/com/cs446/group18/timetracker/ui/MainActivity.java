@@ -40,11 +40,12 @@ import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.databinding.ActivityMainBinding;
 import com.cs446.group18.timetracker.constants.LocationConstant;
 import com.cs446.group18.timetracker.constants.NotificationConstant;
+import com.cs446.group18.timetracker.entity.dateSelected;
 import com.cs446.group18.timetracker.service.ForecastingService;
 import com.cs446.group18.timetracker.service.LocationService;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements dateSelected {
     OnNewIntentListener newIntentListener;
     private DrawerLayout drawerLayout;
     private NavController navController;
@@ -263,5 +264,29 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
         return msgs;
+    }
+
+    @Override
+    public void itemSelected(final String year, final String month, final String dayOfMonth) {
+
+        // TODO: show list of events for that day
+
+//        ArrayList<Event> eventList = new ArrayList<>();
+//        CalendarFragment ef = (CalendarFragment) getSupportFragmentManager().findFragmentById(R.id.calendar_event_list);
+//
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Object o) {
+//            if(eventList != null && !eventList.isEmpty()) {
+//                ef.setViewEmpty();
+//                ef.setList(eventList);
+//            } else {
+//                ef.setViewEmpty();
+//            }
+//            super.onPostExecute(o);
+//        }
     }
 }

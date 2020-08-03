@@ -30,6 +30,18 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="calendar_fragmen">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="event_list_fragment">
                     <value>
                       <LayoutPositions>
