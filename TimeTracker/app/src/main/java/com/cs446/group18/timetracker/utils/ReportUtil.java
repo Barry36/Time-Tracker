@@ -1,7 +1,13 @@
 package com.cs446.group18.timetracker.utils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.view.View;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -17,6 +23,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class ReportUtil {
@@ -131,5 +138,39 @@ public class ReportUtil {
 
     public static float MillisToHours(float d) {
         return d/(1000 * 60 * 60);
+    }
+
+    public static Bitmap getBitmapFromView(View view, int drawWidth) {
+        Bitmap returnedBitmap = Bitmap.createBitmap(drawWidth, view.getHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE);
+        view.draw(canvas);
+        return returnedBitmap;
+    }
+
+    public static Bitmap combineImageIntoOne(ArrayList<Bitmap> bitmap, int drawWidth) {
+        int w = drawWidth, h = 0;
+        for (int i = 0; i < bitmap.size(); i++) {
+            h += bitmap.get(i).getHeight();
+        }
+
+        Bitmap temp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(temp);
+        canvas.drawColor(Color.WHITE);
+        int top = 0;
+        for (int i = 0; i < bitmap.size(); i++) {
+            canvas.drawBitmap(bitmap.get(i), 0f, top, null);
+            top += bitmap.get(i).getHeight();
+        }
+        return temp;
+    }
+
+    public static Uri getImageUri(Context inContext, Bitmap inImage, String title) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(),
+                inImage, title, null);
+        return Uri.parse(path);
     }
 }
