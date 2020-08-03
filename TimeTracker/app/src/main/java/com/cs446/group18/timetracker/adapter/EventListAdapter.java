@@ -1,7 +1,5 @@
 package com.cs446.group18.timetracker.adapter;
 
-import android.app.admin.ConnectEvent;
-import android.media.MediaDrm;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +14,7 @@ import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.databinding.ListItemEventBinding;
 import com.cs446.group18.timetracker.entity.Event;
 import com.cs446.group18.timetracker.entity.TimeEntry;
-import com.cs446.group18.timetracker.utils.InjectorUtils;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 

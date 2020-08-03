@@ -20,7 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.NFCReadActivity"></activity>
+        <activity android:name=".ui.NFCReadActivity" />
         <activity android:name=".ui.NFCWriteActivity" />
         <activity
             android:name=".ui.MainActivity"
@@ -46,6 +46,10 @@
             android:name=".service.LocationService"
             android:enabled="true"
             android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value= "@string/google_maps_api_key" />
     </application>
 
 </manifest>
