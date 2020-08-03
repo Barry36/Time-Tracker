@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="events">
+        <item>Event1</item>
+        <item>Event2</item>
+        <item>Event3</item>
+        <item>Other</item>
+    </string-array>
+</resources>
