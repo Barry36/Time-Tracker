@@ -6,8 +6,12 @@ import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -15,6 +19,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +58,7 @@ import java.util.List;
 
 public class EventListFragment extends Fragment implements EventListAdapter.OnEventListener, FragmentDatabaseSaver {
     private EventListAdapter adapter;
+    private EventListAdapter searchAdaptor;
     private List<Event> events = new ArrayList<>();
     RecyclerView recyclerView;
     private TextView textViewEmpty;
@@ -70,16 +76,17 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
         EventListAdapter eventListAdapter = new EventListAdapter(events, this);
 
+        this.searchAdaptor = eventListAdapter;
 
         EventListAdapter adapter = new EventListAdapter(events, this);
         this.adapter = adapter;
-
         EventListViewModelFactory factory = InjectorUtils.provideEventListViewModelFactory(getActivity());
         EventViewModel viewModel = new ViewModelProvider(this, factory).get(EventViewModel.class);
 
         textViewEmpty = eventListView.findViewById(R.id.empty_event_list);
         recyclerView = eventListView.findViewById(R.id.event_list);
         recyclerView.setAdapter(eventListAdapter);
+        setHasOptionsMenu(true);
 
 
         // Add New Event
@@ -331,6 +338,26 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
             }
         }
 
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu,inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchAdaptor.getFilter().filter(newText);
+                return false;
+            }
+        });
     }
 
 
