@@ -132,7 +132,7 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
 
     @Override
     public void onEventClick(int position, boolean isFromNFC) {
-        // TODO:
+        // No action for now
     }
 
     private void setEvents(List<Event> events) {

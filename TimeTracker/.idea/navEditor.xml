@@ -30,7 +30,7 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="calendar_fragmen">
+                  <entry key="calendar_fragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -67,6 +67,18 @@
                     </value>
                   </entry>
                   <entry key="read_tag_activity">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="timeline_fragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
