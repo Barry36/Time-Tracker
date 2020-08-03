@@ -22,6 +22,10 @@ public class EventViewModel extends ViewModel {
         return repository.getEvents();
     }
 
+    public Event getEventById(long id) {
+        return repository.getEventById(id);
+    }
+
     public void insert(Event event) {
         repository.createEvent(event);
     }

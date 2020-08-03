@@ -14,7 +14,8 @@
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         android:gravity="start"
-        android:text="Timeline start"
+        android:text="@string/timeline_start"
+        android:id="@+id/timeline_header"
         />
 
     <TextView

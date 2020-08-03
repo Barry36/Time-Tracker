@@ -6,4 +6,6 @@
     <string name="text_update_settings">Update Settings</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="timeline_start">Timeline start</string>
+    <string name="timeline_no_events">No events found</string>
 </resources>

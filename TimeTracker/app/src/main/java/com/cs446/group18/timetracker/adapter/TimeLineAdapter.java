@@ -15,7 +15,11 @@ import java.util.List;
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLineViewHolder> {
 	private List<TimeLineModel> mDataSet;
 
-	public TimeLineAdapter(List<TimeLineModel> models) {
+	public TimeLineAdapter() {
+		// Required constructor
+	}
+
+	public void setItems(List<TimeLineModel> models) {
 		mDataSet = models;
 	}
 
