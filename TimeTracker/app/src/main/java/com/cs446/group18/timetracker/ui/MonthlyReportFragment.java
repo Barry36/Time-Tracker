@@ -12,28 +12,41 @@ import android.widget.Spinner;
 import androidx.fragment.app.Fragment;
 
 import com.cs446.group18.timetracker.R;
+import com.cs446.group18.timetracker.entity.Geolocation;
 import com.cs446.group18.timetracker.entity.TimeEntry;
 import com.cs446.group18.timetracker.persistence.TimeTrackerDatabase;
 import com.cs446.group18.timetracker.relation.EventWithTimeEntries;
+import com.cs446.group18.timetracker.repository.GeolocationRepository;
 import com.cs446.group18.timetracker.repository.TimeEntryRepository;
 import com.cs446.group18.timetracker.utils.ReportUtil;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.PieData;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
+import com.google.maps.android.heatmaps.WeightedLatLng;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-public class MonthlyReportFragment extends Fragment {
+public class MonthlyReportFragment extends Fragment implements OnMapReadyCallback {
     private String[] XLabels = {"Week1", "Week2", "Week3", "Week4"};
     private ArrayList<String> events;
     private ArrayList<String> labels;
     private ArrayList<Float> pieData;
     private ArrayList<Float> barDataAll;
     private ArrayList<ArrayList<Float>> barDataOne;
+    private ArrayList<WeightedLatLng> locationData;
+    LatLng defaultLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +61,8 @@ public class MonthlyReportFragment extends Fragment {
         pieData = new ArrayList<>();
         barDataAll = new ArrayList<>();
         barDataOne = new ArrayList<>();
+        locationData = new ArrayList<>();
+        defaultLocation = new LatLng(43.4736, -80.5370);
 
         class MyAsyncTask extends AsyncTask<Void, Void, Boolean> {
             @Override
@@ -59,9 +74,26 @@ public class MonthlyReportFragment extends Fragment {
             protected Boolean doInBackground(Void... v) {
                 TimeEntryRepository timeEntryRepository = TimeEntryRepository.getInstance(
                         TimeTrackerDatabase.getInstance(getContext()).timeEntryDao());
-                List<EventWithTimeEntries> eventsWithTimeEntries = timeEntryRepository.getEventsWithTimeEntriesStatic();
-
+                List<EventWithTimeEntries> eventsWithTimeEntries = timeEntryRepository.
+                        getEventsWithTimeEntriesStatic();
                 updateData(eventsWithTimeEntries);
+
+                GeolocationRepository geolocationRepository = GeolocationRepository.getInstance(
+                        TimeTrackerDatabase.getInstance(getContext()).geolocationDao());
+                List<Geolocation> locations = geolocationRepository.getGeolocations();
+                for (int i = 0; i < locations.size(); i++) {
+                    Geolocation g = locations.get(i);
+                    TimeEntry e = timeEntryRepository.getTimeEntryById(g.getTimeEntryId());
+                    if (e.isCurrent(true, true, false)) {
+                        float density = ReportUtil.MillisToHours(e.getDuration());
+                        locationData.add(new WeightedLatLng(new LatLng(g.getLatitude(), g.getLongitude()),
+                                density));
+                    }
+                    if (i == locations.size() - 1) {
+                        defaultLocation = new LatLng(g.getLatitude(), g.getLongitude());
+                    }
+                }
+
                 return true;
             }
 
@@ -92,6 +124,13 @@ public class MonthlyReportFragment extends Fragment {
 
                     }
                 });
+
+                // heatmap
+                SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                        .findFragmentById(R.id.m_map);
+                if (mapFragment != null) {
+                    mapFragment.getMapAsync(MonthlyReportFragment.this);
+                }
             }
         }
         new MyAsyncTask().execute();
@@ -110,7 +149,7 @@ public class MonthlyReportFragment extends Fragment {
                 yVals.add(0f);
             }
             float timeSpend = 0;
-            List<TimeEntry> entries = event.getCurrMonthTimeEntries();
+            List<TimeEntry> entries = event.getSelectedTimeEntries(true, true, false);
             if (!entries.isEmpty()) {
                 String eventName = event.getEvent().getEventName();
                 events.add(eventName);
@@ -147,5 +186,16 @@ public class MonthlyReportFragment extends Fragment {
             barDataAll.add(other_time);
             pieData.add(other_time / totalTime * 100);
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder()
+                .weightedData(locationData)
+                .build();
+        TileOverlay mOverlay = googleMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+
+        LatLng defaultLocation = new LatLng(43.4736, -80.5370);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12f));
     }
 }

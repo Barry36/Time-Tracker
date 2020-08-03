@@ -76,11 +76,19 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
             eventDao.insert(new Event("Rest", "Watch drama", R.drawable.ic_yoga));
             eventDao.insert(new Event("Exercise", "Go to the gym", R.drawable.ic_soccer));
             eventDao.insert(new Event("Meal", "have lunch", R.drawable.ic_cooking));
+            timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-08-02 11:15:00"),
+                    DateTimeConverter.fromTimestamp("2020-08-02 14:20:00"),
+                    DateTimeConverter.fromTimestamp("2020-08-02 14:20:00").getTime()
+                            - DateTimeConverter.fromTimestamp("2020-08-02 11:15:00").getTime()));
+            timeEntryDao.insert(new TimeEntry(4, DateTimeConverter.fromTimestamp("2020-08-02 8:10:00"),
+                    DateTimeConverter.fromTimestamp("2020-08-02 6:40:00"),
+                    Math.abs(DateTimeConverter.fromTimestamp("2020-08-02 8:10:00").getTime()
+                            - DateTimeConverter.fromTimestamp("2020-08-02 6:40:00").getTime())));
             timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-08-01 17:20:00"),
                     DateTimeConverter.fromTimestamp("2020-08-01 18:40:00"),
                     Math.abs(DateTimeConverter.fromTimestamp("2020-08-01 18:40:00").getTime()
                             - DateTimeConverter.fromTimestamp("2020-08-01 17:20:00").getTime())));
-            timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-07-23 8:15:00"),
+            timeEntryDao.insert(new TimeEntry(4, DateTimeConverter.fromTimestamp("2020-07-23 8:15:00"),
                     DateTimeConverter.fromTimestamp("2020-07-23 10:20:00"),
                     DateTimeConverter.fromTimestamp("2020-07-23 10:20:00").getTime()
                             - DateTimeConverter.fromTimestamp("2020-07-23 8:15:00").getTime()));
@@ -88,26 +96,23 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
                     DateTimeConverter.fromTimestamp("2020-07-22 11:40:00"),
                     DateTimeConverter.fromTimestamp("2020-07-22 11:40:00").getTime()
                             - DateTimeConverter.fromTimestamp("2020-07-22 8:15:00").getTime()));
-            timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2020-05-18 9:15:00"),
+            timeEntryDao.insert(new TimeEntry(3, DateTimeConverter.fromTimestamp("2020-05-18 9:15:00"),
                     DateTimeConverter.fromTimestamp("2020-05-18 11:40:00"),
                     DateTimeConverter.fromTimestamp("2020-05-18 9:40:00").getTime()
                     - DateTimeConverter.fromTimestamp("2020-05-18 11:15:00").getTime()));
-            timeEntryDao.insert(new TimeEntry(2, DateTimeConverter.fromTimestamp("2018-07-17 10:15:00"),
-                    DateTimeConverter.fromTimestamp("2018-07-17 11:40:00"),
-                    DateTimeConverter.fromTimestamp("2018-07-17 10:40:00").getTime()
-                    - DateTimeConverter.fromTimestamp("2018-07-17 11:15:00").getTime()));
-            timeEntryDao.insert(new TimeEntry(4, DateTimeConverter.fromTimestamp("2020-08-02 8:10:00"),
-                    DateTimeConverter.fromTimestamp("2020-08-02 6:40:00"),
-                    Math.abs(DateTimeConverter.fromTimestamp("2020-08-02 8:10:00").getTime()
-                            - DateTimeConverter.fromTimestamp("2020-08-02 6:40:00").getTime())));
+            timeEntryDao.insert(new TimeEntry(4, DateTimeConverter.fromTimestamp("2018-08-01 10:15:00"),
+                    DateTimeConverter.fromTimestamp("2018-08-01 11:40:00"),
+                    DateTimeConverter.fromTimestamp("2018-08-01 10:40:00").getTime()
+                            - DateTimeConverter.fromTimestamp("2018-08-01 11:15:00").getTime()));
             goalDao.insert(new Goal(1, "Study Goal", "I have to study for my final exam", 20, 100));
             goalDao.insert(new Goal(2, "Rest Goal", "I need some rest", 80, 100));
-            geolocationDao.insert(new Geolocation(1, 43.4655, -80.5227)); // Captain Boil
-            geolocationDao.insert(new Geolocation(2, 43.4657, -80.5227)); // Nick & Nat's Uptown 21
-            geolocationDao.insert(new Geolocation(3, 43.4655, -80.5227)); // Captain Boil
+            geolocationDao.insert(new Geolocation(1, 43.4736, -80.5370)); // Blair House
+            geolocationDao.insert(new Geolocation(2, 43.4655, -80.5227)); // Captain Boil
+            geolocationDao.insert(new Geolocation(3, 43.4736, -80.5370)); // Blair House
             geolocationDao.insert(new Geolocation(4, 43.4818, -80.5256)); // McDonald's
             geolocationDao.insert(new Geolocation(5, 43.4736, -80.5370)); // Blair House
-
+            geolocationDao.insert(new Geolocation(6, 43.4657, -80.5227)); // Nick & Nat's Uptown 21
+            geolocationDao.insert(new Geolocation(7, 43.4655, -80.5227)); // Captain Boil
             return null;
         }
     }

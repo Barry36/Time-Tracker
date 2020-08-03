@@ -1,27 +1,18 @@
 package com.cs446.group18.timetracker.service;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
-import com.cs446.group18.timetracker.BuildConfig;
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.constants.LocationConstant;
-import com.cs446.group18.timetracker.constants.NotificationConstant;
 import com.cs446.group18.timetracker.constants.QuadTreeConstant;
 import com.cs446.group18.timetracker.entity.Event;
 import com.cs446.group18.timetracker.entity.Geolocation;
@@ -33,7 +24,6 @@ import com.cs446.group18.timetracker.persistence.TimeTrackerDatabase;
 import com.cs446.group18.timetracker.repository.EventRepository;
 import com.cs446.group18.timetracker.repository.GeolocationRepository;
 import com.cs446.group18.timetracker.repository.TimeEntryRepository;
-import com.cs446.group18.timetracker.ui.MainActivity;
 import com.cs446.group18.timetracker.utils.HttpRequestHandler;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -90,7 +80,7 @@ public class LocationService extends Service {
                 double lng = Double.parseDouble(strings[0].split(",")[1]);
                 String response;
                 HttpRequestHandler requestHandler = new HttpRequestHandler();
-                String API_KEY = BuildConfig.API_KEY;
+                String API_KEY = getResources().getString(R.string.google_maps_api_key);
                 String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?latlng=%.4f,%.4f&key=%s", lat, lng, API_KEY);
                 response = requestHandler.getResponse(url);
                 return response;

@@ -29,8 +29,6 @@ public class GeolocationRepository {
         return geolocationDao.getGeolocations();
     }
 
-
-
     public Geolocation getGeolocationById(long id) {
         return geolocationDao.getGeolocationById(id);
     }

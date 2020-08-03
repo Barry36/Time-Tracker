@@ -25,46 +25,26 @@ public class EventWithTimeEntries {
         return timeEntries;
     }
 
-    public List<TimeEntry> getCurrWeekTimeEntries() {
-        List<TimeEntry> currMonthTimeEntries = new ArrayList<>();
-        Calendar c = Calendar.getInstance();
-        int CURR_WEEK = c.get(Calendar.WEEK_OF_MONTH);
-        for (int i = 0; i < timeEntries.size(); i++) {
-            TimeEntry e = timeEntries.get(i);
-            c.setTime(e.getStartTime());
-            if (c.get(Calendar.WEEK_OF_MONTH) == CURR_WEEK) {
-                currMonthTimeEntries.add(e);
-            }
-        }
-        return currMonthTimeEntries;
-    }
-
-    public List<TimeEntry> getCurrMonthTimeEntries() {
-        List<TimeEntry> currMonthTimeEntries = new ArrayList<>();
-        Calendar c = Calendar.getInstance();
-        int CURR_MONTH = c.get(Calendar.MONTH);
-        for (int i = 0; i < timeEntries.size(); i++) {
-            TimeEntry e = timeEntries.get(i);
-            c.setTime(e.getStartTime());
-            if (c.get(Calendar.MONTH) == CURR_MONTH) {
-                currMonthTimeEntries.add(e);
-            }
-        }
-        return currMonthTimeEntries;
-    }
-
-    public List<TimeEntry> getCurrYearTimeEntries() {
-        List<TimeEntry> currYearTimeEntries = new ArrayList<>();
+    public List<TimeEntry> getSelectedTimeEntries(boolean askThisYear, boolean askThisMonth,
+                                                  boolean askThisWeek) {
+        List<TimeEntry> selectedTimeEntries = new ArrayList<>();
         Calendar c = Calendar.getInstance();
         int CURR_YEAR = c.get(Calendar.YEAR);
+        int CURR_MONTH = c.get(Calendar.MONTH);
+        int CURR_WEEK = c.get(Calendar.WEEK_OF_MONTH);
+
         for (int i = 0; i < timeEntries.size(); i++) {
             TimeEntry e = timeEntries.get(i);
             c.setTime(e.getStartTime());
-            if (c.get(Calendar.YEAR) == CURR_YEAR) {
-                currYearTimeEntries.add(e);
+            if (!askThisYear || c.get(Calendar.YEAR) == CURR_YEAR) {
+                if (!askThisMonth || (c.get(Calendar.MONTH) == CURR_MONTH)) {
+                    if (!askThisWeek || c.get(Calendar.WEEK_OF_MONTH) == CURR_WEEK) {
+                        selectedTimeEntries.add(e);
+                    }
+                }
             }
         }
-        return currYearTimeEntries;
+        return selectedTimeEntries;
     }
 
     public void setEvent(Event event) {

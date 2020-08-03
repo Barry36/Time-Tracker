@@ -75,6 +75,25 @@
                     android:layout_height="1dp"
                     android:layout_marginVertical="@dimen/divider_margin_vertical"
                     android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:id="@+id/m_map_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/divider_margin_vertical"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/title_heatmap"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
+                <fragment
+                    android:id="@+id/m_map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/chart_height"
+                    android:layout_margin="5dp"
+                    android:layout_marginBottom="10dp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
