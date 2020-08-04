@@ -182,8 +182,9 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
                     }
 
                     if (isSameDay(timeEntries.get(i).getStartTime(), dateSelected)) {
-                        int duration = (int) timeEntries.get(i).getDuration() / 1000;
-                        String text = "Duration: " + Integer.toString(duration) + " second";
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                        String text = null;
+                        text = "From " + sdf.format(timeEntries.get(i).getStartTime()).toString() + " to " + sdf.format(timeEntries.get(i).getEndTime()).toString();
                         TextView textView = new TextView(getContext());
                         textView.setText(text);
                         textView.setId(i);
