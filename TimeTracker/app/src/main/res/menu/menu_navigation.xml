@@ -6,6 +6,12 @@
     <item
         android:id="@+id/goal_list_fragment"
         android:title="My goals"/>
+    <item
+        android:id="@+id/calendar_fragment"
+        android:title="My calendar"/>
+    <item
+        android:id="@+id/timeline_fragment"
+        android:title="My timeline"/>
 
     <item
         android:id="@+id/read_tag_activity"

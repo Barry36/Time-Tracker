@@ -16,6 +16,18 @@
         android:label="My goals"
         tools:layout="@layout/fragment_goal_list" />
 
+    <fragment
+        android:id="@+id/calendar_fragment"
+        android:name="com.cs446.group18.timetracker.ui.CalendarFragment"
+        android:label="My calendar"
+        tools:layout="@layout/fragment_calendar" />
+
+    <fragment
+        android:id="@+id/timeline_fragment"
+        android:name="com.cs446.group18.timetracker.ui.TimelineFragment"
+        android:label="My timeline"
+        tools:layout="@layout/fragment_calendar" />
+
     <activity
         android:id="@+id/read_tag_activity"
         android:name="com.cs446.group18.timetracker.ui.NFCReadActivity"

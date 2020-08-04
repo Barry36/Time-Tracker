@@ -50,8 +50,7 @@ import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
 import com.cs446.group18.timetracker.vm.TimeEntryViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.w3c.dom.Text;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -263,19 +262,20 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         this.position = position;
         // Time Entries
         long eventID = events.get(position).getEventId();
-        boolean isFragmentAlreadyAVailable=false;
-        for(Fragment fragment:getChildFragmentManager().getFragments()){
-            if(fragment instanceof StopwatchFragment){
-                isFragmentAlreadyAVailable=true;
+        boolean isFragmentAlreadyAVailable = false;
+        for (Fragment fragment : getChildFragmentManager().getFragments()) {
+            if (fragment instanceof StopwatchFragment) {
+                isFragmentAlreadyAVailable = true;
             }
         }
-        if(!isFragmentAlreadyAVailable) {
+        if (!isFragmentAlreadyAVailable) {
             //integration to stopwatch, should be changed later
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             StopwatchFragment stopwatchFragment = StopwatchFragment.newInstance(eventID, isFromNFC);
             ft.replace(R.id.stopwatch, stopwatchFragment);
             ft.commit();
-        }else{}
+        } else {
+        }
 
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         View view = linearLayoutManager.findViewByPosition(position);
@@ -290,12 +290,14 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         timeEntryViewModel.getTimeEntriesByEventID(eventID).observe(getViewLifecycleOwner(), new Observer<List<TimeEntry>>() {
             @Override
             public void onChanged(List<TimeEntry> timeEntries) {
-                if(expandableLinearLayout.getChildCount() > 0){
+                if (expandableLinearLayout.getChildCount() > 0) {
                     expandableLinearLayout.removeAllViews();
                 }
                 for (int i = 0; i < timeEntries.size(); ++i) {
-                    int duration = (int) timeEntries.get(i).getDuration() / 1000;
-                    String text = "Duration: " + Integer.toString(duration) + " second";
+                    TimeEntry entry = timeEntries.get(i);
+                    SimpleDateFormat datetimeformat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+                    SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm");
+                    String text = datetimeformat.format(entry.getStartTime()) + " to " + timeformat.format(entry.getEndTime());
                     TextView textView = new TextView(getContext());
                     textView.setText(text);
                     textView.setId(i);
@@ -312,21 +314,21 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
 //            stopwatchFragment.startPlayButton();
         } else {
-            if(isFromNFC)
-                if(getChildFragmentManager()!=null&&getChildFragmentManager().getFragments()!=null)
-                    for(Fragment fragment:getChildFragmentManager().getFragments()){
-                        if(fragment instanceof StopwatchFragment){
-                            StopwatchFragment fragmentSTp=((StopwatchFragment)fragment);
-                            if(fragmentSTp.getTimerRunningState())
+            if (isFromNFC)
+                if (getChildFragmentManager() != null && getChildFragmentManager().getFragments() != null)
+                    for (Fragment fragment : getChildFragmentManager().getFragments()) {
+                        if (fragment instanceof StopwatchFragment) {
+                            StopwatchFragment fragmentSTp = ((StopwatchFragment) fragment);
+                            if (fragmentSTp.getTimerRunningState())
                                 fragmentSTp.stopPlayButton();
                             else fragmentSTp.startPlayButton();
                         }
                     }
             //            stopwatchFragment.stopPlayButton();
-            if(!isFromNFC) {
+            if (!isFromNFC) {
                 FragmentTransaction closeFt = getChildFragmentManager().beginTransaction();
-                for(Fragment fragment:getChildFragmentManager().getFragments())
-                    if(fragment instanceof StopwatchFragment){
+                for (Fragment fragment : getChildFragmentManager().getFragments())
+                    if (fragment instanceof StopwatchFragment) {
                         closeFt.remove(fragment).commit();
                     }
 
@@ -339,9 +341,10 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         }
 
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.menu_search, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
@@ -352,6 +355,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 searchAdaptor.getFilter().filter(newText);
@@ -385,17 +389,19 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     public void setRecyclerView(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
     }
-    public void receivedNFCTagEvent(String eventName){
-        if(events!=null)
-            for(int i=0;i<events.size();i++)
-                if(events.get(i).getEventName()!=null &&events.get(i).getEventName().equalsIgnoreCase(eventName)){
-                    onEventClick(i,true);
+
+    public void receivedNFCTagEvent(String eventName) {
+        if (events != null)
+            for (int i = 0; i < events.size(); i++)
+                if (events.get(i).getEventName() != null && events.get(i).getEventName().equalsIgnoreCase(eventName)) {
+                    onEventClick(i, true);
                     break;
                 }
     }
 
     private TimeEntryViewModel timeEntryViewModel;
     private GeolocationViewModel geolocationViewModel;
+
     @Override
     public void updateGeoLocation(Geolocation geolocation) {
         geolocationViewModel.insert(geolocation);
