@@ -10,13 +10,7 @@
     <CalendarView
         android:id="@+id/calendar_view"
         android:layout_width="fill_parent"
-        android:layout_height="340dp" />
-
-    <Button
-        android:id="@+id/add_event"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add event"/>
+        android:layout_height="320dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/calendar_event_list"

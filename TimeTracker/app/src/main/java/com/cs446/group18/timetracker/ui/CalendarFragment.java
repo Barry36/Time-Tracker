@@ -49,7 +49,6 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
 
     private EventListAdapter adapter;
     private List<Event> events = new ArrayList<>();
-    private List<Event> dayEvents = new ArrayList<>();
     private List<TimeEntry> timeEntries = new ArrayList<>();
     private List<TimeEntry> dayEntries = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -209,10 +208,6 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
         this.events = events;
     }
 
-    private void setDayEvents(List<Event> events) {
-        this.dayEvents = events;
-    }
-
     private void setTimeEntries(List<TimeEntry> timeEntries) {
         this.timeEntries = timeEntries;
     }
@@ -247,8 +242,8 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
 
         if (events != null) {
             events.forEach(event -> {
-                timeEntries.forEach(timeEntry -> {
-                    if (isSameDay(timeEntry.getStartTime(), dateSelected)) {
+                dayEntries.forEach(timeEntry -> {
+                    if (timeEntry.getEventId() == event.getEventId() && isSameDay(timeEntry.getStartTime(), dateSelected)) {
                         dayEvents.add(event);
                     }
                 });
@@ -266,8 +261,7 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
         }
 
         setEvents(events);
-        setDayEvents(dayEvents);
-        adapter.setEvents(events);
+        adapter.setEvents(dayEvents);
     }
 
     private static boolean isSameDay(Date date1, Date date2) {
