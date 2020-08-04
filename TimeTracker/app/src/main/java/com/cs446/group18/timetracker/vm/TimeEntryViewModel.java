@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.cs446.group18.timetracker.entity.TimeEntry;
-import com.cs446.group18.timetracker.relation.EventWithTimeEntries;
 import com.cs446.group18.timetracker.repository.TimeEntryRepository;
 
 import java.util.List;
@@ -21,11 +20,6 @@ public class TimeEntryViewModel extends ViewModel {
 
     public LiveData<List<TimeEntry>> getTimeEntries() {
         return repository.getTimeEntries();
-    }
-
-
-    public LiveData<List<EventWithTimeEntries>> getEventWithTimeEntries() {
-        return repository.getEventWithTimeEntries();
     }
 
     public LiveData<List<TimeEntry>> getTimeEntriesByEventID(long event_id) {

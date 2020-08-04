@@ -4,7 +4,15 @@
     <string name="text_warning_nfc_is_off">NFC is currently turned off!</string>
     <string name="text_turn_on_nfc">This example can\'t be used without NFC enabled. Please turn on NFC in the Settings and then use the back button to return to this app.</string>
     <string name="text_update_settings">Update Settings</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <!-- for Reports -->
+    <string name="title_monthly_report">Monthly Report</string>
+    <string name="title_weekly_report">Weekly Report</string>
+    <string name="title_yearly_report">Yearly Report</string>
+    <string name="tab_weekly">Weekly</string>
+    <string name="tab_monthly">Monthly</string>
+    <string name="tab_yearly">Yearly</string>
+    <string name="title_heatmap">Heatmap</string>
+    <string name="share_btn_text">Share</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="timeline_start">Timeline start</string>
     <string name="timeline_no_events">No events found</string>

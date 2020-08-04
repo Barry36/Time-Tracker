@@ -103,13 +103,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        if (newIntentListener != null)
-            newIntentListener.onNewIntent(intent);
-        super.onNewIntent(intent);
-
         if (intent.getAction() == null) {
             return;
         }
+
+        if (newIntentListener != null)
+            newIntentListener.onNewIntent(intent);
+        super.onNewIntent(intent);
 
         if (intent.getAction().equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
             NdefMessage[] c = getNdefMessagesFromIntent(intent);
