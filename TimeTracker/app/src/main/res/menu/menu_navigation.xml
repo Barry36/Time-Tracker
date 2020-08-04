@@ -2,16 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/event_list_fragment"
-        android:title="My events"/>
-    <item
-        android:id="@+id/goal_list_fragment"
-        android:title="My goals"/>
+        android:title="Events"/>
     <item
         android:id="@+id/calendar_fragment"
-        android:title="My calendar"/>
+        android:title="Calendar"/>
     <item
         android:id="@+id/timeline_fragment"
-        android:title="My timeline"/>
+        android:title="Timeline"/>
+
+    <item
+        android:id="@+id/report_fragment"
+        android:title="Reports"/>
 
     <item
         android:id="@+id/read_tag_activity"
@@ -20,8 +21,4 @@
     <item
         android:id="@+id/write_tag_activity"
         android:title="Write Tag"/>
-
-    <item
-        android:id="@+id/report_fragment"
-        android:title="Reports"/>
 </menu>

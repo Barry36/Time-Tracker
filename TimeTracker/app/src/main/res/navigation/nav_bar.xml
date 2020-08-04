@@ -11,12 +11,6 @@
         tools:layout="@layout/fragment_event_list" />
 
     <fragment
-        android:id="@+id/goal_list_fragment"
-        android:name="com.cs446.group18.timetracker.ui.GoalListFragment"
-        android:label="My goals"
-        tools:layout="@layout/fragment_goal_list" />
-
-    <fragment
         android:id="@+id/calendar_fragment"
         android:name="com.cs446.group18.timetracker.ui.CalendarFragment"
         android:label="My calendar"
@@ -27,6 +21,12 @@
         android:name="com.cs446.group18.timetracker.ui.TimelineFragment"
         android:label="My timeline"
         tools:layout="@layout/fragment_calendar" />
+
+    <fragment
+        android:id="@+id/report_fragment"
+        android:name="com.cs446.group18.timetracker.ui.ReportFragment"
+        android:label="Reports"
+        tools:layout="@layout/fragment_report" />
 
     <activity
         android:id="@+id/read_tag_activity"
@@ -39,11 +39,5 @@
         android:name="com.cs446.group18.timetracker.ui.NFCWriteActivity"
         android:label="Write Tag"
         tools:layout="@layout/activity_write_nfc" />
-
-    <fragment
-        android:id="@+id/report_fragment"
-        android:name="com.cs446.group18.timetracker.ui.ReportFragment"
-        android:label="Reports"
-        tools:layout="@layout/fragment_report" />
 
 </navigation>
