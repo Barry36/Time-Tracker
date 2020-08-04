@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.cs446.group18.timetracker.R;
 
@@ -173,7 +174,8 @@ public class TimeLineMarker extends View {
     }
 
     public void setMarkerDrawable(int icon) {
-        this.setBackgroundResource(icon);
+        ImageView view = (ImageView) findViewById(R.id.timeline_event_icon);
+        view.setBackgroundResource(icon);
         initDrawableSize();
         invalidate();
     }

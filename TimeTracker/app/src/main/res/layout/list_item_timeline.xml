@@ -12,14 +12,29 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:paddingBottom="16dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="14dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:paddingTop="16dp"
         app:beginLine="@android:color/darker_gray"
         app:endLine="@android:color/darker_gray"
         app:lineSize="2dp"
         app:marker="@drawable/ic_timeline_default_marker"
         app:markerSize="24dp"/>
+
+    <LinearLayout
+        android:layout_width="46dp"
+        android:layout_height="54dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingRight="15dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="16dp"
+            android:id="@+id/timeline_event_icon"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"

@@ -3,6 +3,7 @@ package com.cs446.group18.timetracker.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,7 +42,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 	@Override
 	public TimeLineViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 		TimeLineViewHolder viewHolder = new TimeLineViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_timeline, viewGroup, false), viewType);
-		viewHolder.setMarkerDrawable(1, viewType);
+		viewHolder.setMarkerDrawable();
 		return viewHolder;
 	}
 
@@ -80,23 +81,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 			mName = (TextView) itemView.findViewById(R.id.item_time_line_txt);
 			mAge = (TextView) itemView.findViewById(R.id.item_time_line_txt2);
 
-//			TimeLineMarker mMarker = (TimeLineMarker) itemView.findViewById(R.id.item_time_line_mark);
-//			if (type == ItemType.ATOM) {
-//				mMarker.setBeginLine(null);
-//				mMarker.setEndLine(null);
-//			} else if (type == ItemType.START) {
-//				mMarker.setBeginLine(null);
-//			} else if (type == ItemType.END) {
-//				mMarker.setEndLine(null);
-//			}
-//			mMarker.setMarkerDrawable(event.getIcon());
-
-		}
-
-		public void setMarkerDrawable(int icon, int type) {
 			TimeLineMarker mMarker = (TimeLineMarker) itemView.findViewById(R.id.item_time_line_mark);
-			mMarker.setMarkerDrawable(mDataSet.get(i).getEvent().getIcon());
-			i = i+1;
 			if (type == ItemType.ATOM) {
 				mMarker.setBeginLine(null);
 				mMarker.setEndLine(null);
@@ -105,6 +90,13 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 			} else if (type == ItemType.END) {
 				mMarker.setEndLine(null);
 			}
+
+		}
+
+		public void setMarkerDrawable() {
+			ImageView view = (ImageView) itemView.findViewById(R.id.timeline_event_icon);
+			view.setBackgroundResource(mDataSet.get(i).getEvent().getIcon());
+			i = i+1;
 		}
 
 	}
