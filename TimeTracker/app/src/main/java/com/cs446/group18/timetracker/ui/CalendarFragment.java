@@ -172,7 +172,7 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
         TimeEntryViewModel timeEntryViewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
         timeEntryViewModel.getTimeEntriesByEventID(eventID).observe(getViewLifecycleOwner(), new Observer<List<TimeEntry>>() {
             @Override
-            public void onChanged(List<TimeEntry> timeEntries) {
+            public void onChanged(List<TimeEntry> entries) {
                 if(expandableLinearLayout.getChildCount() > 0){
                     expandableLinearLayout.removeAllViews();
                 }
@@ -237,7 +237,6 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
         });
 
         setTimeEntries(timeEntries);
-        adapter.setTimeEntries(dayEntries);
 
         List<Event> dayEvents = new ArrayList<>();
 

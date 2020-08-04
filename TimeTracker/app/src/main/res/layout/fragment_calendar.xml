@@ -10,7 +10,7 @@
     <CalendarView
         android:id="@+id/calendar_view"
         android:layout_width="fill_parent"
-        android:layout_height="320dp" />
+        android:layout_height="340dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/calendar_event_list"
