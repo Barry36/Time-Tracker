@@ -98,12 +98,12 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
                             - DateTimeConverter.fromTimestamp("2020-07-22 8:15:00").getTime()));
             timeEntryDao.insert(new TimeEntry(3, DateTimeConverter.fromTimestamp("2020-05-18 9:15:00"),
                     DateTimeConverter.fromTimestamp("2020-05-18 11:40:00"),
-                    DateTimeConverter.fromTimestamp("2020-05-18 9:40:00").getTime()
-                    - DateTimeConverter.fromTimestamp("2020-05-18 11:15:00").getTime()));
+                    DateTimeConverter.fromTimestamp("2020-05-18 11:15:00").getTime()
+                    - DateTimeConverter.fromTimestamp("2020-05-18 9:40:00").getTime()));
             timeEntryDao.insert(new TimeEntry(4, DateTimeConverter.fromTimestamp("2018-08-01 10:15:00"),
                     DateTimeConverter.fromTimestamp("2018-08-01 11:40:00"),
-                    DateTimeConverter.fromTimestamp("2018-08-01 10:40:00").getTime()
-                            - DateTimeConverter.fromTimestamp("2018-08-01 11:15:00").getTime()));
+                    DateTimeConverter.fromTimestamp("2018-08-01 11:15:00").getTime()
+                            - DateTimeConverter.fromTimestamp("2018-08-01 10:40:00").getTime()));
             goalDao.insert(new Goal(1, "Study Goal", "I have to study for my final exam", 20, 100));
             goalDao.insert(new Goal(2, "Rest Goal", "I need some rest", 80, 100));
             geolocationDao.insert(new Geolocation(1, 43.4736, -80.5370)); // Blair House
