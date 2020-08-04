@@ -4,4 +4,5 @@
     <dimen name="report_title_size">20sp</dimen>
     <dimen name="chart_height">260dp</dimen>
     <dimen name="divider_margin_vertical">5dp</dimen>
+    <dimen name="floating_action_btn_margin">32dp</dimen>
 </resources>

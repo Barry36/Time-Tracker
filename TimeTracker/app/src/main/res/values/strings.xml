@@ -12,4 +12,5 @@
     <string name="tab_monthly">Monthly</string>
     <string name="tab_yearly">Yearly</string>
     <string name="title_heatmap">Heatmap</string>
+    <string name="share_btn_text">Share</string>
 </resources>
