@@ -20,32 +20,26 @@ import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.databinding.ActivityMainBinding;
 import com.cs446.group18.timetracker.constants.LocationConstant;
 import com.cs446.group18.timetracker.constants.NotificationConstant;
-import com.cs446.group18.timetracker.entity.dateSelected;
 import com.cs446.group18.timetracker.service.ForecastingService;
 import com.cs446.group18.timetracker.service.LocationService;
 
 
-public class MainActivity extends AppCompatActivity implements dateSelected {
+public class MainActivity extends AppCompatActivity {
     OnNewIntentListener newIntentListener;
     private DrawerLayout drawerLayout;
     private NavController navController;
@@ -264,29 +258,5 @@ public class MainActivity extends AppCompatActivity implements dateSelected {
             finish();
         }
         return msgs;
-    }
-
-    @Override
-    public void itemSelected(final String year, final String month, final String dayOfMonth) {
-
-        // TODO: show list of events for that day
-
-//        ArrayList<Event> eventList = new ArrayList<>();
-//        CalendarFragment ef = (CalendarFragment) getSupportFragmentManager().findFragmentById(R.id.calendar_event_list);
-//
-//        @Override
-//        protected Object doInBackground(Object[] objects) {
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Object o) {
-//            if(eventList != null && !eventList.isEmpty()) {
-//                ef.setViewEmpty();
-//                ef.setList(eventList);
-//            } else {
-//                ef.setViewEmpty();
-//            }
-//            super.onPostExecute(o);
-//        }
     }
 }
