@@ -4,9 +4,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cs446.group18.timetracker.R;
+import com.cs446.group18.timetracker.entity.Event;
 import com.cs446.group18.timetracker.model.TimeLineModel;
 import com.cs446.group18.timetracker.ui.TimeLineMarker;
 
@@ -14,6 +16,7 @@ import java.util.List;
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLineViewHolder> {
 	private List<TimeLineModel> mDataSet;
+	private int i = 0;
 
 	public TimeLineAdapter() {
 		// Required constructor
@@ -37,13 +40,15 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
 	@Override
 	public TimeLineViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-		return new TimeLineViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_timeline, viewGroup, false), viewType);
+		TimeLineViewHolder viewHolder = new TimeLineViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_timeline, viewGroup, false), viewType);
+		viewHolder.setMarkerDrawable(1, viewType);
+		return viewHolder;
 	}
 
 	@Override
 	public void onBindViewHolder(TimeLineViewHolder timeLineViewHolder, int i) {
 
-		timeLineViewHolder.mName.setText(mDataSet.get(i).getEvent());
+		timeLineViewHolder.mName.setText(mDataSet.get(i).getEventName());
 		timeLineViewHolder.mAge.setText(mDataSet.get(i).getTime());
 
 	}
@@ -75,7 +80,23 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 			mName = (TextView) itemView.findViewById(R.id.item_time_line_txt);
 			mAge = (TextView) itemView.findViewById(R.id.item_time_line_txt2);
 
+//			TimeLineMarker mMarker = (TimeLineMarker) itemView.findViewById(R.id.item_time_line_mark);
+//			if (type == ItemType.ATOM) {
+//				mMarker.setBeginLine(null);
+//				mMarker.setEndLine(null);
+//			} else if (type == ItemType.START) {
+//				mMarker.setBeginLine(null);
+//			} else if (type == ItemType.END) {
+//				mMarker.setEndLine(null);
+//			}
+//			mMarker.setMarkerDrawable(event.getIcon());
+
+		}
+
+		public void setMarkerDrawable(int icon, int type) {
 			TimeLineMarker mMarker = (TimeLineMarker) itemView.findViewById(R.id.item_time_line_mark);
+			mMarker.setMarkerDrawable(mDataSet.get(i).getEvent().getIcon());
+			i = i+1;
 			if (type == ItemType.ATOM) {
 				mMarker.setBeginLine(null);
 				mMarker.setEndLine(null);
@@ -84,9 +105,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 			} else if (type == ItemType.END) {
 				mMarker.setEndLine(null);
 			}
-
 		}
-
 
 	}
 

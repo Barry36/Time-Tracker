@@ -18,12 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.adapter.EventListAdapter;
 import com.cs446.group18.timetracker.adapter.TimeLineAdapter;
-import com.cs446.group18.timetracker.dao.EventDao;
 import com.cs446.group18.timetracker.entity.Event;
 import com.cs446.group18.timetracker.entity.TimeEntry;
 import com.cs446.group18.timetracker.model.TimeLineModel;
-import com.cs446.group18.timetracker.persistence.TimeTrackerDatabase;
-import com.cs446.group18.timetracker.repository.EventRepository;
 import com.cs446.group18.timetracker.utils.InjectorUtils;
 import com.cs446.group18.timetracker.vm.EventListViewModelFactory;
 import com.cs446.group18.timetracker.vm.EventViewModel;
@@ -44,7 +41,8 @@ import java.util.List;
 public class TimelineFragment extends Fragment {
 
     private EventListAdapter adapter;
-    private HashMap<Long, String> events = new HashMap<>();
+    private HashMap<Long, String> eventMap = new HashMap<>();
+    private HashMap<Long, Event> events = new HashMap<>();
     private List<TimeEntry> timeEntries = new ArrayList<>();
     private RecyclerView mRecycler;
 
@@ -109,6 +107,7 @@ public class TimelineFragment extends Fragment {
                     header.setText(R.string.timeline_no_events);
                 }
                 setEvents(events);
+                setEventMap(events);
             }
         });
 
@@ -151,7 +150,7 @@ public class TimelineFragment extends Fragment {
         SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm");
 
         Collections.reverse(timeEntries);
-        timeEntries.forEach((timeEntry -> { models.add(new TimeLineModel(events.get(timeEntry.getEventId()), datetimeformat.format(timeEntry.getStartTime()) + " to " + timeformat.format(timeEntry.getEndTime())) ); }));
+        timeEntries.forEach((timeEntry -> { models.add(new TimeLineModel(eventMap.get(timeEntry.getEventId()), datetimeformat.format(timeEntry.getStartTime()) + " to " + timeformat.format(timeEntry.getEndTime()), events.get(timeEntry.getEventId()))); }));
 
 //        models.add(new TimeLineModel("Study for 446", "2016-08-09"));
 //        models.add(new TimeLineModel("Study for 452", "2016-08-09"));
@@ -166,9 +165,15 @@ public class TimelineFragment extends Fragment {
         return models;
     }
 
+    private void setEventMap(List<Event> eventMap) {
+        eventMap.forEach((event -> {
+            this.eventMap.put(event.getEventId(), event.getEventName());
+        }));
+    }
+
     private void setEvents(List<Event> events) {
         events.forEach((event -> {
-            this.events.put(event.getEventId(), event.getEventName());
+            this.events.put(event.getEventId(), event);
         }));
     }
 

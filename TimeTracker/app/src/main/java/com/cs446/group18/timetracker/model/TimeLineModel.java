@@ -1,21 +1,29 @@
 package com.cs446.group18.timetracker.model;
 
+import com.cs446.group18.timetracker.entity.Event;
+
 public class TimeLineModel {
-    private String event;
+    private String eventName;
     private String time;
+    private Event event;
 
-    public TimeLineModel(String event, String time) {
-        this.event = event;
+    public TimeLineModel(String eventName, String time, Event event) {
+        this.eventName = eventName;
         this.time = time;
-    }
-
-    public String getEvent() {
-        return event;
-    }
-
-    public void setEvent(String event) {
         this.event = event;
     }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
+    public Event getEvent() { return event; }
+
+    public void setEvent(Event event) {this.event = event; }
 
     public String getTime() {
         return time;

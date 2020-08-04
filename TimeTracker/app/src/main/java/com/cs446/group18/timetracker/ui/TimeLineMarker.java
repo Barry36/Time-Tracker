@@ -172,14 +172,9 @@ public class TimeLineMarker extends View {
         }
     }
 
-    public void setMarkerDrawable(Drawable markerDrawable) {
-        if (this.mMarkerDrawable != markerDrawable) {
-            this.mMarkerDrawable = markerDrawable;
-            if (mMarkerDrawable != null) {
-                mMarkerDrawable.setCallback(this);
-            }
-            initDrawableSize();
-            invalidate();
-        }
+    public void setMarkerDrawable(int icon) {
+        this.setBackgroundResource(icon);
+        initDrawableSize();
+        invalidate();
     }
 }
