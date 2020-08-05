@@ -14,3 +14,8 @@ To enable geolocation service, please create a file named **apikey.properties** 
 ```
 API_KEY="YOUR_API_KEY"
 ```
+
+### Branch Note
+* master: branch containing all changes with sample time entry data commented out
+* develop: branch containing all changes with sample data
+* other branch: used during development, do not contain all changes, please ingore
