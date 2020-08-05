@@ -50,7 +50,7 @@ public class WeeklyReportFragment extends Fragment implements OnMapReadyCallback
     private ArrayList<Float> barDataAll;
     private ArrayList<ArrayList<Float>> barDataOne;
     private ArrayList<WeightedLatLng> locationData;
-    LatLng defaultLocation;
+    private LatLng defaultLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,12 +97,22 @@ public class WeeklyReportFragment extends Fragment implements OnMapReadyCallback
                         defaultLocation = new LatLng(g.getLatitude(), g.getLongitude());
                     }
                 }
-
                 return true;
             }
 
             @Override
             protected void onPostExecute(Boolean success) {
+                if (pieData.isEmpty()) {
+                    view.findViewById(R.id.w_charts).setVisibility(View.GONE);
+                    view.findViewById(R.id.w_button_share).setVisibility(View.GONE);
+                    view.findViewById(R.id.w_no_data).setVisibility(View.VISIBLE);
+                    return;
+                } else {
+                    view.findViewById(R.id.w_charts).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.w_button_share).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.w_no_data).setVisibility(View.GONE);
+                }
+
                 PieData dataP = ReportUtil.generatePieData(labels, pieData);
                 ReportUtil.drawPieChart(pieChart, dataP);
 
@@ -135,34 +145,34 @@ public class WeeklyReportFragment extends Fragment implements OnMapReadyCallback
                 if (mapFragment != null) {
                     mapFragment.getMapAsync(WeeklyReportFragment.this);
                 }
+
+                // Share report
+                FloatingActionButton buttonShare = view.findViewById(R.id.w_button_share);
+                buttonShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent();
+                        i.setAction(Intent.ACTION_SEND);
+                        i.setType("image/*");
+                        int drawWidth = pieChart.getWidth();
+                        ArrayList<Bitmap> bitmap = new ArrayList<>();
+                        bitmap.add(ReportUtil.getBitmapFromView(view.findViewById(R.id.title_weekly), drawWidth));
+                        bitmap.add(ReportUtil.getBitmapFromView(pieChart, drawWidth));
+                        bitmap.add(ReportUtil.getBitmapFromView(barChartAll, drawWidth));
+                        bitmap.add(ReportUtil.getBitmapFromView(view.findViewById(R.id.w_spinner_event), drawWidth));
+                        bitmap.add(ReportUtil.getBitmapFromView(barChartOne, drawWidth));
+                        i.putExtra(Intent.EXTRA_STREAM, ReportUtil.getImageUri(getContext(),
+                                ReportUtil.combineImageIntoOne(bitmap, drawWidth), "WeeklyReport"));
+                        try {
+                            startActivity(Intent.createChooser(i, null));
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
             }
         }
         new MyAsyncTask().execute();
-
-        // Share report
-        FloatingActionButton buttonShare = view.findViewById(R.id.w_button_share);
-        buttonShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent();
-                i.setAction(Intent.ACTION_SEND);
-                i.setType("image/*");
-                int drawWidth = pieChart.getWidth();
-                ArrayList<Bitmap> bitmap = new ArrayList<>();
-                bitmap.add(ReportUtil.getBitmapFromView(view.findViewById(R.id.title_weekly), drawWidth));
-                bitmap.add(ReportUtil.getBitmapFromView(pieChart, drawWidth));
-                bitmap.add(ReportUtil.getBitmapFromView(barChartAll, drawWidth));
-                bitmap.add(ReportUtil.getBitmapFromView(view.findViewById(R.id.w_spinner_event), drawWidth));
-                bitmap.add(ReportUtil.getBitmapFromView(barChartOne, drawWidth));
-                i.putExtra(Intent.EXTRA_STREAM, ReportUtil.getImageUri(getContext(),
-                        ReportUtil.combineImageIntoOne(bitmap, drawWidth), "WeeklyReport"));
-                try {
-                    startActivity(Intent.createChooser(i, null));
-                } catch (android.content.ActivityNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
 
         return view;
     }
@@ -219,12 +229,12 @@ public class WeeklyReportFragment extends Fragment implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder()
-                .weightedData(locationData)
-                .build();
-        TileOverlay mOverlay = googleMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
-
-        LatLng defaultLocation = new LatLng(43.4736, -80.5370);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12f));
+        if (locationData.size() != 0) {
+            HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder()
+                    .weightedData(locationData)
+                    .build();
+            TileOverlay mOverlay = googleMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12f));
+        }
     }
 }

@@ -12,10 +12,16 @@ import com.cs446.group18.timetracker.ui.YearlyReportFragment;
 public class PageAdapter extends FragmentPagerAdapter {
 
     private int numOfTabs;
+    private Fragment weeklyReport;
+    private Fragment monthlyReport;
+    private Fragment yearlyReport;
 
     public PageAdapter(FragmentManager fm, int numOfTabs) {
         super(fm);
         this.numOfTabs = numOfTabs;
+        weeklyReport = new WeeklyReportFragment();
+        monthlyReport = new MonthlyReportFragment();
+        yearlyReport = new YearlyReportFragment();
     }
 
     @NonNull
@@ -23,11 +29,11 @@ public class PageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new WeeklyReportFragment();
+                return weeklyReport;
             case 1:
-                return new MonthlyReportFragment();
+                return monthlyReport;
             case 2:
-                return new YearlyReportFragment();
+                return yearlyReport;
             default:
                 return null;
         }
