@@ -65,7 +65,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     private int position;
     private int prevPosition;
     private final ArrayList<Integer> iconList = new ArrayList<>(Arrays.asList(R.drawable.ic_cooking, R.drawable.ic_yoga, R.drawable.ic_homework, R.drawable.ic_movies, R.drawable.ic_music, R.drawable.ic_soccer,
-            R.drawable.ic_gym, R.drawable.ic_cafe, R.drawable.ic_cleaning, R.drawable.ic_coffee, R.drawable.ic_shopping_cart, R.drawable.ic_task, R.drawable.ic_television, R.drawable.ic_youtube, R.drawable.ic_sms));
+            R.drawable.ic_gym, R.drawable.ic_cafe, R.drawable.ic_hospital, R.drawable.ic_coffee, R.drawable.ic_shopping_cart, R.drawable.ic_task, R.drawable.ic_television, R.drawable.ic_youtube, R.drawable.ic_television, R.drawable.ic_compass, R.drawable.ic_email));
 
 
     @Nullable
