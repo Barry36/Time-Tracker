@@ -15,7 +15,7 @@ public class TimeEntryRepository {
     private TimeEntryDao timeEntryDao;
     private static volatile TimeEntryRepository instance = null;
 
-    public TimeEntryRepository(TimeEntryDao timeEntryDao) {
+    private TimeEntryRepository(TimeEntryDao timeEntryDao) {
         this.timeEntryDao = timeEntryDao;
     }
 

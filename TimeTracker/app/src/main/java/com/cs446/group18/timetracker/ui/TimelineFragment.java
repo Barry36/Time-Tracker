@@ -21,7 +21,8 @@ import com.cs446.group18.timetracker.adapter.TimeLineAdapter;
 import com.cs446.group18.timetracker.entity.Event;
 import com.cs446.group18.timetracker.entity.TimeEntry;
 import com.cs446.group18.timetracker.model.TimeLineModel;
-import com.cs446.group18.timetracker.utils.InjectorUtils;
+import com.cs446.group18.timetracker.utils.AbstractFactory;
+import com.cs446.group18.timetracker.utils.ConcreteFactory;
 import com.cs446.group18.timetracker.vm.EventListViewModelFactory;
 import com.cs446.group18.timetracker.vm.EventViewModel;
 import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
@@ -50,10 +51,9 @@ public class TimelineFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private AbstractFactory factory = new ConcreteFactory();
 
     public TimelineFragment() {
         // Required empty public constructor
@@ -95,7 +95,7 @@ public class TimelineFragment extends Fragment {
         TimeLineAdapter adapter = initRecycler();
         TextView header = view.findViewById(R.id.timeline_header);
 
-        EventListViewModelFactory eventFactory = InjectorUtils.provideEventListViewModelFactory(getActivity());
+        EventListViewModelFactory eventFactory = factory.provideEventListViewModelFactory(getActivity());
         EventViewModel eventViewModel = new ViewModelProvider(this, eventFactory).get(EventViewModel.class);
         eventViewModel.getEvents().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
             @Override
@@ -111,8 +111,8 @@ public class TimelineFragment extends Fragment {
             }
         });
 
-        TimeEntryListViewModelFactory factory = InjectorUtils.provideTimeEntryListViewModelFactory(getActivity());
-        TimeEntryViewModel factoryViewModel = new ViewModelProvider(this, factory).get(TimeEntryViewModel.class);
+        TimeEntryListViewModelFactory timeEntryListViewModelFactory = factory.provideTimeEntryListViewModelFactory(getActivity());
+        TimeEntryViewModel factoryViewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
 
         factoryViewModel.getTimeEntries().observe(getViewLifecycleOwner(), new Observer<List<TimeEntry>>() {
             @Override

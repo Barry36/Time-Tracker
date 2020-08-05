@@ -2,9 +2,7 @@ package com.cs446.group18.timetracker.ui;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.opengl.Visibility;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,13 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +20,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -41,7 +34,8 @@ import com.cs446.group18.timetracker.adapter.IconListAdaptor;
 import com.cs446.group18.timetracker.entity.Event;
 import com.cs446.group18.timetracker.entity.Geolocation;
 import com.cs446.group18.timetracker.entity.TimeEntry;
-import com.cs446.group18.timetracker.utils.InjectorUtils;
+import com.cs446.group18.timetracker.utils.AbstractFactory;
+import com.cs446.group18.timetracker.utils.ConcreteFactory;
 import com.cs446.group18.timetracker.vm.EventListViewModelFactory;
 import com.cs446.group18.timetracker.vm.EventViewModel;
 import com.cs446.group18.timetracker.vm.GeolocationViewModel;
@@ -66,7 +60,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
     private int prevPosition;
     private final ArrayList<Integer> iconList = new ArrayList<>(Arrays.asList(R.drawable.ic_cooking, R.drawable.ic_yoga, R.drawable.ic_homework, R.drawable.ic_movies, R.drawable.ic_music, R.drawable.ic_soccer,
             R.drawable.ic_gym, R.drawable.ic_cafe, R.drawable.ic_hospital, R.drawable.ic_coffee, R.drawable.ic_shopping_cart, R.drawable.ic_task, R.drawable.ic_television, R.drawable.ic_youtube, R.drawable.ic_television, R.drawable.ic_compass, R.drawable.ic_email));
-
+    private AbstractFactory factory = new ConcreteFactory();
 
     @Nullable
     @Override
@@ -79,8 +73,8 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
         EventListAdapter adapter = new EventListAdapter(events, this);
         this.adapter = adapter;
-        EventListViewModelFactory factory = InjectorUtils.provideEventListViewModelFactory(getActivity());
-        EventViewModel viewModel = new ViewModelProvider(this, factory).get(EventViewModel.class);
+        EventListViewModelFactory eventListViewModelFactory = factory.provideEventListViewModelFactory(getActivity());
+        EventViewModel viewModel = new ViewModelProvider(this, eventListViewModelFactory).get(EventViewModel.class);
 
         textViewEmpty = eventListView.findViewById(R.id.empty_event_list);
         recyclerView = eventListView.findViewById(R.id.event_list);
@@ -224,17 +218,17 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
 
 
         subscribeUI(eventListAdapter);
-        TimeEntryListViewModelFactory timeEntryListViewModelFactory = InjectorUtils.provideTimeEntryListViewModelFactory(getActivity());
+        TimeEntryListViewModelFactory timeEntryListViewModelFactory = factory.provideTimeEntryListViewModelFactory(getActivity());
         timeEntryViewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
-        GeolocationViewModelFactory geolocationViewModelFactory = InjectorUtils.provideGeolocationViewModelFactory(getActivity());
+        GeolocationViewModelFactory geolocationViewModelFactory = factory.provideGeolocationViewModelFactory(getActivity());
         geolocationViewModel = new ViewModelProvider(this, geolocationViewModelFactory).get(GeolocationViewModel.class);
         return eventListView;
     }
 
     private void subscribeUI(EventListAdapter eventListAdapter) {
 
-        EventListViewModelFactory factory = InjectorUtils.provideEventListViewModelFactory(getActivity());
-        EventViewModel viewModel = new ViewModelProvider(this, factory).get(EventViewModel.class);
+        EventListViewModelFactory eventListViewModelFactory = factory.provideEventListViewModelFactory(getActivity());
+        EventViewModel viewModel = new ViewModelProvider(this, eventListViewModelFactory).get(EventViewModel.class);
         viewModel.getEvents().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
             @Override
             public void onChanged(@Nullable List<Event> events) {
@@ -285,7 +279,7 @@ public class EventListFragment extends Fragment implements EventListAdapter.OnEv
         LinearLayout preExpandableLinearLayout = view.findViewById(R.id.expandable);
 
 
-        TimeEntryListViewModelFactory timeEntryListViewModelFactory = InjectorUtils.provideTimeEntryListViewModelFactory((getActivity()));
+        TimeEntryListViewModelFactory timeEntryListViewModelFactory = factory.provideTimeEntryListViewModelFactory((getActivity()));
         TimeEntryViewModel timeEntryViewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
         timeEntryViewModel.getTimeEntriesByEventID(eventID).observe(getViewLifecycleOwner(), new Observer<List<TimeEntry>>() {
             @Override

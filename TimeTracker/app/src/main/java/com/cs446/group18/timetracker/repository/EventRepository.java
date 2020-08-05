@@ -13,7 +13,7 @@ public class EventRepository {
     private EventDao eventDao;
     private static volatile EventRepository instance = null;
 
-    public EventRepository(EventDao eventDao) {
+    private EventRepository(EventDao eventDao) {
         this.eventDao = eventDao;
     }
 
