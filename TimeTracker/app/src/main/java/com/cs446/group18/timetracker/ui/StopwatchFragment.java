@@ -8,10 +8,8 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
 
@@ -23,7 +21,8 @@ import com.cs446.group18.timetracker.R;
 
 import com.cs446.group18.timetracker.entity.Geolocation;
 import com.cs446.group18.timetracker.entity.TimeEntry;
-import com.cs446.group18.timetracker.utils.InjectorUtils;
+import com.cs446.group18.timetracker.utils.AbstractFactory;
+import com.cs446.group18.timetracker.utils.ConcreteFactory;
 import com.cs446.group18.timetracker.vm.GeolocationViewModel;
 import com.cs446.group18.timetracker.vm.GeolocationViewModelFactory;
 import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
@@ -47,6 +46,7 @@ public class StopwatchFragment extends Fragment{
     private TimeEntryViewModel timeEntryViewModel;
     private GeolocationViewModel geolocationViewModel;
     private View rootView;
+    private AbstractFactory factory = new ConcreteFactory();
     public static StopwatchFragment newInstance(long eventId,boolean isFromNFC) {
         StopwatchFragment stopwatchFragment = new StopwatchFragment();
         Bundle args = new Bundle();
@@ -59,9 +59,9 @@ public class StopwatchFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        TimeEntryListViewModelFactory timeEntryListViewModelFactory = InjectorUtils.provideTimeEntryListViewModelFactory(getActivity());
+        TimeEntryListViewModelFactory timeEntryListViewModelFactory = factory.provideTimeEntryListViewModelFactory(getActivity());
         timeEntryViewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
-        GeolocationViewModelFactory geolocationViewModelFactory = InjectorUtils.provideGeolocationViewModelFactory(getActivity());
+        GeolocationViewModelFactory geolocationViewModelFactory = factory.provideGeolocationViewModelFactory(getActivity());
         geolocationViewModel = new ViewModelProvider(this, geolocationViewModelFactory).get(GeolocationViewModel.class);
 
 

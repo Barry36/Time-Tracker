@@ -11,7 +11,7 @@ public class GeolocationRepository {
     private GeolocationDao geolocationDao;
     private static volatile GeolocationRepository instance = null;
 
-    public GeolocationRepository(GeolocationDao geolocationDao) {
+    private GeolocationRepository(GeolocationDao geolocationDao) {
         this.geolocationDao = geolocationDao;
     }
 

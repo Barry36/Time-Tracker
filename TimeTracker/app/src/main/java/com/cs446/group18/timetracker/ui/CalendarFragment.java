@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,19 +20,16 @@ import android.widget.TextView;
 
 import com.cs446.group18.timetracker.R;
 import com.cs446.group18.timetracker.adapter.EventListAdapter;
-import com.cs446.group18.timetracker.entity.DateSelected;
 import com.cs446.group18.timetracker.entity.Event;
 import com.cs446.group18.timetracker.entity.TimeEntry;
-import com.cs446.group18.timetracker.utils.InjectorUtils;
+import com.cs446.group18.timetracker.utils.AbstractFactory;
+import com.cs446.group18.timetracker.utils.ConcreteFactory;
 import com.cs446.group18.timetracker.vm.EventListViewModelFactory;
 import com.cs446.group18.timetracker.vm.EventViewModel;
 import com.cs446.group18.timetracker.vm.TimeEntryListViewModelFactory;
 import com.cs446.group18.timetracker.vm.TimeEntryViewModel;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -56,6 +52,7 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
     private int position;
     private int prevPosition;
     private Date dateSelected;
+    private AbstractFactory factory = new ConcreteFactory();
 
     @Nullable
     @Override
@@ -95,8 +92,8 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
         EventListAdapter adapter = new EventListAdapter(events, this);
         this.adapter = adapter;
 
-        EventListViewModelFactory factory = InjectorUtils.provideEventListViewModelFactory(getActivity());
-        EventViewModel viewModel = new ViewModelProvider(this, factory).get(EventViewModel.class);
+        EventListViewModelFactory eventListViewModelFactory = factory.provideEventListViewModelFactory(getActivity());
+        EventViewModel viewModel = new ViewModelProvider(this, eventListViewModelFactory).get(EventViewModel.class);
 
         textViewEmpty = view.findViewById(R.id.calendar_empty_event_list);
         recyclerView = view.findViewById(R.id.calendar_event_list);
@@ -109,8 +106,8 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
 
     private void subscribeUI(EventListAdapter eventListAdapter) {
 
-        TimeEntryListViewModelFactory tfactory = InjectorUtils.provideTimeEntryListViewModelFactory(getActivity());
-        TimeEntryViewModel tviewModel = new ViewModelProvider(this, tfactory).get(TimeEntryViewModel.class);
+        TimeEntryListViewModelFactory timeEntryListViewModelFactory = factory.provideTimeEntryListViewModelFactory(getActivity());
+        TimeEntryViewModel tviewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
         tviewModel.getTimeEntries().observe(getViewLifecycleOwner(), new Observer<List<TimeEntry>>() {
             @Override
             public void onChanged(@Nullable List<TimeEntry> timeEntries) {
@@ -119,8 +116,8 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
             }
         });
 
-        EventListViewModelFactory factory = InjectorUtils.provideEventListViewModelFactory(getActivity());
-        EventViewModel viewModel = new ViewModelProvider(this, factory).get(EventViewModel.class);
+        EventListViewModelFactory eventListViewModelFactory = factory.provideEventListViewModelFactory(getActivity());
+        EventViewModel viewModel = new ViewModelProvider(this, eventListViewModelFactory).get(EventViewModel.class);
         viewModel.getEvents().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
             @Override
             public void onChanged(@Nullable List<Event> events) {
@@ -168,7 +165,7 @@ public class CalendarFragment extends Fragment implements EventListAdapter.OnEve
         LinearLayout preExpandableLinearLayout = view.findViewById(R.id.expandable);
 
 
-        TimeEntryListViewModelFactory timeEntryListViewModelFactory = InjectorUtils.provideTimeEntryListViewModelFactory((getActivity()));
+        TimeEntryListViewModelFactory timeEntryListViewModelFactory = factory.provideTimeEntryListViewModelFactory((getActivity()));
         TimeEntryViewModel timeEntryViewModel = new ViewModelProvider(this, timeEntryListViewModelFactory).get(TimeEntryViewModel.class);
         timeEntryViewModel.getTimeEntriesByEventID(eventID).observe(getViewLifecycleOwner(), new Observer<List<TimeEntry>>() {
             @Override
