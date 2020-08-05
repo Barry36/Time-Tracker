@@ -76,7 +76,15 @@ public abstract class TimeTrackerDatabase extends RoomDatabase {
             eventDao.insert(new Event("Rest", "Have some sleep", R.drawable.ic_yoga));
             eventDao.insert(new Event("Exercise", "Go to the gym", R.drawable.ic_soccer));
             eventDao.insert(new Event("Meal", "Have meal", R.drawable.ic_cooking));
-            eventDao.insert(new Event("School", "Take lectures", R.drawable.ic_cooking));
+            eventDao.insert(new Event("Selfcare", "Dental", R.drawable.ic_hospital));
+            eventDao.insert(new Event("Chores", "Flute", R.drawable.ic_music));
+            eventDao.insert(new Event("School", "Takes lectures", R.drawable.ic_task));
+            eventDao.insert(new Event("Groceries", "Fruits and vegetables", R.drawable.ic_shopping_cart));
+            eventDao.insert(new Event("Travel", "Go to banff", R.drawable.ic_compass));
+            eventDao.insert(new Event("Entertainment", "TV shows", R.drawable.ic_television));
+            eventDao.insert(new Event("Appointment", "Virtual meeting", R.drawable.ic_email));
+            eventDao.insert(new Event("Shopping", "Clothes and shoes", R.drawable.ic_shopping_cart));
+
             timeEntryDao.insert(new TimeEntry(1, DateTimeConverter.fromTimestamp("2020-08-02 11:15:00"),
                     DateTimeConverter.fromTimestamp("2020-08-02 14:20:00"),
                     DateTimeConverter.fromTimestamp("2020-08-02 14:20:00").getTime()
