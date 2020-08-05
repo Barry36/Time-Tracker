@@ -30,6 +30,7 @@
             android:textAlignment="center" />
 
         <ScrollView
+            android:id="@+id/w_charts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -98,6 +99,18 @@
                     android:layout_marginBottom="10dp" />
             </LinearLayout>
         </ScrollView>
+
+        <TextView
+            android:id="@+id/w_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:text="@string/no_data"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_orange_light"
+            android:textSize="15sp"
+            android:layout_margin="100dp"
+            tools:ignore="RtlCompat" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -106,5 +119,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/floating_action_btn_margin"
         android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_share" />
+        android:src="@drawable/ic_share"
+        android:visibility="gone"/>
 </FrameLayout>
